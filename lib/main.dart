@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:foto_zweig/enums/item_type_enum.dart';
 import 'package:foto_zweig/image_urls.dart';
 import 'package:foto_zweig/models/main_foto.dart';
+import 'package:foto_zweig/services/init_fotos.dart';
 import 'package:foto_zweig/widgets/image_content.dart';
 import 'package:foto_zweig/widgets/small_foto_item_widget.dart';
 
@@ -30,6 +32,16 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   Color _myColor = Colors.white;
+  List<SmallFotoItem> _allItems = List();
+
+  @override
+  void initState() {
+    super.initState();
+
+    InitFotos.getAllItems().then((value) => setState((){
+      _allItems = value;
+    }));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +69,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _getContent() {
-    return ImageContentWidget(IMAGE_URL_LIST);
+    return ImageContentWidget(_allItems, ItemTypeEnum.FOTO);
   }
 }

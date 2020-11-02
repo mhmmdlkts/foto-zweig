@@ -1,0 +1,4 @@
+enum ItemTypeEnum {
+    DOCUMENT,
+    FOTO
+}
