@@ -31,7 +31,7 @@ class SmallFotoItem implements Comparable {
   SmallFotoItem.fromJson(json) {
     id = json["id"];
     shortDescription = json["shortDescription"];
-    //date = Date.fromJson(["date"]);
+    date = Date.fromJson(json["date"]);
     description = json["description"];
     annotation = json["annotation"];
     filename = json["filename"];
@@ -55,5 +55,26 @@ class SmallFotoItem implements Comparable {
   }
 
   @override
-  int compareTo(other) =>(date?.endDate?.millisecondsSinceEpoch??0) - (other?.date?.endDate?.millisecondsSinceEpoch ?? 0);
+  int compareTo(other) {
+    final int diff = (date?.startDate?.millisecondsSinceEpoch??0) - (other?.date?.startDate?.millisecondsSinceEpoch ?? 0);
+    if (diff == 0)
+      return other.location.country.compareTo(location.country);
+    return diff;
+  }
+
+  String getReadablePersons() {
+    String result = "";
+    for (int i = 0; i < photographedPeople.length; i++) {
+      result += photographedPeople[i].toString() + (photographedPeople.length-1 != i?", ":"");
+    }
+    return result;
+  }
+
+  String getTags() {
+    String result = "";
+    for (int i = 0; i < tags.length; i++) {
+      result += tags[i].toString() + (tags.length-1 != i?", ":"");
+    }
+    return result;
+  }
 }

@@ -12,7 +12,7 @@ class ImageContentWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Wrap(
       alignment: WrapAlignment.spaceBetween,
-      children: smallFotoItems.map((item) => SmallFotoItemWidget(item, only: itemTypeEnum)).toList(),
+      children: smallFotoItems.map((item) => item.itemType.getEnum() == itemTypeEnum?SmallFotoItemWidget(item):null).toList().where((k) => k != null).toList(),
     );
   }
 }

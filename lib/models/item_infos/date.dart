@@ -10,4 +10,10 @@ class Date {
     if (json["endDate"] != null)
       endDate = DateTime.parse(json["endDate"]);
   }
+
+  String getReadableTime() {
+    if (startDate.compareTo(endDate) == 0)
+      return startDate.toString();
+    return '${startDate.toString()} bis ${endDate.toString()}';
+  }
 }

@@ -1,37 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:foto_zweig/enums/item_type_enum.dart';
 import 'package:foto_zweig/models/main_foto.dart';
+import 'package:foto_zweig/screens/details_screen.dart';
 
 class SmallFotoItemWidget extends StatelessWidget {
   final SmallFotoItem smallFotoItem;
-  final ItemTypeEnum only;
-  SmallFotoItemWidget(this.smallFotoItem, {Key key, this.only}) : super(key: key);
+  SmallFotoItemWidget(this.smallFotoItem, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print(smallFotoItem.itemType.getEnum().toString() + " == " + only.toString());
-    return Visibility(
-      visible: smallFotoItem.itemType.getEnum() == only,
-      child: Container(
-        margin: EdgeInsets.only(left: 16, bottom: 16),
-        child: Table(
-          defaultColumnWidth: IntrinsicColumnWidth(),
-          children: [
-            TableRow(children: [
-              _getImg()
-            ]),
-            TableRow(children: [
-              _getImgTitle()
-            ]),
-          ],
-        ),
-      )
+    return Container(
+      margin: EdgeInsets.only(left: 16, bottom: 16),
+      child: Table(
+        defaultColumnWidth: IntrinsicColumnWidth(),
+        children: [
+          TableRow(children: [
+            _getImg(context)
+          ]),
+          TableRow(children: [
+            _getImgTitle()
+          ]),
+        ],
+      ),
     );
   }
 
-  Widget _getImg() => GestureDetector(
+  Widget _getImg(BuildContext c) => GestureDetector(
     onTap: (){
-      print(smallFotoItem.shortDescription);
+      Navigator.push(c, MaterialPageRoute(builder: (context) => DetailsScreen(smallFotoItem)));
     },
     child: Container(
       child: Image.network(

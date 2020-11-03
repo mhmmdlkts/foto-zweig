@@ -10,25 +10,31 @@ class InitFotos {
 
   static Future<List<SmallFotoItem>> getAllItems() async {
     List<SmallFotoItem> allItems = List();
-    for (int i = 0; i < 45; i++) {
+    
+    List<Future> futures = <Future>[];
+
+    Future addItem (int i) async {
       SmallFotoItem result = await getItem(i);
-      if (result == null)
-        continue;
-      allItems.add(result);
+      if (result != null)
+        allItems.add(result);
     }
+
+    for (int i = 0; i < 45; i++) {
+      futures.add(addItem(i));
+    }
+    await Future.wait(futures);
     allItems.sort();
     return allItems;
   }
 
   static Future<SmallFotoItem> getItem(id) async {
-    print(id);
     try {
       final response = await http.get(getApiUrl(id));
+      print(id);
       if (response.statusCode != 200)
         return null;
       final jsonData = json.decode(utf8.decode(response.bodyBytes));
-      final a = SmallFotoItem.fromJson(jsonData);
-      return a;
+      return SmallFotoItem.fromJson(jsonData);
     } catch (e) {
       print(e);
     }

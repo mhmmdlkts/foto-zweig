@@ -61,14 +61,10 @@ class _MyHomePageState extends State<MyHomePage> {
               child: IconButton(icon: Icon(Icons.sort),),
               alignment: Alignment.centerLeft,
             ),
-            _getContent()
+            ImageContentWidget(_allItems, ItemTypeEnum.FOTO)
           ],
         ),
       )
     );
-  }
-
-  Widget _getContent() {
-    return ImageContentWidget(_allItems, ItemTypeEnum.FOTO);
   }
 }
