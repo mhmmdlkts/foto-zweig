@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:foto_zweig/enums/item_type_enum.dart';
-import 'package:foto_zweig/image_urls.dart';
+import 'package:foto_zweig/enums/sorting_typs_enum.dart';
 import 'package:foto_zweig/models/main_foto.dart';
 import 'package:foto_zweig/services/init_fotos.dart';
+import 'package:foto_zweig/services/sorting_service.dart';
 import 'package:foto_zweig/widgets/image_content.dart';
-import 'package:foto_zweig/widgets/small_foto_item_widget.dart';
 
 void main() {
   runApp(MyApp());
@@ -31,15 +31,20 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  SortingService _sortingService = SortingService();
   Color _myColor = Colors.white;
-  List<SmallFotoItem> _allItems = List();
+  bool _isFilterMenuOpen = false;
+  
+  List<SmallFotoItem> _shownItems = List();
 
   @override
   void initState() {
     super.initState();
 
+
     InitFotos.getAllItems().then((value) => setState((){
-      _allItems = value;
+      _sortingService.list = (value);
+      _shownItems = _sortingService.sortFilterList();
     }));
   }
 
@@ -51,20 +56,162 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Color.fromRGBO(86, 61, 124, 1),
         title: Text('Foto Zweig'),
       ),
-      body: Padding(
-        padding: EdgeInsets.only(right: 16),
-        child: ListView(
-          children: [
-            Container( // TODO Sort filter field
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              color: Color.fromRGBO(248, 249, 250, 1),
-              child: IconButton(icon: Icon(Icons.sort),),
-              alignment: Alignment.centerLeft,
+      body: ListView(
+        children: [
+          Container( // TODO Sort filter field
+            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            color: Color.fromRGBO(248, 249, 250, 1),
+            child: Row(
+            children: [
+              Opacity(
+                opacity: _isFilterMenuOpen?1:0.6,
+                child: IconButton(icon: Icon(Icons.sort), onPressed: () => setState((){
+                  _isFilterMenuOpen = !_isFilterMenuOpen;
+                }),),
+              ),
+              Visibility(
+                visible: _isFilterMenuOpen,
+                child: _getFilters(),
+              ),
+              _sortingDropDown(),
+              IconButton(icon: Icon(_sortingService.isDesc?Icons.arrow_upward:Icons.arrow_downward), onPressed: () => setState((){
+                  _shownItems = _sortingService.sortFilterList(isDesc: !_sortingService.isDesc);
+              })),
+              ],
             ),
-            ImageContentWidget(_allItems, ItemTypeEnum.FOTO)
-          ],
+            alignment: Alignment.centerLeft,
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: 16),
+            child: ImageContentWidget(_shownItems, ItemTypeEnum.FOTO)
+          )
+        ],
+      ),
+    );
+  }            
+
+  Widget _getFilters() {
+    return Row(
+      children: [
+        Container(
+          margin: EdgeInsets.only(right: 10),
+          width: 100,
+          child: _filterOrt(),
         ),
-      )
+        Container(
+          margin: EdgeInsets.only(right: 10),
+          width: 100,
+          child: _filterVon(),
+        ),
+        Container(
+          margin: EdgeInsets.only(right: 10),
+          width: 100,
+          child: _filterBis(),
+        )
+      ],
+    );
+  }
+  
+  Widget _sortingDropDown() {
+    return DropdownButton<String>(
+      value: _sortingService.getTyp(),
+      icon: Icon(Icons.arrow_downward),
+      iconSize: 24,
+      elevation: 16,
+      style: TextStyle(color: Colors.deepPurple),
+      underline: Container(
+        height: 2,
+        color: Colors.deepPurpleAccent,
+      ),
+      onChanged: (String newValue) {
+        SortingTypsEnum a;
+        if (newValue == 'ORT')
+          a = SortingTypsEnum.ORT;
+        if (newValue == 'DATE')
+          a = SortingTypsEnum.DATE;
+        if (newValue == 'DESCRIPTION')
+          a = SortingTypsEnum.DESCRIPTION;
+        setState(() {
+          _sortingService.sortingTyp = a;
+          _shownItems = _sortingService.sortFilterList();
+        });
+      },
+      items: <String>['ORT', 'DATE', 'DESCRIPTION']
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+    );
+  }   
+  
+  Widget _filterOrt() {
+    return DropdownButton<String>(
+      value: "Ort",
+      elevation: 16,
+      style: TextStyle(color: Colors.deepPurple),
+      underline: Container(
+        height: 2,
+        color: Colors.deepPurpleAccent,
+      ),
+      onChanged: (String newValue) {
+        setState(() {
+        });
+      },
+      items: <String>['Ort']
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+    );
+  }
+  
+  Widget _filterVon() {
+    return DropdownButton<String>(
+      value: "Von",
+      elevation: 16,
+      style: TextStyle(color: Colors.deepPurple),
+      underline: Container(
+        height: 2,
+        color: Colors.deepPurpleAccent,
+      ),
+      onChanged: (String newValue) {
+        setState(() {
+        });
+      },
+      items: <String>['Von']
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+    );
+  }
+  
+  Widget _filterBis() {
+    return DropdownButton<String>(
+      value: "Bis",
+      elevation: 16,
+      style: TextStyle(color: Colors.deepPurple),
+      underline: Container(
+        height: 2,
+        color: Colors.deepPurpleAccent,
+      ),
+      onChanged: (String newValue) {
+        setState(() {
+        });
+      },
+      items: <String>['Bis']
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
     );
   }
 }
