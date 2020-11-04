@@ -65,7 +65,7 @@ class SmallFotoItem implements Comparable {
   String getReadablePersons() {
     String result = "";
     for (int i = 0; i < photographedPeople.length; i++) {
-      result += photographedPeople[i].toString() + (photographedPeople.length-1 != i?", ":"");
+      result += photographedPeople[i].getName() + (photographedPeople.length-1 != i?", ":"");
     }
     return result;
   }

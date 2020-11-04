@@ -12,8 +12,26 @@ class Date {
   }
 
   String getReadableTime() {
-    if (startDate.compareTo(endDate) == 0)
-      return startDate.toString();
-    return '${startDate.toString()} bis ${endDate.toString()}';
+    if (isStartAndEndSame())
+      return getReadableStartDate();
+    return '${getReadableStartDate()} bis ${getReadableEndDate()}';
+  }
+
+  bool isStartAndEndSame() {
+    if (startDate == null || endDate == null)
+      return true;
+    return startDate.isAtSameMomentAs(endDate); 
+  }
+
+  String getReadableStartDate() {
+    if (startDate == null)
+      return "";
+    return startDate.toString().split(" ")[0];
+  }
+
+  String getReadableEndDate() {
+    if (endDate == null)
+      return "";
+    return endDate.toString().split(" ")[0];
   }
 }

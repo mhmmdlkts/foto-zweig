@@ -13,4 +13,6 @@ class People {
     firstName = json["firstName"];
     lastName = json["lastName"];
   }
+
+  getName() => '$firstName $lastName';
 }

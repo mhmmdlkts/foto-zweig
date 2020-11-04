@@ -32,7 +32,9 @@ class DetailsScreen extends StatelessWidget {
                         width: 300,
                         child: Text("Zeitraum:"),
                       ),
-                      Text(smallFotoItem.date.getReadableTime()),
+                      Flexible(
+                        child: Text(smallFotoItem.date.getReadableTime()),
+                      )
                     ],
                   ),
                   Divider(),
@@ -42,7 +44,9 @@ class DetailsScreen extends StatelessWidget {
                         width: 300,
                         child: Text("Abgebildete Personen:"),
                       ),
-                      Text(smallFotoItem.getReadablePersons()),
+                      Flexible(
+                        child: Text(smallFotoItem.getReadablePersons()),
+                      )
                     ],
                   ),
                   Divider(),
@@ -52,7 +56,9 @@ class DetailsScreen extends StatelessWidget {
                         width: 300,
                         child: Text("Ort:"),
                       ),
-                      Text(smallFotoItem.location?.country ?? "")
+                      Flexible(
+                        child: Text(smallFotoItem.location?.country ?? ""),
+                      )
                     ],
                   ),
                   Divider(),
@@ -62,7 +68,9 @@ class DetailsScreen extends StatelessWidget {
                         width: 300,
                         child: Text("Foto - Typ:"),
                       ),
-                      Text(smallFotoItem.itemType?.name ?? "")
+                      Flexible(
+                        child: Text(smallFotoItem.itemType?.name ?? "")
+                      )
                     ],
                   ),
                   Divider(),
@@ -72,7 +80,9 @@ class DetailsScreen extends StatelessWidget {
                         width: 300,
                         child: Text("Foto - Typ:"),
                       ),
-                      Text("")
+                      Flexible(
+                        child: Text("")
+                      )
                     ],
                   ),
                   Divider(),
@@ -82,7 +92,9 @@ class DetailsScreen extends StatelessWidget {
                         width: 300,
                         child: Text("Rechteinhaber:"),
                       ),
-                      Text(smallFotoItem.rightOwner?.name ?? "")
+                      Flexible(
+                        child: Text(smallFotoItem.rightOwner?.name ?? "")
+                      )
                     ],
                   ),
                   Divider(),
@@ -92,7 +104,9 @@ class DetailsScreen extends StatelessWidget {
                         width: 300,
                         child: Text("Institution:"),
                       ),
-                      Text(smallFotoItem.institution?.name ?? "")
+                      Flexible(
+                        child: Text(smallFotoItem.institution?.name ?? "")
+                      )
                     ],
                   ),
                   Divider(),
@@ -111,7 +125,9 @@ class DetailsScreen extends StatelessWidget {
                         width: 300,
                         child: Text("Stichworte:"),
                       ),
-                      Text(smallFotoItem.getTags())
+                      Flexible(
+                        child: Text(smallFotoItem.getTags())
+                      )
                     ],
                   ),
                   Divider(),
