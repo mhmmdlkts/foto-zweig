@@ -8,135 +8,139 @@ class DetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromRGBO(86, 61, 124, 1),
-        title: Text('Foto Zweig'),
-      ),
-      body: SingleChildScrollView(
-        child: Row(
-          children: [
-            Flexible(
-              flex: 1,
-              child: Image.network(smallFotoItem.path),
-            ),
-            Flexible(
-              flex: 1,
-              child: Column(
-                children: [
-                  Text(smallFotoItem.shortDescription, style: TextStyle(fontSize: 30),),
-                  Text(smallFotoItem.description),
-                  Divider(),
-                  Row(
-                    children: [
-                      Container(
-                        width: 300,
-                        child: Text("Zeitraum:"),
-                      ),
-                      Flexible(
-                        child: Text(smallFotoItem.date.getReadableTime()),
-                      )
-                    ],
-                  ),
-                  Divider(),
-                  Row(
-                    children: [
-                      Container(
-                        width: 300,
-                        child: Text("Abgebildete Personen:"),
-                      ),
-                      Flexible(
-                        child: Text(smallFotoItem.getReadablePersons()),
-                      )
-                    ],
-                  ),
-                  Divider(),
-                  Row(
-                    children: [
-                      Container(
-                        width: 300,
-                        child: Text("Ort:"),
-                      ),
-                      Flexible(
-                        child: Text(smallFotoItem.location?.country ?? ""),
-                      )
-                    ],
-                  ),
-                  Divider(),
-                  Row(
-                    children: [
-                      Container(
-                        width: 300,
-                        child: Text("Foto - Typ:"),
-                      ),
-                      Flexible(
-                        child: Text(smallFotoItem.itemType?.name ?? "")
-                      )
-                    ],
-                  ),
-                  Divider(),
-                  Row(
-                    children: [
-                      Container(
-                        width: 300,
-                        child: Text("Foto - Typ:"),
-                      ),
-                      Flexible(
-                        child: Text("")
-                      )
-                    ],
-                  ),
-                  Divider(),
-                  Row(
-                    children: [
-                      Container(
-                        width: 300,
-                        child: Text("Rechteinhaber:"),
-                      ),
-                      Flexible(
-                        child: Text(smallFotoItem.rightOwner?.name ?? "")
-                      )
-                    ],
-                  ),
-                  Divider(),
-                  Row(
-                    children: [
-                      Container(
-                        width: 300,
-                        child: Text("Institution:"),
-                      ),
-                      Flexible(
-                        child: Text(smallFotoItem.institution?.name ?? "")
-                      )
-                    ],
-                  ),
-                  Divider(),
-                  Row(
-                    children: [
-                      Container(
-                        width: 300,
-                        child: Text("Vermerk:"),
-                      ),
-                    ],
-                  ),
-                  Divider(),
-                  Row(
-                    children: [
-                      Container(
-                        width: 300,
-                        child: Text("Stichworte:"),
-                      ),
-                      Flexible(
-                        child: Text(smallFotoItem.getTags())
-                      )
-                    ],
-                  ),
-                  Divider(),
-                ],
-              ),
-            )
-          ],
+        appBar: AppBar(
+          backgroundColor: Color.fromRGBO(86, 61, 124, 1),
+          title: Text('Foto Zweig'),
         ),
-      )
-    );
+        body: SingleChildScrollView(
+          child: Row(
+            children: [
+              Flexible(
+                  flex: 1,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Image.network(smallFotoItem.path),
+                  )),
+              Flexible(
+                  flex: 1,
+                  child: Container(
+                    height: MediaQuery.of(context).size.height,
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SelectableText(
+                          smallFotoItem.shortDescription,
+                          style: TextStyle(
+                            fontSize: 30,
+                          ),
+                        ),
+                        SelectableText(smallFotoItem.description),
+                        Divider(),
+                        Row(
+                          children: [
+                            Container(
+                              width: 150,
+                              child: SelectableText("Zeitraum:"),
+                            ),
+                            Flexible(
+                              child: SelectableText(
+                                  smallFotoItem.date.getReadableTime()),
+                            )
+                          ],
+                        ),
+                        Divider(),
+                        Row(
+                          children: [
+                            Container(
+                              width: 150,
+                              child: SelectableText("Abgebildete Personen:"),
+                            ),
+                            Flexible(
+                              child: SelectableText(
+                                  smallFotoItem.getReadablePersons()),
+                            )
+                          ],
+                        ),
+                        Divider(),
+                        Row(
+                          children: [
+                            Container(
+                              width: 150,
+                              child: SelectableText("Ort:"),
+                            ),
+                            Flexible(
+                              child: SelectableText(
+                                  smallFotoItem.location?.name ?? ""),
+                            )
+                          ],
+                        ),
+                        Divider(),
+                        Row(
+                          children: [
+                            Container(
+                              width: 150,
+                              child: SelectableText("Foto - Typ:"),
+                            ),
+                            Flexible(
+                                child: SelectableText(
+                                    smallFotoItem.itemSubType?.name ?? ""))
+                          ],
+                        ),
+                        Divider(),
+                        Row(
+                          children: [
+                            Container(
+                              width: 150,
+                              child: SelectableText("Rechteinhaber:"),
+                            ),
+                            Flexible(
+                                child: SelectableText(
+                                    smallFotoItem.rightOwner?.name ??
+                                        "unbekannt"))
+                          ],
+                        ),
+                        Divider(),
+                        Row(
+                          children: [
+                            Container(
+                              width: 150,
+                              child: SelectableText("Institution:"),
+                            ),
+                            Flexible(
+                                child: SelectableText(
+                                    smallFotoItem.institution?.name ?? ""))
+                          ],
+                        ),
+                        Divider(),
+                        Row(
+                          children: [
+                            Container(
+                              width: 150,
+                              child: SelectableText("Vermerk:"),
+                            ),
+                            Flexible(
+                                child: SelectableText(
+                                    smallFotoItem.annotation ?? ""))
+                          ],
+                        ),
+                        Divider(),
+                        Row(
+                          children: [
+                            Container(
+                              width: 150,
+                              child: SelectableText("Stichworte:"),
+                            ),
+                            Flexible(
+                                child: SelectableText(smallFotoItem.getTags()))
+                          ],
+                        ),
+                        Divider(),
+                      ],
+                    ),
+                  ))
+            ],
+          ),
+        ));
   }
 }
