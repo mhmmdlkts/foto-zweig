@@ -77,4 +77,16 @@ class SmallFotoItem implements Comparable {
     }
     return result;
   }
+
+  bool contains(String val) {
+    if (val == null || tags.length == 0)
+      return true;
+    if (tags == null)
+      return false;
+    for (int i = 0; i < tags.length; i++) {
+      if (tags[i].toLowerCase().contains(val.toLowerCase()))
+      return true;
+    }
+    return false;
+  }
 }

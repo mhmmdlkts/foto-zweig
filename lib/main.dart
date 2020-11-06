@@ -33,6 +33,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   SortingService _sortingService = SortingService();
+  ItemTypeEnum _itemType = ItemTypeEnum.FOTO;
   Color _myColor = Colors.white;
   bool _isFilterMenuOpen = false;
 
@@ -57,31 +58,38 @@ class _MyHomePageState extends State<MyHomePage> {
         centerTitle: false,
         title: Text('Foto Zweig'),
         actions: <Widget>[
-          new Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                new FlatButton(
-                  onPressed: () {},
+          new FlatButton(
+                    onPressed: () => setState(() {
+                      _itemType = ItemTypeEnum.FOTO;
+                    }),
                   child: Text('Fotos'),
                   textColor: Colors.white,
                 ),
                 new FlatButton(
-                    onPressed: () {},
-                    child: Text('Dokumente'),
+                    onPressed: () => setState(() {
+                      _itemType = ItemTypeEnum.DOCUMENT;
+                    }),
+                    child: Text('Dokumente'), 
                     textColor: Colors.white),
-                SizedBox(
-                    width: 900,
-                    child: const DecoratedBox(
-                      decoration: const BoxDecoration(color: Colors.white),
+                Flexible(
+                    child: Container(
+                      margin: EdgeInsets.all(5),
                       child: TextField(
-                          decoration: InputDecoration(hintText: ' Suche...')),
+                          decoration: InputDecoration (
+                            hintText: ' Suche...',     
+                            filled: true,
+                            fillColor: Colors.white,      
+                          ),
+                          onChanged: (val) => setState((){
+                            _shownItems = _sortingService.sortFilterList(searchText: val);
+                          }),
+                        ),
                     )),
                 SignInButton(
                   Buttons.Google,
                   text: 'Anmelden',
                   onPressed: () {},
                 ),
-              ]),
         ],
       ),
       body: ListView(
@@ -120,7 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Padding(
               padding: EdgeInsets.only(right: 16),
-              child: ImageContentWidget(_shownItems, ItemTypeEnum.FOTO))
+              child: ImageContentWidget(_shownItems, _itemType))
         ],
       ),
     );

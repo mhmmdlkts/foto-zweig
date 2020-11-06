@@ -11,6 +11,7 @@ class SortingService {
     {
       SortingTypsEnum sortingTyp,
       bool isDesc = true,
+      String searchText,
       String placeFiler,
       String von,
       String bis
@@ -31,7 +32,7 @@ class SortingService {
             list.sort((a, b) => a?.shortDescription?.compareTo(b?.shortDescription??"")??0 * (this.isDesc?1:-1));
           break;
       }
-      return list;
+      return list.where((element) => element.contains(searchText)).toList();
       return list.where((element) => element.location.country.toLowerCase().trim().contains(placeFiler.toLowerCase().trim()))
         .toList();
     }
