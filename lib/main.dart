@@ -55,41 +55,46 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: _myColor,
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(86, 61, 124, 1),
-        centerTitle: false,
-        title: Text('Foto Zweig'),
         actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(5),
+            child: new TextButton(
+                child: Text('Foto Zweig',
+                    style: TextStyle(color: Colors.white, fontSize: 20.0)),
+                onPressed: () {}),
+          ),
           new FlatButton(
-                    onPressed: () => setState(() {
-                      _itemType = ItemTypeEnum.FOTO;
-                    }),
-                  child: Text('Fotos'),
-                  textColor: Colors.white,
-                ),
-                new FlatButton(
-                    onPressed: () => setState(() {
-                      _itemType = ItemTypeEnum.DOCUMENT;
-                    }),
-                    child: Text('Dokumente'), 
-                    textColor: Colors.white),
-                Flexible(
-                    child: Container(
-                      margin: EdgeInsets.all(5),
-                      child: TextField(
-                          decoration: InputDecoration (
-                            hintText: ' Suche...',     
-                            filled: true,
-                            fillColor: Colors.white,      
-                          ),
-                          onChanged: (val) => setState((){
-                            _shownItems = _sortingService.sortFilterList(searchText: val);
-                          }),
-                        ),
-                    )),
-                SignInButton(
-                  Buttons.Google,
-                  text: 'Anmelden',
-                  onPressed: () {},
-                ),
+            onPressed: () => setState(() {
+              _itemType = ItemTypeEnum.FOTO;
+            }),
+            child: Text('Fotos'),
+            textColor: Colors.white,
+          ),
+          new FlatButton(
+              onPressed: () => setState(() {
+                    _itemType = ItemTypeEnum.DOCUMENT;
+                  }),
+              child: Text('Dokumente'),
+              textColor: Colors.white),
+          Flexible(
+              child: Container(
+            margin: EdgeInsets.all(5),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: ' Suche...',
+                filled: true,
+                fillColor: Colors.white,
+              ),
+              onChanged: (val) => setState(() {
+                _shownItems = _sortingService.sortFilterList(searchText: val);
+              }),
+            ),
+          )),
+          SignInButton(
+            Buttons.Google,
+            text: 'Anmelden',
+            onPressed: () {},
+          ),
         ],
       ),
       body: ListView(
