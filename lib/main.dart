@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Foto Zweig",
+      title: "FotoZweig",
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
@@ -169,15 +169,15 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       onChanged: (String newValue) {
         SortingTypsEnum a;
-        if (newValue == 'ORT') a = SortingTypsEnum.ORT;
-        if (newValue == 'DATE') a = SortingTypsEnum.DATE;
-        if (newValue == 'DESCRIPTION') a = SortingTypsEnum.DESCRIPTION;
+        if (newValue == 'Ort') a = SortingTypsEnum.ORT;
+        if (newValue == 'Datum') a = SortingTypsEnum.DATE;
+        if (newValue == 'Kurzbezeichnung') a = SortingTypsEnum.DESCRIPTION;
         setState(() {
           _sortingService.sortingTyp = a;
           _shownItems = _sortingService.sortFilterList();
         });
       },
-      items: <String>['ORT', 'DATE', 'DESCRIPTION']
+      items: <String>['Ort', 'Datum', 'Kurzbezeichnung']
           .map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,

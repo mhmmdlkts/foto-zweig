@@ -40,13 +40,13 @@ class SortingService {
     String getTyp() {
       switch (sortingTyp) {
         case SortingTypsEnum.ORT:
-        return "ORT";
+        return "Ort";
         case SortingTypsEnum.DATE:
-          return "DATE";
+          return "Datum";
         case SortingTypsEnum.DESCRIPTION:
-          return "DESCRIPTION";
+          return "Kurzbezeichnung";
       }
-      return "DATE";
+      return "Datum";
     }
 
 
