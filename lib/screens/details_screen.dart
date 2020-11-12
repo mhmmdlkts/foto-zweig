@@ -36,7 +36,9 @@ class DetailsScreen extends StatelessWidget {
                           ),
                         ),
                         SelectableText(smallFotoItem.description),
-                        Divider(),
+                        Divider(
+                          thickness: 2,
+                        ),
                         Row(
                           children: [
                             Container(
