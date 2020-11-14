@@ -9,7 +9,10 @@ import 'package:foto_zweig/services/init_fotos.dart';
 import 'package:foto_zweig/services/sorting_service.dart';
 import 'package:foto_zweig/widgets/image_content.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:foto_zweig/widgets/rounded_button.dart';
+import 'package:foto_zweig/widgets/upload_dialog.dart';
 import 'decoration/button_colors.dart';
+import 'enums/auth_mode_enum.dart';
 
 void main() {
   runApp(MyApp());
@@ -19,6 +22,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: "FotoZweig",
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
@@ -41,6 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ItemTypeEnum _itemType = ItemTypeEnum.FOTO;
   Color _myColor = Colors.white;
   bool _isFilterMenuOpen = false;
+  AuthModeEnum _authModeEnum = AuthModeEnum.ADMIN;
 
   List<SmallFotoItem> _shownItems = List();
 
@@ -62,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: ButtonColors.appBarColor,
         actions: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(5),
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
             child: new TextButton(
                 child: Text('Foto Zweig',
                     style: TextStyle(color: Colors.white, fontSize: 20.0)),
@@ -109,12 +114,52 @@ class _MyHomePageState extends State<MyHomePage> {
               }),
             ),
           )),
-          SignInButton(
-            Buttons.Google,
-            text: 'Anmelden',
-            onPressed: () {
+          Visibility(
+            visible: _authModeEnum == AuthModeEnum.ADMIN,
+            child: Center(
+              child: RoundedButtonWidget(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context){
+                        return UploadDialog();
+                    }
+                  );
+                },
+                color: Colors.white,
+                secondColor: ButtonColors.appBarColor,
+                text: "Hochladen",
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              // start for Test
+              setState(() {
+                _authModeEnum = _authModeEnum == null? AuthModeEnum.ADMIN:null;
+              });
+              // end   for Test
               //_authService.signInWithGoogle();
             },
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Center(
+                child: Stack(
+                  children: [
+                    Icon(Icons.account_circle, color: Colors.white, size: 42,),
+                    Visibility(
+                      visible: _authModeEnum == AuthModeEnum.ADMIN,
+                      child: CircleAvatar(
+                        radius: 20,
+                        backgroundImage:
+                            NetworkImage('https://cdnb.artstation.com/p/assets/images/images/011/693/779/large/youssef-hesham-heisenberg-upres.jpg?1530893146'),
+                        backgroundColor: Colors.transparent,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            )
           ),
         ],
       ),
@@ -154,7 +199,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Padding(
               padding: EdgeInsets.only(right: 16),
-              child: ImageContentWidget(_shownItems, _itemType))
+              child: ImageContentWidget(_shownItems, _itemType, _authModeEnum))
         ],
       ),
     );

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:foto_zweig/enums/auth_mode_enum.dart';
 import 'package:foto_zweig/models/main_foto.dart';
 import 'package:foto_zweig/screens/details_screen.dart';
 
 class SmallFotoItemWidget extends StatelessWidget {
   final SmallFotoItem smallFotoItem;
-  SmallFotoItemWidget(this.smallFotoItem, {Key key}) : super(key: key);
+  final AuthModeEnum authModeEnum;
+  SmallFotoItemWidget(this.smallFotoItem, this.authModeEnum, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class SmallFotoItemWidget extends StatelessWidget {
 
   Widget _getImg(BuildContext c) => GestureDetector(
     onTap: (){
-      Navigator.push(c, MaterialPageRoute(builder: (context) => DetailsScreen(smallFotoItem)));
+      Navigator.push(c, MaterialPageRoute(builder: (context) => DetailsScreen(smallFotoItem, authModeEnum)));
     },
     child: Container(
       child: Image.network(

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:foto_zweig/models/main_foto.dart';
+import 'package:foto_zweig/widgets/rounded_button.dart';
+import 'package:foto_zweig/enums/auth_mode_enum.dart';
 
 class DetailsScreen extends StatelessWidget {
   final SmallFotoItem smallFotoItem;
-  DetailsScreen(this.smallFotoItem, {Key key}) : super(key: key);
+  final AuthModeEnum _authModeEnum;
+  DetailsScreen(this.smallFotoItem, this._authModeEnum, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +28,26 @@ class DetailsScreen extends StatelessWidget {
                   flex: 1,
                   child: Container(
                     height: MediaQuery.of(context).size.height,
-                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Visibility(
+                          visible: _authModeEnum == AuthModeEnum.ADMIN,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              RoundedButtonWidget(
+                                color: Colors.redAccent,
+                                text: "Löschen",
+                              ),
+                              Container(width: 10,),
+                              RoundedButtonWidget(
+                                text: "Editieren",
+                              )
+                            ],
+                          ),
+                        ),
                         SelectableText(
                           smallFotoItem.shortDescription,
                           style: TextStyle(
