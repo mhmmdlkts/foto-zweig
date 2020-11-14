@@ -36,7 +36,9 @@ class DetailsScreen extends StatelessWidget {
                           ),
                         ),
                         SelectableText(smallFotoItem.description),
-                        Divider(),
+                        Divider(
+                          thickness: 2,
+                        ),
                         Row(
                           children: [
                             Container(
@@ -49,7 +51,9 @@ class DetailsScreen extends StatelessWidget {
                             )
                           ],
                         ),
-                        Divider(),
+                        Divider(
+                          thickness: 2,
+                        ),
                         Row(
                           children: [
                             Container(
@@ -62,7 +66,9 @@ class DetailsScreen extends StatelessWidget {
                             )
                           ],
                         ),
-                        Divider(),
+                        Divider(
+                          thickness: 2,
+                        ),
                         Row(
                           children: [
                             Container(
@@ -75,7 +81,9 @@ class DetailsScreen extends StatelessWidget {
                             )
                           ],
                         ),
-                        Divider(),
+                        Divider(
+                          thickness: 2,
+                        ),
                         Row(
                           children: [
                             Container(
@@ -87,7 +95,9 @@ class DetailsScreen extends StatelessWidget {
                                     smallFotoItem.itemSubType?.name ?? ""))
                           ],
                         ),
-                        Divider(),
+                        Divider(
+                          thickness: 2,
+                        ),
                         Row(
                           children: [
                             Container(
@@ -100,7 +110,9 @@ class DetailsScreen extends StatelessWidget {
                                         "unbekannt"))
                           ],
                         ),
-                        Divider(),
+                        Divider(
+                          thickness: 2,
+                        ),
                         Row(
                           children: [
                             Container(
@@ -112,7 +124,9 @@ class DetailsScreen extends StatelessWidget {
                                     smallFotoItem.institution?.name ?? ""))
                           ],
                         ),
-                        Divider(),
+                        Divider(
+                          thickness: 2,
+                        ),
                         Row(
                           children: [
                             Container(
@@ -124,7 +138,9 @@ class DetailsScreen extends StatelessWidget {
                                     smallFotoItem.annotation ?? ""))
                           ],
                         ),
-                        Divider(),
+                        Divider(
+                          thickness: 2,
+                        ),
                         Row(
                           children: [
                             Container(
@@ -135,7 +151,9 @@ class DetailsScreen extends StatelessWidget {
                                 child: SelectableText(smallFotoItem.getTags()))
                           ],
                         ),
-                        Divider(),
+                        Divider(
+                          thickness: 2,
+                        ),
                       ],
                     ),
                   ))
