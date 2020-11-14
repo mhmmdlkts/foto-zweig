@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foto_zweig/enums/item_type_enum.dart';
 import 'package:foto_zweig/enums/sorting_typs_enum.dart';
 import 'package:foto_zweig/models/main_foto.dart';
+import 'package:foto_zweig/services/authentication.dart';
 import 'package:foto_zweig/services/init_fotos.dart';
 import 'package:foto_zweig/services/sorting_service.dart';
 import 'package:foto_zweig/widgets/image_content.dart';
@@ -32,6 +33,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final AuthService _authService = AuthService();
   SortingService _sortingService = SortingService();
   ItemTypeEnum _itemType = ItemTypeEnum.FOTO;
   Color _myColor = Colors.white;
@@ -93,7 +95,9 @@ class _MyHomePageState extends State<MyHomePage> {
           SignInButton(
             Buttons.Google,
             text: 'Anmelden',
-            onPressed: () {},
+            onPressed: () {
+              //_authService.signInWithGoogle();
+            },
           ),
         ],
       ),
