@@ -185,14 +185,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _sortingDropDown() {
     return DropdownButton<String>(
       value: _sortingService.getTyp(),
-      icon: Icon(Icons.arrow_downward),
-      iconSize: 24,
-      elevation: 16,
-      style: TextStyle(color: Colors.deepPurple),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
-      ),
+      underline: Container(),
       onChanged: (String newValue) {
         SortingTypsEnum a;
         if (newValue == 'Ort') a = SortingTypsEnum.ORT;
@@ -217,11 +210,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return DropdownButton<String>(
       value: "Ort",
       elevation: 16,
-      style: TextStyle(color: Colors.deepPurple),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
-      ),
+      style: TextStyle(color: Colors.blue),
+      underline: Container(),
       onChanged: (String newValue) {
         setState(() {});
       },
@@ -238,11 +228,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return DropdownButton<String>(
       value: "Von",
       elevation: 16,
-      style: TextStyle(color: Colors.deepPurple),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
-      ),
+      style: TextStyle(color: Colors.blue),
+      underline: Container(),
       onChanged: (String newValue) {
         setState(() {});
       },
@@ -259,11 +246,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return DropdownButton<String>(
       value: "Bis",
       elevation: 16,
-      style: TextStyle(color: Colors.deepPurple),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
-      ),
+      style: TextStyle(color: Colors.blue),
+      underline: Container(),
       onChanged: (String newValue) {
         setState(() {});
       },
