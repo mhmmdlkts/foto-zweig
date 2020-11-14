@@ -59,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       backgroundColor: _myColor,
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(86, 61, 124, 1),
+        backgroundColor: ButtonColors.appBarColor,
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.all(5),
@@ -123,7 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Container(
             // TODO Sort filter field
             padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            color: Color.fromRGBO(248, 249, 250, 1),
+            color: ButtonColors.backgroundColor,
             child: Row(
               children: [
                 Opacity(
