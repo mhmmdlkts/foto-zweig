@@ -6,7 +6,6 @@ import 'package:foto_zweig/models/item_infos/people.dart';
 import 'package:foto_zweig/models/item_infos/right_owner.dart';
 
 class SmallFotoItem implements Comparable {
-
   int id;
   String shortDescription;
   Date date;
@@ -25,7 +24,6 @@ class SmallFotoItem implements Comparable {
   People creator;
   bool isPublic;
 
-
   SmallFotoItem(this.shortDescription, this.thumbnailPath);
 
   SmallFotoItem.fromJson(json) {
@@ -38,8 +36,7 @@ class SmallFotoItem implements Comparable {
     thumbnailPath = json["thumbnailPath"];
     path = json["path"];
     if (json["tags"] != null) {
-      for (int i = 0; i < json["tags"].length; i++)
-        tags.add(json["tags"][i]);
+      for (int i = 0; i < json["tags"].length; i++) tags.add(json["tags"][i]);
     }
     if (json["photographedPeople"] != null) {
       for (int i = 0; i < json["photographedPeople"].length; i++)
@@ -56,16 +53,17 @@ class SmallFotoItem implements Comparable {
 
   @override
   int compareTo(other) {
-    final int diff = (date?.startDate?.millisecondsSinceEpoch??0) - (other?.date?.startDate?.millisecondsSinceEpoch ?? 0);
-    if (diff == 0)
-      return other.location.country.compareTo(location.country);
+    final int diff = (date?.startDate?.millisecondsSinceEpoch ?? 0) -
+        (other?.date?.startDate?.millisecondsSinceEpoch ?? 0);
+    if (diff == 0) return other.location.country.compareTo(location.country);
     return diff;
   }
 
   String getReadablePersons() {
     String result = "";
     for (int i = 0; i < photographedPeople.length; i++) {
-      result += photographedPeople[i].getName() + (photographedPeople.length-1 != i?", ":"");
+      result += photographedPeople[i].getName() +
+          (photographedPeople.length - 1 != i ? ", " : "");
     }
     return result;
   }
@@ -73,19 +71,16 @@ class SmallFotoItem implements Comparable {
   String getTags() {
     String result = "";
     for (int i = 0; i < tags.length; i++) {
-      result += tags[i].toString() + (tags.length-1 != i?", ":"");
+      result += tags[i].toString() + (tags.length - 1 != i ? ", " : "");
     }
     return result;
   }
 
   bool contains(String val) {
-    if (val == null || tags.length == 0)
-      return true;
-    if (tags == null)
-      return false;
+    if (val == null || tags.length == 0) return true;
+    if (tags == null) return false;
     for (int i = 0; i < tags.length; i++) {
-      if (tags[i].toLowerCase().contains(val.toLowerCase()))
-      return true;
+      if (tags[i].toLowerCase().contains(val.toLowerCase())) return true;
     }
     return false;
   }

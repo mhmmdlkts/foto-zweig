@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:foto_zweig/enums/item_type_enum.dart';
 import 'package:foto_zweig/enums/sorting_typs_enum.dart';
+import 'package:foto_zweig/models/item_infos/item_type.dart';
 import 'package:foto_zweig/models/main_foto.dart';
 import 'package:foto_zweig/services/init_fotos.dart';
 import 'package:foto_zweig/services/sorting_service.dart';
 import 'package:foto_zweig/widgets/image_content.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'decoration/button_colors.dart';
 
 void main() {
   runApp(MyApp());
@@ -63,19 +66,33 @@ class _MyHomePageState extends State<MyHomePage> {
                     style: TextStyle(color: Colors.white, fontSize: 20.0)),
                 onPressed: () {}),
           ),
-          new FlatButton(
-            onPressed: () => setState(() {
-              _itemType = ItemTypeEnum.FOTO;
-            }),
-            child: Text('Fotos'),
-            textColor: Colors.white,
-          ),
-          new FlatButton(
+          Container(
+            decoration: _itemType == ItemTypeEnum.FOTO
+                ? BoxDecoration(
+                    border: Border(
+                        bottom: BorderSide(color: Colors.white, width: 5)))
+                : null,
+            child: new FlatButton(
               onPressed: () => setState(() {
-                    _itemType = ItemTypeEnum.DOCUMENT;
-                  }),
-              child: Text('Dokumente'),
-              textColor: Colors.white),
+                _itemType = ItemTypeEnum.FOTO;
+              }),
+              child: Text('Fotos'),
+              textColor: Colors.white,
+            ),
+          ),
+          Container(
+            decoration: _itemType == ItemTypeEnum.DOCUMENT
+                ? BoxDecoration(
+                    border: Border(
+                        bottom: BorderSide(color: Colors.white, width: 5)))
+                : null,
+            child: new FlatButton(
+                onPressed: () => setState(() {
+                      _itemType = ItemTypeEnum.DOCUMENT;
+                    }),
+                child: Text('Dokumente'),
+                textColor: Colors.white),
+          ),
           Flexible(
               child: Container(
             margin: EdgeInsets.all(5),
