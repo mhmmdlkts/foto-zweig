@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foto_zweig/decoration/button_colors.dart';
 import 'package:foto_zweig/models/main_foto.dart';
 import 'package:foto_zweig/widgets/rounded_button.dart';
 import 'package:foto_zweig/enums/auth_mode_enum.dart';
@@ -6,13 +7,14 @@ import 'package:foto_zweig/enums/auth_mode_enum.dart';
 class DetailsScreen extends StatelessWidget {
   final SmallFotoItem smallFotoItem;
   final AuthModeEnum _authModeEnum;
-  DetailsScreen(this.smallFotoItem, this._authModeEnum, {Key key}) : super(key: key);
+  DetailsScreen(this.smallFotoItem, this._authModeEnum, {Key key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Color.fromRGBO(86, 61, 124, 1),
+          backgroundColor: ButtonColors.appBarColor,
           title: Text('Foto Zweig'),
         ),
         body: SingleChildScrollView(
@@ -41,7 +43,9 @@ class DetailsScreen extends StatelessWidget {
                                 color: Colors.redAccent,
                                 text: "Löschen",
                               ),
-                              Container(width: 10,),
+                              Container(
+                                width: 10,
+                              ),
                               RoundedButtonWidget(
                                 text: "Editieren",
                               )
