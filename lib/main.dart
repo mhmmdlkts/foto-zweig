@@ -8,7 +8,6 @@ import 'package:foto_zweig/services/authentication.dart';
 import 'package:foto_zweig/services/init_fotos.dart';
 import 'package:foto_zweig/services/sorting_service.dart';
 import 'package:foto_zweig/widgets/image_content.dart';
-import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:foto_zweig/widgets/rounded_button.dart';
 import 'package:foto_zweig/widgets/upload_dialog.dart';
 import 'decoration/button_colors.dart';
@@ -120,11 +119,10 @@ class _MyHomePageState extends State<MyHomePage> {
               child: RoundedButtonWidget(
                 onPressed: () {
                   showDialog(
-                    context: context,
-                    builder: (BuildContext context){
+                      context: context,
+                      builder: (BuildContext context) {
                         return UploadDialog();
-                    }
-                  );
+                      });
                 },
                 color: Colors.white,
                 secondColor: ButtonColors.appBarColor,
@@ -133,34 +131,38 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           GestureDetector(
-            onTap: () {
-              // start for Test
-              setState(() {
-                _authModeEnum = _authModeEnum == null? AuthModeEnum.ADMIN:null;
-              });
-              // end   for Test
-              //_authService.signInWithGoogle();
-            },
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Center(
-                child: Stack(
-                  children: [
-                    Icon(Icons.account_circle, color: Colors.white, size: 42,),
-                    Visibility(
-                      visible: _authModeEnum == AuthModeEnum.ADMIN,
-                      child: CircleAvatar(
-                        radius: 20,
-                        backgroundImage:
-                            NetworkImage('https://cdnb.artstation.com/p/assets/images/images/011/693/779/large/youssef-hesham-heisenberg-upres.jpg?1530893146'),
-                        backgroundColor: Colors.transparent,
+              onTap: () {
+                // start for Test
+                setState(() {
+                  _authModeEnum =
+                      _authModeEnum == null ? AuthModeEnum.ADMIN : null;
+                });
+                // end   for Test
+                //_authService.signInWithGoogle();
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Center(
+                  child: Stack(
+                    children: [
+                      Icon(
+                        Icons.account_circle,
+                        color: Colors.white,
+                        size: 42,
                       ),
-                    )
-                  ],
+                      Visibility(
+                        visible: _authModeEnum == AuthModeEnum.ADMIN,
+                        child: CircleAvatar(
+                          radius: 20,
+                          backgroundImage: NetworkImage(
+                              'https://cdnb.artstation.com/p/assets/images/images/011/693/779/large/youssef-hesham-heisenberg-upres.jpg?1530893146'),
+                          backgroundColor: Colors.transparent,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            )
-          ),
+              )),
         ],
       ),
       body: ListView(
