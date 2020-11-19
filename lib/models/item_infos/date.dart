@@ -34,4 +34,9 @@ class Date {
       return "";
     return endDate.toString().split(" ")[0];
   }
+
+  Map<String, dynamic> toJson() => {
+    "startDate":startDate?.toString()?.split(" ")[0]??null,
+    "endDate":endDate?.toString()?.split(" ")[0]??null,
+  };
 }

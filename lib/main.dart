@@ -8,7 +8,6 @@ import 'package:foto_zweig/services/authentication.dart';
 import 'package:foto_zweig/services/init_fotos.dart';
 import 'package:foto_zweig/services/sorting_service.dart';
 import 'package:foto_zweig/widgets/image_content.dart';
-import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:foto_zweig/widgets/rounded_button.dart';
 import 'package:foto_zweig/widgets/upload_dialog.dart';
 import 'decoration/button_colors.dart';

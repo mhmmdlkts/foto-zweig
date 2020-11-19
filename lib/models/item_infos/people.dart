@@ -15,4 +15,11 @@ class People {
   }
 
   getName() => '$firstName $lastName';
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "dateOfBirth": dateOfBirth?.toString()?.split(" ")[0]??null,
+    "firstName": firstName,
+    "lastName": lastName,
+  };
 }

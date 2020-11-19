@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:foto_zweig/models/item_infos/date.dart';
 import 'package:foto_zweig/models/item_infos/institution.dart';
 import 'package:foto_zweig/models/item_infos/item_type.dart';
@@ -24,7 +26,7 @@ class SmallFotoItem implements Comparable {
   People creator;
   bool isPublic;
 
-  SmallFotoItem(this.shortDescription, this.thumbnailPath);
+  SmallFotoItem({this.shortDescription, this.itemType});
 
   SmallFotoItem.fromJson(json) {
     id = json["id"];
@@ -49,6 +51,12 @@ class SmallFotoItem implements Comparable {
     itemSubType = ItemType.fromJson(json["itemSubType"]);
     creator = People.fromJson(json["creator"]);
     isPublic = json["isPublic"] == 'true';
+    printf();
+  }
+
+  printf() {
+    if (id == 30)
+      print(json.encode(toJson()));
   }
 
   @override
@@ -84,4 +92,24 @@ class SmallFotoItem implements Comparable {
     }
     return false;
   }
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "shortDescription": shortDescription,
+    "date": date?.toJson(),
+    "description": description,
+    "annotation": annotation,
+    "filename": filename,
+    "thumbnailPath": thumbnailPath,
+    "path": path,
+    "tags": tags,
+    "photographedPeople": photographedPeople.map((e) => e?.toJson())?.toList(),
+    "location": location?.toJson(),
+    "rightOwner": rightOwner?.toJson(),
+    "institution": institution?.toJson(),
+    "itemType": itemType?.toJson(),
+    "itemSubType": itemSubType?.toJson(),
+    "creator": creator?.toJson(),
+    "isPublic": isPublic?.toString(),
+  };
 }

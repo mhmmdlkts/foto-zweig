@@ -4,6 +4,8 @@ class ItemType {
   int id;
   String name;
 
+  ItemType(this.id, this.name);
+
   ItemType.fromJson(json) {
     if (json == null)
       return;
@@ -20,4 +22,9 @@ class ItemType {
     }
     return null;
   }
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "name": name
+  };
 }

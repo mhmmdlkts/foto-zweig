@@ -10,4 +10,10 @@ class Institution {
     name = json["name"];
     contactInformation = json["contactInformation"];
   }
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "name": name,
+    "contactInformation": contactInformation
+  };
 }

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:foto_zweig/enums/item_type_enum.dart';
+import 'package:foto_zweig/models/item_infos/item_type.dart';
+import 'package:foto_zweig/models/main_foto.dart';
+import 'package:foto_zweig/services/upload_service.dart';
 import 'package:foto_zweig/widgets/rounded_button.dart';
+import 'package:image_picker_web_redux/image_picker_web_redux.dart';
 
 class UploadDialog extends StatefulWidget {
   @override
@@ -9,6 +13,8 @@ class UploadDialog extends StatefulWidget {
 
 class _UploadDialogState extends State<UploadDialog> {
   ItemTypeEnum _itemType = ItemTypeEnum.FOTO;
+  String _shortDescription = "";
+  MediaInfo _mediaInfo;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +49,9 @@ class _UploadDialogState extends State<UploadDialog> {
                 border: new OutlineInputBorder(
                     borderSide: new BorderSide(color: Colors.teal)),
                 ),
+              onChanged: (val) {
+                _shortDescription = val;
+              },
             ),
           ),
           Container(height: 10, width: 0,),
@@ -54,11 +63,15 @@ class _UploadDialogState extends State<UploadDialog> {
                 color: Colors.blueGrey,
                 text: "Choose file",
                 onPressed: () {
-
+                  ImagePickerWeb.getImageInfo.then((value) {
+                    setState((){
+                      _mediaInfo = value;
+                    });
+                  });
                 },
               ),
               Container(width: 10,),
-              Text ("No file chosen")
+              Text (_mediaInfo==null?"No file chosen":_mediaInfo.fileName)
             ],
           ),
           Container(height: 20, width: 0,),
@@ -69,7 +82,8 @@ class _UploadDialogState extends State<UploadDialog> {
                 color: Colors.blue,
                 text: "Hochlade",
                 onPressed: () {
-
+                  SmallFotoItem smallFotoItem = SmallFotoItem(shortDescription: _shortDescription, itemType: ItemType(1,_itemType.toString()));
+                  UploadService().uploadImage(smallFotoItem, _mediaInfo);
                 },
               ),
               Container(width: 10,),

@@ -10,4 +10,10 @@ class Location {
     name = json["name"];
     country = json["country"];
   }
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "name": name,
+    "country": country
+  };
 }
