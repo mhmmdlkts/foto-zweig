@@ -8,7 +8,7 @@ import 'package:foto_zweig/models/item_infos/people.dart';
 import 'package:foto_zweig/models/item_infos/right_owner.dart';
 
 class SmallFotoItem implements Comparable {
-  int id;
+  String key;
   String shortDescription;
   Date date;
   String description;
@@ -29,7 +29,7 @@ class SmallFotoItem implements Comparable {
   SmallFotoItem({this.shortDescription, this.itemType});
 
   SmallFotoItem.fromJson(json) {
-    id = json["id"];
+    key = json["id"].toString();
     shortDescription = json["shortDescription"];
     date = Date.fromJson(json["date"]);
     description = json["description"];
@@ -51,12 +51,6 @@ class SmallFotoItem implements Comparable {
     itemSubType = ItemType.fromJson(json["itemSubType"]);
     creator = People.fromJson(json["creator"]);
     isPublic = json["isPublic"] == 'true';
-    printf();
-  }
-
-  printf() {
-    if (id == 30)
-      print(json.encode(toJson()));
   }
 
   @override
@@ -94,7 +88,7 @@ class SmallFotoItem implements Comparable {
   }
 
   Map<String, dynamic> toJson() => {
-    "id": id,
+    "id": key,
     "shortDescription": shortDescription,
     "date": date?.toJson(),
     "description": description,
