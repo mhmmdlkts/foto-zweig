@@ -29,14 +29,16 @@ class SmallFotoItem implements Comparable {
   SmallFotoItem({this.shortDescription, this.itemType});
 
   SmallFotoItem.fromJson(json) {
-    key = json["id"].toString();
+    key = json["id"];
     shortDescription = json["shortDescription"];
     date = Date.fromJson(json["date"]);
     description = json["description"];
     annotation = json["annotation"];
     filename = json["filename"];
-    thumbnailPath = json["thumbnailPath"];
-    path = json["path"];
+    thumbnailPath = json["urls"]["thumbnail"];
+    path = json["urls"]["original"];
+    if (path == null)
+      path = json["urls"]["watermark"];
     if (json["tags"] != null) {
       for (int i = 0; i < json["tags"].length; i++) tags.add(json["tags"][i]);
     }

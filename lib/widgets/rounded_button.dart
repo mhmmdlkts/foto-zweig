@@ -5,11 +5,13 @@ class RoundedButtonWidget extends StatefulWidget {
   final String text;
   final Color color;
   final Color secondColor;
+  final IconData icon;
   RoundedButtonWidget({
     this.onPressed,
     this.color = Colors.grey,
     this.secondColor = Colors.white,
-    this.text
+    this.text,
+    this.icon
     });
 
   @override
@@ -33,7 +35,7 @@ class _RoundedButtonState extends State<RoundedButtonWidget> {
           borderRadius: BorderRadius.all(Radius.circular(5)),
           color: _getSecondaryColor()
         ),
-        child: Text(widget.text, style: TextStyle(color: _getPrimaryColor()),),
+        child: widget.icon!=null?Icon(widget.icon, color: _getPrimaryColor(),):Text(widget.text, style: TextStyle(color: _getPrimaryColor()),),
       ),
     );
   }

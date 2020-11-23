@@ -80,7 +80,7 @@ class _UploadDialogState extends State<UploadDialog> {
             children: [
               RoundedButtonWidget(
                 color: Colors.blue,
-                text: "Hochlade",
+                text: "Hochladen",
                 onPressed: () {
                   SmallFotoItem smallFotoItem = SmallFotoItem(shortDescription: _shortDescription, itemType: ItemType(1,_itemType.toString()));
                   UploadService().uploadImage(smallFotoItem, _mediaInfo);

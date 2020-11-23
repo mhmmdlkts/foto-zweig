@@ -83,12 +83,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
               ),
             ),
             SelectableText(
-              widget.smallFotoItem.shortDescription,
+              widget.smallFotoItem?.shortDescription??"",
               style: TextStyle(
                 fontSize: 30,
               ),
             ),
-            SelectableText(widget.smallFotoItem.description),
+            SelectableText(widget.smallFotoItem?.description??""),
             Divider(
               thickness: 2,
             ),
@@ -100,7 +100,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
                 Flexible(
                   child: SelectableText(
-                      widget.smallFotoItem.date.getReadableTime()),
+                      widget.smallFotoItem.date?.getReadableTime()??""),
                 )
               ],
             ),
@@ -115,7 +115,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
                 Flexible(
                   child:
-                      SelectableText(widget.smallFotoItem.getReadablePersons()),
+                      SelectableText(widget.smallFotoItem?.getReadablePersons()??""),
                 )
               ],
             ),
@@ -130,7 +130,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
                 Flexible(
                   child:
-                      SelectableText(widget.smallFotoItem.location?.name ?? ""),
+                      SelectableText(widget.smallFotoItem?.location?.name??""),
                 )
               ],
             ),
@@ -187,7 +187,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
                 Flexible(
                     child:
-                        SelectableText(widget.smallFotoItem.annotation ?? ""))
+                        SelectableText(widget.smallFotoItem?.annotation ?? ""))
               ],
             ),
             Divider(
@@ -199,7 +199,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   width: 150,
                   child: SelectableText("Stichworte:"),
                 ),
-                Flexible(child: SelectableText(widget.smallFotoItem.getTags()))
+                Flexible(child: SelectableText(widget.smallFotoItem?.getTags()??""))
               ],
             ),
             Divider(

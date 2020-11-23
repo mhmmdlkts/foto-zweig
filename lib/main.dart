@@ -6,6 +6,7 @@ import 'package:foto_zweig/models/item_infos/item_type.dart';
 import 'package:foto_zweig/models/main_foto.dart';
 import 'package:foto_zweig/services/authentication.dart';
 import 'package:foto_zweig/services/init_fotos.dart';
+import 'package:foto_zweig/services/mobile_checker_service.dart';
 import 'package:foto_zweig/services/sorting_service.dart';
 import 'package:foto_zweig/widgets/image_content.dart';
 import 'package:foto_zweig/widgets/rounded_button.dart';
@@ -44,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ItemTypeEnum _itemType = ItemTypeEnum.FOTO;
   Color _myColor = Colors.white;
   bool _isFilterMenuOpen = false;
-  AuthModeEnum _authModeEnum = AuthModeEnum.ADMIN;
+  AuthModeEnum _authModeEnum = AuthModeEnum.READ_ONLY;
 
   List<SmallFotoItem> _shownItems = List();
 
@@ -52,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
-    InitFotos.getAllItems().then((value) => setState(() {
+    InitFotos.getAllItems(_authModeEnum == AuthModeEnum.ADMIN ? "admin":null).then((value) => setState(() {
           _sortingService.list = (value);
           _shownItems = _sortingService.sortFilterList();
         }));
@@ -65,12 +66,15 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: ButtonColors.appBarColor,
         actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-            child: new TextButton(
-                child: Text('Foto Zweig',
-                    style: TextStyle(color: Colors.white, fontSize: 20.0)),
-                onPressed: () {}),
+          Visibility(
+            visible: !MbCheck.isMobile(context),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+              child: new TextButton(
+                  child: Text('Foto Zweig',
+                      style: TextStyle(color: Colors.white, fontSize: 20.0)),
+                  onPressed: () {}),
+            ),
           ),
           Container(
             decoration: _itemType == ItemTypeEnum.FOTO
@@ -127,6 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.white,
                 secondColor: ButtonColors.appBarColor,
                 text: "Hochladen",
+                icon: MbCheck.isMobile(context)?Icons.upload_rounded:null,
               ),
             ),
           ),

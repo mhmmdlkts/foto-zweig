@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foto_zweig/enums/auth_mode_enum.dart';
 import 'package:foto_zweig/models/main_foto.dart';
 import 'package:foto_zweig/screens/details_screen.dart';
+import 'package:foto_zweig/services/mobile_checker_service.dart';
 
 class SmallFotoItemWidget extends StatelessWidget {
   final SmallFotoItem smallFotoItem;
@@ -33,10 +34,16 @@ class SmallFotoItemWidget extends StatelessWidget {
     child: Container(
       child: Image.network(
         smallFotoItem.thumbnailPath,
-        height: 272, // 17em
+        height: _getImgHeight(c), // 17em
       ),
     ),
   );
+
+  double _getImgHeight(BuildContext c) {
+    if (!MbCheck.isMobile(c))
+      return 272;
+    return 120;
+  }
 
   Widget _getImgTitle() => Container(
     width: 0, // Maybe there is a better solution for the text overflowing
