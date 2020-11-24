@@ -52,11 +52,15 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    _initContent();
+    _initContent();
+  }
 
+  _initContent() {
     InitFotos.getAllItems(_authModeEnum == AuthModeEnum.ADMIN ? "admin":null).then((value) => setState(() {
-          _sortingService.list = (value);
-          _shownItems = _sortingService.sortFilterList();
-        }));
+      _sortingService.list = (value);
+      _shownItems = _sortingService.sortFilterList();
+    }));
   }
 
   @override
@@ -86,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () => setState(() {
                 _itemType = ItemTypeEnum.FOTO;
               }),
-              child: Text('Fotos'),
+              child: !MbCheck.isMobile(context)?Text('Fotos'):Icon(Icons.photo),
               textColor: Colors.white,
             ),
           ),
@@ -100,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () => setState(() {
                       _itemType = ItemTypeEnum.DOCUMENT;
                     }),
-                child: Text('Dokumente'),
+                child: !MbCheck.isMobile(context)?Text('Dokumente'):Icon(Icons.insert_drive_file_rounded),
                 textColor: Colors.white),
           ),
           Flexible(
@@ -121,12 +125,14 @@ class _MyHomePageState extends State<MyHomePage> {
             visible: _authModeEnum == AuthModeEnum.ADMIN,
             child: Center(
               child: RoundedButtonWidget(
-                onPressed: () {
-                  showDialog(
+                onPressed: () async {
+                  final rtn = await showDialog(
                       context: context,
                       builder: (BuildContext context) {
                         return UploadDialog();
                       });
+                  if (rtn??false)
+                    _initContent();
                 },
                 color: Colors.white,
                 secondColor: ButtonColors.appBarColor,
@@ -135,13 +141,16 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          GestureDetector(
+          InkWell(
               onTap: () {
                 // start for Test
+
                 setState(() {
+                  _shownItems = List();
                   _authModeEnum =
                       _authModeEnum == null ? AuthModeEnum.ADMIN : null;
                 });
+                _initContent();
                 // end   for Test
                 //_authService.signInWithGoogle();
               },

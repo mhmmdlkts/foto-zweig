@@ -81,16 +81,17 @@ class _UploadDialogState extends State<UploadDialog> {
               RoundedButtonWidget(
                 color: Colors.blue,
                 text: "Hochladen",
-                onPressed: () {
-                  SmallFotoItem smallFotoItem = SmallFotoItem(shortDescription: _shortDescription, itemType: ItemType(1,_itemType.toString()));
-                  UploadService().uploadImage(smallFotoItem, _mediaInfo);
+                onPressed: () async {
+                  SmallFotoItem smallFotoItem = SmallFotoItem(shortDescription: _shortDescription, itemType: ItemType(_itemType == ItemTypeEnum.DOCUMENT?2:1,_itemType.toString().split(".")[1]));
+                  await UploadService().uploadImage(smallFotoItem, _mediaInfo);
+                  Navigator.pop(context, true);
                 },
               ),
               Container(width: 10,),
               RoundedButtonWidget(
                 text: "Schließen",
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pop(context, false);
                 },
               ),
             ],

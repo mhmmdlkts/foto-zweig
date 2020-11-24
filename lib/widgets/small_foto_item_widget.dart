@@ -11,31 +11,32 @@ class SmallFotoItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(left: 16, bottom: 16),
-      child: Table(
-        defaultColumnWidth: IntrinsicColumnWidth(),
-        children: [
-          TableRow(children: [
-            _getImg(context)
-          ]),
-          TableRow(children: [
-            _getImgTitle()
-          ]),
-        ],
+    return InkWell(
+      onTap: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context) => DetailsScreen(smallFotoItem, authModeEnum)));
+      },
+      child: Container(
+        margin: EdgeInsets.only(left: 16, bottom: 16),
+        child: Table(
+          defaultColumnWidth: IntrinsicColumnWidth(),
+          children: [
+            TableRow(children: [
+              _getImg(context)
+            ]),
+            TableRow(children: [
+              _getImgTitle()
+            ]),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _getImg(BuildContext c) => GestureDetector(
-    onTap: (){
-      Navigator.push(c, MaterialPageRoute(builder: (context) => DetailsScreen(smallFotoItem, authModeEnum)));
-    },
-    child: Container(
-      child: Image.network(
-        smallFotoItem.thumbnailPath,
-        height: _getImgHeight(c), // 17em
-      ),
+  Widget _getImg(BuildContext c) => Container(
+    child: Image.network(
+      smallFotoItem.thumbnailPath,
+      height: _getImgHeight(c), // 17em
+      fit: BoxFit.fitHeight,
     ),
   );
 
