@@ -1,13 +1,13 @@
 class People {
-  int id;
+  String key;
   DateTime dateOfBirth;
   String firstName;
   String lastName;
 
-  People.fromJson(json) {
+  People.fromJson(json, key) {
     if (json == null)
       return;
-    id = json["id"];
+    key = key;
     if (json["dateOfBirth"] != null)
       dateOfBirth = DateTime.parse(json["dateOfBirth"]);
     firstName = json["firstName"];
@@ -17,7 +17,7 @@ class People {
   getName() => '$firstName $lastName';
 
   Map<String, dynamic> toJson() => {
-    "id": id,
+    "key": key,
     "dateOfBirth": dateOfBirth?.toString()?.split(" ")[0]??null,
     "firstName": firstName,
     "lastName": lastName,

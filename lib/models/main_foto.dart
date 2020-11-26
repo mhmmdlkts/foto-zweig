@@ -28,7 +28,13 @@ class SmallFotoItem implements Comparable {
 
   SmallFotoItem({this.shortDescription, this.itemType});
 
-  SmallFotoItem.fromJson(json) {
+  SmallFotoItem.fromJson(json, {locationsJson, rightOwnerJson, institutionJson, itemSubTypeJson, peopleJson}) {
+    if (json == null) json = Map();
+    if (locationsJson == null) locationsJson = Map();
+    if (rightOwnerJson == null) rightOwnerJson = Map();
+    if (institutionJson == null) institutionJson = Map();
+    if (itemSubTypeJson == null) itemSubTypeJson = Map();
+    if (peopleJson == null) peopleJson = Map();
     key = json["id"];
     shortDescription = json["shortDescription"];
     date = Date.fromJson(json["date"]);
@@ -43,15 +49,17 @@ class SmallFotoItem implements Comparable {
       for (int i = 0; i < json["tags"].length; i++) tags.add(json["tags"][i]);
     }
     if (json["photographedPeople"] != null) {
-      for (int i = 0; i < json["photographedPeople"].length; i++)
-        photographedPeople.add(People.fromJson(json["photographedPeople"][i]));
+      json["photographedPeople"].values.forEach((element) {
+        photographedPeople.add(People.fromJson(peopleJson[element], element));
+      });
     }
-    location = Location.fromJson(json["location"]);
-    rightOwner = RightOwner.fromJson(json["rightOwner"]);
-    institution = Institution.fromJson(json["institution"]);
-    itemType = ItemType.fromJson(json["itemType"]);
-    itemSubType = ItemType.fromJson(json["itemSubType"]);
-    creator = People.fromJson(json["creator"]);
+
+    location = Location.fromJson(locationsJson[json["location"]], json["location"]);
+    rightOwner = RightOwner.fromJson(rightOwnerJson[json["rightOwner"]], json["rightOwner"]);
+    institution = Institution.fromJson(institutionJson[json["institution"]], json["institution"]);
+    itemType = ItemType.fromJson(json["itemType"], "key");
+    itemSubType = ItemType.fromJson(itemSubTypeJson[json["itemSubType"]], json["itemSubType"]);
+    creator = People.fromJson(peopleJson[json["creator"]], json["creator"]);
     isPublic = json["isPublic"] == 'true';
   }
 

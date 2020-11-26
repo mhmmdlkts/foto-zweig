@@ -8,8 +8,13 @@ import 'package:foto_zweig/enums/auth_mode_enum.dart';
 class DetailsScreen extends StatefulWidget {
   final SmallFotoItem smallFotoItem;
   final AuthModeEnum authModeEnum;
+  final Map locationsJson;
+  final Map rightOwnerJson;
+  final Map institutionJson;
+  final Map itemSubTypeJson;
+  final Map peopleJson;
 
-  DetailsScreen(this.smallFotoItem, this.authModeEnum);
+  DetailsScreen(this.smallFotoItem, this.authModeEnum, {this.locationsJson, this.rightOwnerJson, this.institutionJson, this.itemSubTypeJson, this.peopleJson});
 
   @override
   _DetailsScreenState createState() => _DetailsScreenState();
@@ -39,8 +44,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   child: _isEditing
                       ? Container(
                           padding: EdgeInsets.symmetric(horizontal: 16),
-                          child:
-                              AdminViewEdit(_cancelEdit, widget.smallFotoItem))
+                          child: AdminViewEdit(_cancelEdit, widget.smallFotoItem,
+                                  locationsJson: widget.locationsJson,
+                                  rightOwnerJson: widget.rightOwnerJson,
+                                  institutionJson: widget.institutionJson,
+                                  itemSubTypeJson: widget.itemSubTypeJson,
+                                  peopleJson: widget.peopleJson))
                       : _showContent(context))
             ],
           ),

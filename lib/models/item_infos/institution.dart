@@ -1,18 +1,18 @@
 class Institution {
-  int id;
+  String key;
   String name;
   String contactInformation;
 
-  Institution.fromJson(json) {
+  Institution.fromJson(json, key) {
     if (json == null)
       return;
-    id = json["id"];
+    key = key;
     name = json["name"];
     contactInformation = json["contactInformation"];
   }
 
   Map<String, dynamic> toJson() => {
-    "id": id,
+    "key": key,
     "name": name,
     "contactInformation": contactInformation
   };

@@ -1,18 +1,18 @@
 class Location {
-  int id;
+  String key;
   String name;
   String country;
 
-  Location.fromJson(json) {
+  Location.fromJson(json, key) {
     if (json == null)
       return;
-    id = json["id"];
+    key = key;
     name = json["name"];
     country = json["country"];
   }
 
   Map<String, dynamic> toJson() => {
-    "id": id,
+    "key": key,
     "name": name,
     "country": country
   };

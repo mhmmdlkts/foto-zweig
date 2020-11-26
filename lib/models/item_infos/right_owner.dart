@@ -1,18 +1,18 @@
 class RightOwner {
-  int id;
+  String key;
   String name;
   String contactInformation;
 
-  RightOwner.fromJson(json) {
+  RightOwner.fromJson(json, key) {
     if (json == null)
       return;
-    id = json["id"];
+    key = key;
     name = json["name"];
     contactInformation = json["contactInformation"];
   }
 
   Map<String, dynamic> toJson() => {
-    "id": id,
+    "key": key,
     "name": name,
     "contactInformation": contactInformation
   };

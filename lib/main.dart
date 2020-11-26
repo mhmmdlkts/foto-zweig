@@ -4,6 +4,7 @@ import 'package:foto_zweig/enums/item_type_enum.dart';
 import 'package:foto_zweig/enums/sorting_typs_enum.dart';
 import 'package:foto_zweig/models/item_infos/item_type.dart';
 import 'package:foto_zweig/models/main_foto.dart';
+import 'package:foto_zweig/screens/details_screen.dart';
 import 'package:foto_zweig/services/authentication.dart';
 import 'package:foto_zweig/services/init_fotos.dart';
 import 'package:foto_zweig/services/mobile_checker_service.dart';
@@ -45,7 +46,12 @@ class _MyHomePageState extends State<MyHomePage> {
   ItemTypeEnum _itemType = ItemTypeEnum.FOTO;
   Color _myColor = Colors.white;
   bool _isFilterMenuOpen = false;
-  AuthModeEnum _authModeEnum = AuthModeEnum.READ_ONLY;
+  AuthModeEnum _authModeEnum = AuthModeEnum.ADMIN;
+  Map _institutionJson;
+  Map _locationsJson;
+  Map _peopleJson;
+  Map _itemSubTypeJson;
+  Map _rightOwnerJson;
 
   List<SmallFotoItem> _shownItems = List();
 
@@ -53,13 +59,26 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _initContent();
-    _initContent();
   }
 
-  _initContent() {
-    InitFotos.getAllItems(_authModeEnum == AuthModeEnum.ADMIN ? "admin":null).then((value) => setState(() {
+  Future<void> _initContent() async{
+    _institutionJson = await InitFotos.getJson("getAllInstitutions");
+    _locationsJson = await InitFotos.getJson("getAllLocations");
+    _peopleJson = await InitFotos.getJson("getAllPeoples");
+    /*_itemSubTypeJson = await InitFotos.getJson(name);
+    _rightOwnerJson = await InitFotos.getJson(name);*/
+
+    InitFotos.getAllItems(
+      _authModeEnum == AuthModeEnum.ADMIN ? "admin":null,
+      institutionJson: _institutionJson,
+      locationsJson: _locationsJson,
+      peopleJson: _peopleJson,
+      itemSubTypeJson: _itemSubTypeJson,
+      rightOwnerJson: _rightOwnerJson
+    ).then((value) => setState(() {
       _sortingService.list = (value);
       _shownItems = _sortingService.sortFilterList();
+      //_openAutoEditingScreen();
     }));
   }
 
@@ -143,12 +162,9 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           InkWell(
               onTap: () {
-                // start for Test
-
                 setState(() {
                   _shownItems = List();
-                  _authModeEnum =
-                      _authModeEnum == null ? AuthModeEnum.ADMIN : null;
+                  _authModeEnum = _authModeEnum == AuthModeEnum.READ_ONLY ? AuthModeEnum.ADMIN : AuthModeEnum.READ_ONLY;
                 });
                 _initContent();
                 // end   for Test
@@ -168,8 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         visible: _authModeEnum == AuthModeEnum.ADMIN,
                         child: CircleAvatar(
                           radius: 20,
-                          backgroundImage: NetworkImage(
-                              'https://cdnb.artstation.com/p/assets/images/images/011/693/779/large/youssef-hesham-heisenberg-upres.jpg?1530893146'),
+                          backgroundImage: NetworkImage('https://cdnb.artstation.com/p/assets/images/images/011/693/779/large/youssef-hesham-heisenberg-upres.jpg?1530893146'),
                           backgroundColor: Colors.transparent,
                         ),
                       )
@@ -215,10 +230,21 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Padding(
               padding: EdgeInsets.only(right: 16),
-              child: ImageContentWidget(_shownItems, _itemType, _authModeEnum))
+              child: ImageContentWidget(_shownItems, _itemType, _authModeEnum, peopleJson: _peopleJson, rightOwnerJson: _rightOwnerJson, itemSubTypeJson: _itemSubTypeJson, institutionJson: _institutionJson, locationsJson: _locationsJson))
         ],
       ),
     );
+  }
+  
+  void _openAutoEditingScreen() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) =>
+        DetailsScreen(_shownItems[0], AuthModeEnum.ADMIN,
+            locationsJson: _locationsJson,
+            rightOwnerJson: _rightOwnerJson,
+            institutionJson: _institutionJson,
+            itemSubTypeJson: _itemSubTypeJson,
+            peopleJson: _peopleJson
+        )));
   }
 
   Widget _getFilters() {
