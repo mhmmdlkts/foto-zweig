@@ -3,6 +3,14 @@ class Location {
   String name;
   String country;
 
+  Location();
+
+  Location.copy(Location location) {
+    key = location.key;
+    name = location.name;
+    country = location.country;
+  }
+
   Location.fromJson(json, key) {
     if (json == null)
       return;

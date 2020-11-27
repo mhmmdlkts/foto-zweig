@@ -7,6 +7,7 @@ import 'package:foto_zweig/models/item_infos/location.dart';
 import 'package:foto_zweig/models/item_infos/people.dart';
 import 'package:foto_zweig/models/item_infos/right_owner.dart';
 import 'package:foto_zweig/models/item_infos/tag.dart';
+import 'package:foto_zweig/services/keyword_service.dart';
 
 import 'item_infos/item_subtype.dart';
 
@@ -31,13 +32,8 @@ class SmallFotoItem implements Comparable {
 
   SmallFotoItem({this.shortDescription, this.itemType});
 
-  SmallFotoItem.fromJson(json, key, {locationsJson, rightOwnerJson, institutionJson, itemSubtypeJson, peopleJson, tagJson}) {
+  SmallFotoItem.fromJson(json, key, KeywordService ks) {
     if (json == null) json = Map();
-    if (locationsJson == null) locationsJson = Map();
-    if (rightOwnerJson == null) rightOwnerJson = Map();
-    if (institutionJson == null) institutionJson = Map();
-    if (itemSubtypeJson == null) itemSubtypeJson = Map();
-    if (peopleJson == null) peopleJson = Map();
     this.key = key;
     shortDescription = json["shortDescription"];
     date = Date.fromJson(json["date"]);
@@ -51,21 +47,21 @@ class SmallFotoItem implements Comparable {
     if (json["tags"] != null) {
       json["tags"].forEach((element) {
         print(element);
-        tags.add(Tag.fromJson(tagJson[element], element));
+        tags.add(Tag.fromJson(ks.tagJson[element], element));
       });
     }
     if (json["photographedPeople"] != null) {
       json["photographedPeople"].forEach((element) {
-        photographedPeople.add(People.fromJson(peopleJson[element], element));
+        photographedPeople.add(People.fromJson(ks.peopleJson[element], element));
       });
     }
 
-    location = Location.fromJson(locationsJson[json["location"]], json["location"]);
-    rightOwner = RightOwner.fromJson(rightOwnerJson[json["rightOwner"]], json["rightOwner"]);
-    institution = Institution.fromJson(institutionJson[json["institution"]], json["institution"]);
+    location = Location.fromJson(ks.locationsJson[json["location"]], json["location"]);
+    rightOwner = RightOwner.fromJson(ks.rightOwnerJson[json["rightOwner"]], json["rightOwner"]);
+    institution = Institution.fromJson(ks.institutionJson[json["institution"]], json["institution"]);
     itemType = intToItemTypeEnum(json["itemType"]);
-    itemSubType = ItemSubtype.fromJson(itemSubtypeJson[json["itemSubtype"]], json["itemSubtype"]);
-    creator = People.fromJson(peopleJson[json["creator"]], json["creator"]);
+    itemSubType = ItemSubtype.fromJson(ks.itemSubtypeJson[json["itemSubtype"]], json["itemSubtype"]);
+    creator = People.fromJson(ks.peopleJson[json["creator"]], json["creator"]);
     isPublic = json["isPublic"] == 'true';
   }
 

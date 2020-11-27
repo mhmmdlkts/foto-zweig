@@ -2,26 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:foto_zweig/enums/auth_mode_enum.dart';
 import 'package:foto_zweig/models/main_foto.dart';
 import 'package:foto_zweig/screens/details_screen.dart';
+import 'package:foto_zweig/services/keyword_service.dart';
 import 'package:foto_zweig/services/mobile_checker_service.dart';
 
 class SmallFotoItemWidget extends StatelessWidget {
+  final KeywordService keywordService;
   final VoidCallback onPop;
   final SmallFotoItem smallFotoItem;
   final AuthModeEnum authModeEnum;
-  final Map locationsJson;
-  final Map rightOwnerJson;
-  final Map institutionJson;
-  final Map tagJson;
-  final Map itemSubTypeJson;
-  final Map peopleJson;
-  SmallFotoItemWidget(this.smallFotoItem, this.authModeEnum,
+  SmallFotoItemWidget(this.smallFotoItem, this.authModeEnum, this.keywordService,
       {
-        this.locationsJson,
-        this.rightOwnerJson,
-        this.tagJson,
-        this.institutionJson,
-        this.itemSubTypeJson,
-        this.peopleJson,
         this.onPop,
         Key key
       }) : super(key: key);
@@ -30,15 +20,8 @@ class SmallFotoItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-
         Navigator.push(context, MaterialPageRoute(builder: (context) =>
-            DetailsScreen(smallFotoItem, authModeEnum,
-              locationsJson: locationsJson,
-              rightOwnerJson: rightOwnerJson,
-              institutionJson: institutionJson,
-              tagJson: tagJson,
-              itemSubTypeJson: itemSubTypeJson,
-              peopleJson: peopleJson
+            DetailsScreen(smallFotoItem, authModeEnum, keywordService,
             ))).then((value) => {
               if (value??false)
                 onPop.call()

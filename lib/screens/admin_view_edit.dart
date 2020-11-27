@@ -9,28 +9,17 @@ import 'package:foto_zweig/models/item_infos/people.dart';
 import 'package:foto_zweig/models/item_infos/right_owner.dart';
 import 'package:foto_zweig/models/item_infos/tag.dart';
 import 'package:foto_zweig/models/main_foto.dart';
+import 'package:foto_zweig/services/keyword_service.dart';
 import 'package:foto_zweig/services/upload_service.dart';
 import 'package:foto_zweig/widgets/rounded_button.dart';
 
 class AdminViewEdit extends StatefulWidget {
+  final KeywordService ks;
   final BuildContext context;
   final SmallFotoItem smallFotoItem;
   final VoidCallback onCancel;
-  final Map locationsJson;
-  final Map rightOwnerJson;
-  final Map institutionJson;
-  final Map itemSubTypeJson;
-  final Map peopleJson;
-  final Map tagJson;
 
-  AdminViewEdit(this.context, this.onCancel, this.smallFotoItem,
-      {this.locationsJson,
-      this.rightOwnerJson,
-      this.institutionJson,
-      this.itemSubTypeJson,
-      this.peopleJson,
-      Key key, this.tagJson})
-      : super(key: key);
+  AdminViewEdit(this.context, this.onCancel, this.smallFotoItem, this.ks);
 
   @override
   _AdminViewEditState createState() => _AdminViewEditState();
@@ -66,12 +55,12 @@ class _AdminViewEditState extends State<AdminViewEdit> {
   @override
   void initState() {
     super.initState();
-    widget.locationsJson?.forEach((key, value) => _locationList.add(Location.fromJson(value, key)));
-    widget.rightOwnerJson?.forEach((key, value) => _rightOwnerList.add(RightOwner.fromJson(value, key)));
-    widget.institutionJson?.forEach((key, value) => _institutionList.add(Institution.fromJson(value, key)));
-    widget.itemSubTypeJson?.forEach((key, value) => _itemSubTypeList.add(ItemSubtype.fromJson(value, key)));
-    widget.peopleJson?.forEach((key, value) => _peopleList.add(People.fromJson(value, key)));
-    widget.tagJson?.forEach((key, value) => _tagList.add(Tag.fromJson(value, key)));
+    widget.ks.locationsJson?.forEach((key, value) => _locationList.add(Location.fromJson(value, key)));
+    widget.ks.rightOwnerJson?.forEach((key, value) => _rightOwnerList.add(RightOwner.fromJson(value, key)));
+    widget.ks.institutionJson?.forEach((key, value) => _institutionList.add(Institution.fromJson(value, key)));
+    widget.ks.itemSubtypeJson?.forEach((key, value) => _itemSubTypeList.add(ItemSubtype.fromJson(value, key)));
+    widget.ks.peopleJson?.forEach((key, value) => _peopleList.add(People.fromJson(value, key)));
+    widget.ks.tagJson?.forEach((key, value) => _tagList.add(Tag.fromJson(value, key)));
 
     _annotationController = TextEditingController(text: widget.smallFotoItem?.annotation??"");
     _locationController = TextEditingController(text: widget.smallFotoItem?.location?.name??"");

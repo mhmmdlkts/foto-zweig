@@ -4,13 +4,15 @@ import 'package:foto_zweig/enums/item_type_enum.dart';
 import 'package:foto_zweig/enums/sorting_typs_enum.dart';
 import 'package:foto_zweig/models/main_foto.dart';
 import 'package:foto_zweig/screens/details_screen.dart';
+import 'package:foto_zweig/screens/keyword_edit_screen.dart';
 import 'package:foto_zweig/services/authentication.dart';
 import 'package:foto_zweig/services/init_fotos.dart';
+import 'package:foto_zweig/services/keyword_service.dart';
 import 'package:foto_zweig/services/mobile_checker_service.dart';
 import 'package:foto_zweig/services/sorting_service.dart';
 import 'package:foto_zweig/widgets/image_content.dart';
 import 'package:foto_zweig/widgets/rounded_button.dart';
-import 'package:foto_zweig/widgets/upload_dialog.dart';
+import 'package:foto_zweig/dialogs/upload_dialog.dart';
 import 'decoration/button_colors.dart';
 import 'enums/auth_mode_enum.dart';
 
@@ -48,12 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Color _myColor = Colors.white;
   bool _isFilterMenuOpen = false;
   AuthModeEnum _authModeEnum = AuthModeEnum.ADMIN;
-  Map _institutionJson;
-  Map _locationsJson;
-  Map _peopleJson;
-  Map _itemSubTypeJson;
-  Map _rightOwnerJson;
-  Map _tagJson;
+  final KeywordService _keywordService = KeywordService();
 
   List<SmallFotoItem> _shownItems = List();
 
@@ -64,25 +61,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _initContent() async {
-    _institutionJson = await InitFotos.getJson("getAllInstitutions");
-    _locationsJson = await InitFotos.getJson("getAllLocations");
-    _peopleJson = await InitFotos.getJson("getAllPeoples");
-    _tagJson = await InitFotos.getJson("getAllTags");
-    _rightOwnerJson = await InitFotos.getJson("getAllRightOwners");
-    _itemSubTypeJson = await InitFotos.getJson("getAllSubtypes");
+    await _keywordService.initKeywords();
 
     InitFotos.getAllItems(
-      _authModeEnum == AuthModeEnum.ADMIN ? "admin":null,
-      institutionJson: _institutionJson,
-      locationsJson: _locationsJson,
-      peopleJson: _peopleJson,
-      itemSubTypeJson: _itemSubTypeJson,
-      rightOwnerJson: _rightOwnerJson,
-      tagJson: _tagJson
+      _authModeEnum == AuthModeEnum.ADMIN ? "admin":null, _keywordService
     ).then((value) => setState(() {
       _sortingService.list = value;
       _shownItems = _sortingService.sortFilterList();
-      //_openAutoEditingScreen();
+      //_openAutoEditingScreen(1);
     }));
   }
 
@@ -167,6 +153,22 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
+          Container(width: 10,),
+          Visibility(
+            visible: _authModeEnum == AuthModeEnum.ADMIN,
+            child: Center(
+              child: RoundedButtonWidget(
+                onPressed: () async {
+                  await Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                      KeywordEditScreen(ks: _keywordService)));
+                },
+                color: Colors.white,
+                secondColor: ButtonColors.appBarColor,
+                text: "Settings",
+                icon: MbCheck.isMobile(context) ? Icons.settings : null,
+              ),
+            ),
+          ),
           InkWell(
               onTap: () {
                 setState(() {
@@ -240,32 +242,26 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Padding(
               padding: EdgeInsets.only(right: 16),
-              child: ImageContentWidget(_shownItems, _itemType, _authModeEnum,
-                  onPop: () {
-                    _initContent();
-                  },
-                  peopleJson: _peopleJson,
-                  rightOwnerJson: _rightOwnerJson,
-                  itemSubTypeJson: _itemSubTypeJson,
-                  institutionJson: _institutionJson,
-                  locationsJson: _locationsJson))
+              child: ImageContentWidget(_shownItems, _itemType, _authModeEnum, _keywordService, onPop: () => _initContent())
+          )
         ],
       ),
     );
   }
 
-  void _openAutoEditingScreen() {
-    if (_shownItems.isEmpty)
+  void _openAutoEditingScreen(int i) {
+    if (i == 0)
       return;
-    Navigator.push(context, MaterialPageRoute(builder: (context) =>
-        DetailsScreen(_shownItems[0], AuthModeEnum.ADMIN,
-            locationsJson: _locationsJson,
-            rightOwnerJson: _rightOwnerJson,
-            institutionJson: _institutionJson,
-            tagJson: _tagJson,
-            itemSubTypeJson: _itemSubTypeJson,
-            peopleJson: _peopleJson
-        )));
+    else if (i == 1) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) =>
+          KeywordEditScreen(ks: _keywordService)));
+    }
+    else if (i == 2) {
+      if (_shownItems.isEmpty)
+        return;
+      Navigator.push(context, MaterialPageRoute(builder: (context) =>
+          DetailsScreen(_shownItems[0], AuthModeEnum.ADMIN, _keywordService)));
+    }
   }
 
   Widget _getFilters() {

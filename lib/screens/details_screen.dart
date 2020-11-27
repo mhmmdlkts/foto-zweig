@@ -2,21 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:foto_zweig/decoration/button_colors.dart';
 import 'package:foto_zweig/models/main_foto.dart';
 import 'package:foto_zweig/screens/admin_view_edit.dart';
+import 'package:foto_zweig/services/keyword_service.dart';
 import 'package:foto_zweig/services/upload_service.dart';
 import 'package:foto_zweig/widgets/rounded_button.dart';
 import 'package:foto_zweig/enums/auth_mode_enum.dart';
 
 class DetailsScreen extends StatefulWidget {
+  final KeywordService keywordService;
   final SmallFotoItem smallFotoItem;
   final AuthModeEnum authModeEnum;
-  final Map locationsJson;
-  final Map rightOwnerJson;
-  final Map institutionJson;
-  final Map itemSubTypeJson;
-  final Map tagJson;
-  final Map peopleJson;
 
-  DetailsScreen(this.smallFotoItem, this.authModeEnum, {this.locationsJson, this.tagJson, this.rightOwnerJson, this.institutionJson, this.itemSubTypeJson, this.peopleJson});
+  DetailsScreen(this.smallFotoItem, this.authModeEnum, this.keywordService);
 
   @override
   _DetailsScreenState createState() => _DetailsScreenState();
@@ -47,13 +43,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   child: _isEditing
                       ? Container(
                           padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: AdminViewEdit(context, _cancelEdit, widget.smallFotoItem,
-                                  locationsJson: widget.locationsJson,
-                                  rightOwnerJson: widget.rightOwnerJson,
-                                  institutionJson: widget.institutionJson,
-                                  itemSubTypeJson: widget.itemSubTypeJson,
-                                  tagJson: widget.tagJson,
-                                  peopleJson: widget.peopleJson))
+                          child: AdminViewEdit(context, _cancelEdit, widget.smallFotoItem, widget.keywordService))
                       : _showContent(context))
             ],
           ),
