@@ -7,7 +7,7 @@ class People {
   People.fromJson(json, key) {
     if (json == null)
       return;
-    key = key;
+    this.key = key;
     if (json["dateOfBirth"] != null)
       dateOfBirth = DateTime.parse(json["dateOfBirth"]);
     firstName = json["firstName"];
@@ -18,7 +18,7 @@ class People {
 
   Map<String, dynamic> toJson() => {
     "key": key,
-    "dateOfBirth": dateOfBirth?.toString()?.split(" ")[0]??null,
+    "dateOfBirth": dateOfBirth?.toString()?.split(" ")?.first,
     "firstName": firstName,
     "lastName": lastName,
   };

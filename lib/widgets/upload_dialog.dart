@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:foto_zweig/enums/item_type_enum.dart';
-import 'package:foto_zweig/models/item_infos/item_type.dart';
 import 'package:foto_zweig/models/main_foto.dart';
 import 'package:foto_zweig/services/upload_service.dart';
 import 'package:foto_zweig/widgets/rounded_button.dart';
@@ -15,6 +14,7 @@ class _UploadDialogState extends State<UploadDialog> {
   ItemTypeEnum _itemType = ItemTypeEnum.FOTO;
   String _shortDescription = "";
   MediaInfo _mediaInfo;
+  bool _isUploading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -79,10 +79,14 @@ class _UploadDialogState extends State<UploadDialog> {
             mainAxisSize:  MainAxisSize.min,
             children: [
               RoundedButtonWidget(
+                isActive: !_isUploading,
                 color: Colors.blue,
                 text: "Hochladen",
                 onPressed: () async {
-                  SmallFotoItem smallFotoItem = SmallFotoItem(shortDescription: _shortDescription, itemType: ItemType(_itemType == ItemTypeEnum.DOCUMENT?2:1,_itemType.toString().split(".")[1]));
+                  setState(() {
+                    _isUploading = true;
+                  });
+                  SmallFotoItem smallFotoItem = SmallFotoItem(shortDescription: _shortDescription, itemType: _itemType);
                   await UploadService().uploadImage(smallFotoItem, _mediaInfo);
                   Navigator.pop(context, true);
                 },

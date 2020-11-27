@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:foto_zweig/enums/item_type_enum.dart';
 import 'package:foto_zweig/enums/sorting_typs_enum.dart';
-import 'package:foto_zweig/models/item_infos/item_type.dart';
 import 'package:foto_zweig/models/main_foto.dart';
 import 'package:foto_zweig/screens/details_screen.dart';
 import 'package:foto_zweig/services/authentication.dart';
@@ -16,7 +15,9 @@ import 'decoration/button_colors.dart';
 import 'enums/auth_mode_enum.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+      MyApp()
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -52,6 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Map _peopleJson;
   Map _itemSubTypeJson;
   Map _rightOwnerJson;
+  Map _tagJson;
 
   List<SmallFotoItem> _shownItems = List();
 
@@ -61,12 +63,13 @@ class _MyHomePageState extends State<MyHomePage> {
     _initContent();
   }
 
-  Future<void> _initContent() async{
+  Future<void> _initContent() async {
     _institutionJson = await InitFotos.getJson("getAllInstitutions");
     _locationsJson = await InitFotos.getJson("getAllLocations");
     _peopleJson = await InitFotos.getJson("getAllPeoples");
-    /*_itemSubTypeJson = await InitFotos.getJson(name);
-    _rightOwnerJson = await InitFotos.getJson(name);*/
+    _tagJson = await InitFotos.getJson("getAllTags");
+    _rightOwnerJson = await InitFotos.getJson("getAllRightOwners");
+    _itemSubTypeJson = await InitFotos.getJson("getAllSubtypes");
 
     InitFotos.getAllItems(
       _authModeEnum == AuthModeEnum.ADMIN ? "admin":null,
@@ -74,9 +77,10 @@ class _MyHomePageState extends State<MyHomePage> {
       locationsJson: _locationsJson,
       peopleJson: _peopleJson,
       itemSubTypeJson: _itemSubTypeJson,
-      rightOwnerJson: _rightOwnerJson
+      rightOwnerJson: _rightOwnerJson,
+      tagJson: _tagJson
     ).then((value) => setState(() {
-      _sortingService.list = (value);
+      _sortingService.list = value;
       _shownItems = _sortingService.sortFilterList();
       //_openAutoEditingScreen();
     }));
@@ -109,7 +113,9 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () => setState(() {
                 _itemType = ItemTypeEnum.FOTO;
               }),
-              child: !MbCheck.isMobile(context)?Text('Fotos'):Icon(Icons.photo),
+              child: !MbCheck.isMobile(context)
+                  ? Text('Fotos')
+                  : Icon(Icons.photo),
               textColor: Colors.white,
             ),
           ),
@@ -123,7 +129,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () => setState(() {
                       _itemType = ItemTypeEnum.DOCUMENT;
                     }),
-                child: !MbCheck.isMobile(context)?Text('Dokumente'):Icon(Icons.insert_drive_file_rounded),
+                child: !MbCheck.isMobile(context)
+                    ? Text('Dokumente')
+                    : Icon(Icons.insert_drive_file_rounded),
                 textColor: Colors.white),
           ),
           Flexible(
@@ -150,13 +158,12 @@ class _MyHomePageState extends State<MyHomePage> {
                       builder: (BuildContext context) {
                         return UploadDialog();
                       });
-                  if (rtn??false)
-                    _initContent();
+                  if (rtn ?? false) _initContent();
                 },
                 color: Colors.white,
                 secondColor: ButtonColors.appBarColor,
                 text: "Hochladen",
-                icon: MbCheck.isMobile(context)?Icons.upload_rounded:null,
+                icon: MbCheck.isMobile(context) ? Icons.upload_rounded : null,
               ),
             ),
           ),
@@ -164,7 +171,9 @@ class _MyHomePageState extends State<MyHomePage> {
               onTap: () {
                 setState(() {
                   _shownItems = List();
-                  _authModeEnum = _authModeEnum == AuthModeEnum.READ_ONLY ? AuthModeEnum.ADMIN : AuthModeEnum.READ_ONLY;
+                  _authModeEnum = _authModeEnum == AuthModeEnum.READ_ONLY
+                      ? AuthModeEnum.ADMIN
+                      : AuthModeEnum.READ_ONLY;
                 });
                 _initContent();
                 // end   for Test
@@ -184,7 +193,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         visible: _authModeEnum == AuthModeEnum.ADMIN,
                         child: CircleAvatar(
                           radius: 20,
-                          backgroundImage: NetworkImage('https://cdnb.artstation.com/p/assets/images/images/011/693/779/large/youssef-hesham-heisenberg-upres.jpg?1530893146'),
+                          backgroundImage: NetworkImage(
+                              'https://cdnb.artstation.com/p/assets/images/images/011/693/779/large/youssef-hesham-heisenberg-upres.jpg?1530893146'),
                           backgroundColor: Colors.transparent,
                         ),
                       )
@@ -230,18 +240,29 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Padding(
               padding: EdgeInsets.only(right: 16),
-              child: ImageContentWidget(_shownItems, _itemType, _authModeEnum, peopleJson: _peopleJson, rightOwnerJson: _rightOwnerJson, itemSubTypeJson: _itemSubTypeJson, institutionJson: _institutionJson, locationsJson: _locationsJson))
+              child: ImageContentWidget(_shownItems, _itemType, _authModeEnum,
+                  onPop: () {
+                    _initContent();
+                  },
+                  peopleJson: _peopleJson,
+                  rightOwnerJson: _rightOwnerJson,
+                  itemSubTypeJson: _itemSubTypeJson,
+                  institutionJson: _institutionJson,
+                  locationsJson: _locationsJson))
         ],
       ),
     );
   }
-  
+
   void _openAutoEditingScreen() {
+    if (_shownItems.isEmpty)
+      return;
     Navigator.push(context, MaterialPageRoute(builder: (context) =>
         DetailsScreen(_shownItems[0], AuthModeEnum.ADMIN,
             locationsJson: _locationsJson,
             rightOwnerJson: _rightOwnerJson,
             institutionJson: _institutionJson,
+            tagJson: _tagJson,
             itemSubTypeJson: _itemSubTypeJson,
             peopleJson: _peopleJson
         )));

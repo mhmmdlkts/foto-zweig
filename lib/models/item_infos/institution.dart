@@ -6,7 +6,7 @@ class Institution {
   Institution.fromJson(json, key) {
     if (json == null)
       return;
-    key = key;
+    this.key = key;
     name = json["name"];
     contactInformation = json["contactInformation"];
   }

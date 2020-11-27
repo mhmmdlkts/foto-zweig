@@ -5,20 +5,24 @@ import 'package:foto_zweig/screens/details_screen.dart';
 import 'package:foto_zweig/services/mobile_checker_service.dart';
 
 class SmallFotoItemWidget extends StatelessWidget {
+  final VoidCallback onPop;
   final SmallFotoItem smallFotoItem;
   final AuthModeEnum authModeEnum;
   final Map locationsJson;
   final Map rightOwnerJson;
   final Map institutionJson;
+  final Map tagJson;
   final Map itemSubTypeJson;
   final Map peopleJson;
   SmallFotoItemWidget(this.smallFotoItem, this.authModeEnum,
       {
         this.locationsJson,
         this.rightOwnerJson,
+        this.tagJson,
         this.institutionJson,
         this.itemSubTypeJson,
         this.peopleJson,
+        this.onPop,
         Key key
       }) : super(key: key);
 
@@ -26,14 +30,19 @@ class SmallFotoItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
+
         Navigator.push(context, MaterialPageRoute(builder: (context) =>
             DetailsScreen(smallFotoItem, authModeEnum,
               locationsJson: locationsJson,
               rightOwnerJson: rightOwnerJson,
               institutionJson: institutionJson,
+              tagJson: tagJson,
               itemSubTypeJson: itemSubTypeJson,
               peopleJson: peopleJson
-            )));
+            ))).then((value) => {
+              if (value??false)
+                onPop.call()
+        });
       },
       child: Container(
         margin: EdgeInsets.only(left: 16, bottom: 16),

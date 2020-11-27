@@ -6,7 +6,7 @@ class Location {
   Location.fromJson(json, key) {
     if (json == null)
       return;
-    key = key;
+    this.key = key;
     name = json["name"];
     country = json["country"];
   }

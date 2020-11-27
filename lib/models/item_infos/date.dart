@@ -36,7 +36,7 @@ class Date {
   }
 
   Map<String, dynamic> toJson() => {
-    "startDate":startDate?.toString()?.split(" ")[0]??null,
-    "endDate":endDate?.toString()?.split(" ")[0]??null,
+    "startDate":startDate?.toString()?.split(" ")?.first,
+    "endDate":endDate?.toString()?.split(" ")?.first,
   };
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foto_zweig/decoration/button_colors.dart';
 import 'package:foto_zweig/models/main_foto.dart';
 import 'package:foto_zweig/screens/admin_view_edit.dart';
+import 'package:foto_zweig/services/upload_service.dart';
 import 'package:foto_zweig/widgets/rounded_button.dart';
 import 'package:foto_zweig/enums/auth_mode_enum.dart';
 
@@ -12,15 +13,17 @@ class DetailsScreen extends StatefulWidget {
   final Map rightOwnerJson;
   final Map institutionJson;
   final Map itemSubTypeJson;
+  final Map tagJson;
   final Map peopleJson;
 
-  DetailsScreen(this.smallFotoItem, this.authModeEnum, {this.locationsJson, this.rightOwnerJson, this.institutionJson, this.itemSubTypeJson, this.peopleJson});
+  DetailsScreen(this.smallFotoItem, this.authModeEnum, {this.locationsJson, this.tagJson, this.rightOwnerJson, this.institutionJson, this.itemSubTypeJson, this.peopleJson});
 
   @override
   _DetailsScreenState createState() => _DetailsScreenState();
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
+  final UploadService _uploadService = UploadService();
   bool _isEditing = false;
 
   @override
@@ -44,11 +47,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   child: _isEditing
                       ? Container(
                           padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: AdminViewEdit(_cancelEdit, widget.smallFotoItem,
+                          child: AdminViewEdit(context, _cancelEdit, widget.smallFotoItem,
                                   locationsJson: widget.locationsJson,
                                   rightOwnerJson: widget.rightOwnerJson,
                                   institutionJson: widget.institutionJson,
                                   itemSubTypeJson: widget.itemSubTypeJson,
+                                  tagJson: widget.tagJson,
                                   peopleJson: widget.peopleJson))
                       : _showContent(context))
             ],
@@ -76,6 +80,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   RoundedButtonWidget(
                     color: Colors.redAccent,
                     text: "Löschen",
+                    onPressed: () async {
+                      print(widget.smallFotoItem.key);
+                      await _uploadService.deleteImage(widget.smallFotoItem.key);
+                      Navigator.pop(context, true);
+                    },
                   ),
                   Container(
                     width: 10,
