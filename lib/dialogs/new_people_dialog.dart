@@ -2,32 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:foto_zweig/enums/editing_typ_enum.dart';
 import 'package:foto_zweig/enums/item_type_enum.dart';
 import 'package:foto_zweig/models/item_infos/location.dart';
+import 'package:foto_zweig/models/item_infos/people.dart';
+import 'package:foto_zweig/models/item_infos/tag.dart';
 import 'package:foto_zweig/models/main_foto.dart';
 import 'package:foto_zweig/services/keyword_service.dart';
 import 'package:foto_zweig/services/upload_service.dart';
 import 'package:foto_zweig/widgets/rounded_button.dart';
 import 'package:image_picker_web_redux/image_picker_web_redux.dart';
 
-class LocationDialog extends StatefulWidget {
-  final Location location;
+class PeopleDialog extends StatefulWidget {
+  final People people;
   final KeywordService ks;
   final String name;
 
-  LocationDialog({this.location, this.name, this.ks});
+  PeopleDialog({this.people, this.name, this.ks});
 
   @override
-  _LocationDialogState createState() => _LocationDialogState();
+  _PeopleDialogState createState() => _PeopleDialogState();
 }
 
-class _LocationDialogState extends State<LocationDialog> {
+class _PeopleDialogState extends State<PeopleDialog> {
 
-  Location location;
+  TextEditingController _dateOfBirthController;
+  People people;
   bool _isActive = true;
 
   @override
   void initState() {
     super.initState();
-    location = widget.location==null?Location(name: widget.name):widget.location;
+    people = widget.people==null?People(firstName: widget.name):widget.people;
+    _dateOfBirthController = TextEditingController(text: people.dateOfBirth?.toString()?.split(" ")?.first??"");
   }
 
   @override
@@ -50,36 +54,50 @@ class _LocationDialogState extends State<LocationDialog> {
         children: [
           Container(
             width: 400,
-            child: Text("Location", style: TextStyle(fontSize: 36),),
+            child: Text("People", style: TextStyle(fontSize: 36),),
           ),
           Container(height: 10, width: 0,),
-          Text("Name"),
+          Text("First Name"),
           Container(
             width: 400,
             child: TextField(
-              controller: TextEditingController(text: location.name),
+              controller: TextEditingController(text: people.firstName),
               decoration: new InputDecoration(
                 border: new OutlineInputBorder(
                     borderSide: new BorderSide(color: Colors.teal)),
               ),
               onChanged: (val) {
-                location.name = val;
+                people.firstName = val;
               },
             ),
           ),
           Container(height: 10, width: 0,),
-          Text("Code"),
+          Text("Last Name"),
           Container(
             width: 400,
             child: TextField(
-              controller: TextEditingController(text: location.country),
+              controller: TextEditingController(text: people.lastName),
               decoration: new InputDecoration(
                 border: new OutlineInputBorder(
                     borderSide: new BorderSide(color: Colors.teal)),
               ),
               onChanged: (val) {
-                location.country = val;
+                people.lastName = val;
               },
+            ),
+          ),
+          Container(height: 10, width: 0,),
+          Text("Date Of Birth"),
+          Container(
+            width: 400,
+            child: TextField(
+              readOnly: true,
+              onTap: _showDatePicker,
+              controller: _dateOfBirthController,
+              decoration: new InputDecoration(
+                border: new OutlineInputBorder(
+                    borderSide: new BorderSide(color: Colors.teal)),
+              ),
             ),
           ),
           Container(height: 10, width: 0,),
@@ -92,13 +110,13 @@ class _LocationDialogState extends State<LocationDialog> {
               Container(width: 10,),
               RoundedButtonWidget(onPressed: () async {
                 setState(() { _isActive = false; });
-                if (location != null) {
-                  location = Location.copy(location);
-                  await widget.ks.editLocation(EditingTypEnum.UPDATE, location);
+                if (people != null) {
+                  people = People.copy(people);
+                  await widget.ks.editPeople(EditingTypEnum.UPDATE, people);
                 } else {
-                  await widget.ks.editLocation(EditingTypEnum.CREATE, location);
+                  await widget.ks.editPeople(EditingTypEnum.CREATE, people);
                 }
-                Navigator.pop(context, location);
+                Navigator.pop(context, people);
               }, text: "Save", color: Colors.green,
                 isActive: _isActive,)
             ],
@@ -106,5 +124,18 @@ class _LocationDialogState extends State<LocationDialog> {
         ],
       ),
     );
+  }
+
+
+
+  void _showDatePicker() async {
+    DateTime val = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(DateTime.now().year-1000),
+      lastDate: DateTime(DateTime.now().year+1),
+    );
+    people.dateOfBirth = val;
+    _dateOfBirthController.text = val?.toString()?.split(" ")?.first??"";
   }
 }

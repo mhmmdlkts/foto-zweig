@@ -1,33 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:foto_zweig/enums/editing_typ_enum.dart';
 import 'package:foto_zweig/enums/item_type_enum.dart';
+import 'package:foto_zweig/models/item_infos/item_subtype.dart';
 import 'package:foto_zweig/models/item_infos/location.dart';
+import 'package:foto_zweig/models/item_infos/tag.dart';
 import 'package:foto_zweig/models/main_foto.dart';
 import 'package:foto_zweig/services/keyword_service.dart';
 import 'package:foto_zweig/services/upload_service.dart';
 import 'package:foto_zweig/widgets/rounded_button.dart';
 import 'package:image_picker_web_redux/image_picker_web_redux.dart';
 
-class LocationDialog extends StatefulWidget {
-  final Location location;
+class SubtypeDialog extends StatefulWidget {
+  final ItemSubtype itemSubtype;
   final KeywordService ks;
   final String name;
 
-  LocationDialog({this.location, this.name, this.ks});
+  SubtypeDialog({this.itemSubtype, this.name, this.ks});
 
   @override
-  _LocationDialogState createState() => _LocationDialogState();
+  _SubtypeDialogState createState() => _SubtypeDialogState();
 }
 
-class _LocationDialogState extends State<LocationDialog> {
+class _SubtypeDialogState extends State<SubtypeDialog> {
 
-  Location location;
+  ItemSubtype itemSubtype;
   bool _isActive = true;
 
   @override
   void initState() {
     super.initState();
-    location = widget.location==null?Location(name: widget.name):widget.location;
+    itemSubtype = widget.itemSubtype==null?_submitSubtype():widget.itemSubtype;
+  }
+
+  ItemSubtype _submitSubtype() {
+    itemSubtype = ItemSubtype(name: widget.name);
+    _submit();
+    return itemSubtype;
   }
 
   @override
@@ -50,35 +58,20 @@ class _LocationDialogState extends State<LocationDialog> {
         children: [
           Container(
             width: 400,
-            child: Text("Location", style: TextStyle(fontSize: 36),),
+            child: Text("Item Subtype", style: TextStyle(fontSize: 36),),
           ),
           Container(height: 10, width: 0,),
           Text("Name"),
           Container(
             width: 400,
             child: TextField(
-              controller: TextEditingController(text: location.name),
+              controller: TextEditingController(text: itemSubtype.name),
               decoration: new InputDecoration(
                 border: new OutlineInputBorder(
                     borderSide: new BorderSide(color: Colors.teal)),
               ),
               onChanged: (val) {
-                location.name = val;
-              },
-            ),
-          ),
-          Container(height: 10, width: 0,),
-          Text("Code"),
-          Container(
-            width: 400,
-            child: TextField(
-              controller: TextEditingController(text: location.country),
-              decoration: new InputDecoration(
-                border: new OutlineInputBorder(
-                    borderSide: new BorderSide(color: Colors.teal)),
-              ),
-              onChanged: (val) {
-                location.country = val;
+                itemSubtype.name = val;
               },
             ),
           ),
@@ -90,21 +83,23 @@ class _LocationDialogState extends State<LocationDialog> {
                 Navigator.pop(context, null);
               }, text: "Schließen", color: Colors.red,),
               Container(width: 10,),
-              RoundedButtonWidget(onPressed: () async {
-                setState(() { _isActive = false; });
-                if (location != null) {
-                  location = Location.copy(location);
-                  await widget.ks.editLocation(EditingTypEnum.UPDATE, location);
-                } else {
-                  await widget.ks.editLocation(EditingTypEnum.CREATE, location);
-                }
-                Navigator.pop(context, location);
-              }, text: "Save", color: Colors.green,
+              RoundedButtonWidget(onPressed: _submit, text: "Save", color: Colors.green,
                 isActive: _isActive,)
             ],
           )
         ],
       ),
     );
+  }
+
+  void _submit() async {
+    setState(() { _isActive = false; });
+    if (itemSubtype != null) {
+      itemSubtype = ItemSubtype.copy(itemSubtype);
+      await widget.ks.editItemSubType(EditingTypEnum.UPDATE, itemSubtype);
+    } else {
+      await widget.ks.editItemSubType(EditingTypEnum.CREATE, itemSubtype);
+    }
+    Navigator.pop(context, itemSubtype);
   }
 }

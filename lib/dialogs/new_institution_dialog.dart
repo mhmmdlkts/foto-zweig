@@ -1,33 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:foto_zweig/enums/editing_typ_enum.dart';
 import 'package:foto_zweig/enums/item_type_enum.dart';
+import 'package:foto_zweig/models/item_infos/institution.dart';
 import 'package:foto_zweig/models/item_infos/location.dart';
+import 'package:foto_zweig/models/item_infos/tag.dart';
 import 'package:foto_zweig/models/main_foto.dart';
 import 'package:foto_zweig/services/keyword_service.dart';
 import 'package:foto_zweig/services/upload_service.dart';
 import 'package:foto_zweig/widgets/rounded_button.dart';
 import 'package:image_picker_web_redux/image_picker_web_redux.dart';
 
-class LocationDialog extends StatefulWidget {
-  final Location location;
+class InstitutionDialog extends StatefulWidget {
+  final Institution institution;
   final KeywordService ks;
   final String name;
 
-  LocationDialog({this.location, this.name, this.ks});
+  InstitutionDialog({this.institution, this.name, this.ks});
 
   @override
-  _LocationDialogState createState() => _LocationDialogState();
+  _InstitutionDialogState createState() => _InstitutionDialogState();
 }
 
-class _LocationDialogState extends State<LocationDialog> {
+class _InstitutionDialogState extends State<InstitutionDialog> {
 
-  Location location;
+  Institution institution;
   bool _isActive = true;
 
   @override
   void initState() {
     super.initState();
-    location = widget.location==null?Location(name: widget.name):widget.location;
+    institution = widget.institution==null?Institution(name: widget.name):widget.institution;
   }
 
   @override
@@ -50,35 +52,35 @@ class _LocationDialogState extends State<LocationDialog> {
         children: [
           Container(
             width: 400,
-            child: Text("Location", style: TextStyle(fontSize: 36),),
+            child: Text("Institution", style: TextStyle(fontSize: 36),),
           ),
           Container(height: 10, width: 0,),
           Text("Name"),
           Container(
             width: 400,
             child: TextField(
-              controller: TextEditingController(text: location.name),
+              controller: TextEditingController(text: institution.name),
               decoration: new InputDecoration(
                 border: new OutlineInputBorder(
                     borderSide: new BorderSide(color: Colors.teal)),
               ),
               onChanged: (val) {
-                location.name = val;
+                institution.name = val;
               },
             ),
           ),
           Container(height: 10, width: 0,),
-          Text("Code"),
+          Text("Contact Information"),
           Container(
             width: 400,
             child: TextField(
-              controller: TextEditingController(text: location.country),
+              controller: TextEditingController(text: institution.contactInformation),
               decoration: new InputDecoration(
                 border: new OutlineInputBorder(
                     borderSide: new BorderSide(color: Colors.teal)),
               ),
               onChanged: (val) {
-                location.country = val;
+                institution.contactInformation = val;
               },
             ),
           ),
@@ -92,15 +94,15 @@ class _LocationDialogState extends State<LocationDialog> {
               Container(width: 10,),
               RoundedButtonWidget(onPressed: () async {
                 setState(() { _isActive = false; });
-                if (location != null) {
-                  location = Location.copy(location);
-                  await widget.ks.editLocation(EditingTypEnum.UPDATE, location);
+                if (institution != null) {
+                  institution = Institution.copy(institution);
+                  await widget.ks.editInstitution(EditingTypEnum.UPDATE, institution);
                 } else {
-                  await widget.ks.editLocation(EditingTypEnum.CREATE, location);
+                  await widget.ks.editInstitution(EditingTypEnum.CREATE, institution);
                 }
-                Navigator.pop(context, location);
+                Navigator.pop(context, institution);
               }, text: "Save", color: Colors.green,
-                isActive: _isActive,)
+              isActive: _isActive,)
             ],
           )
         ],

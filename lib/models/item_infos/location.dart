@@ -3,7 +3,7 @@ class Location {
   String name;
   String country;
 
-  Location();
+  Location({this.key, this.name, this.country});
 
   Location.copy(Location location) {
     key = location.key;

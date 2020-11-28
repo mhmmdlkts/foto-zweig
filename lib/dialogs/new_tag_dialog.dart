@@ -2,32 +2,39 @@ import 'package:flutter/material.dart';
 import 'package:foto_zweig/enums/editing_typ_enum.dart';
 import 'package:foto_zweig/enums/item_type_enum.dart';
 import 'package:foto_zweig/models/item_infos/location.dart';
+import 'package:foto_zweig/models/item_infos/tag.dart';
 import 'package:foto_zweig/models/main_foto.dart';
 import 'package:foto_zweig/services/keyword_service.dart';
 import 'package:foto_zweig/services/upload_service.dart';
 import 'package:foto_zweig/widgets/rounded_button.dart';
 import 'package:image_picker_web_redux/image_picker_web_redux.dart';
 
-class LocationDialog extends StatefulWidget {
-  final Location location;
+class TagDialog extends StatefulWidget {
+  final Tag tag;
   final KeywordService ks;
   final String name;
 
-  LocationDialog({this.location, this.name, this.ks});
+  TagDialog({this.tag, this.name, this.ks});
 
   @override
-  _LocationDialogState createState() => _LocationDialogState();
+  _TagDialogState createState() => _TagDialogState();
 }
 
-class _LocationDialogState extends State<LocationDialog> {
+class _TagDialogState extends State<TagDialog> {
 
-  Location location;
+  Tag tag;
   bool _isActive = true;
 
   @override
   void initState() {
     super.initState();
-    location = widget.location==null?Location(name: widget.name):widget.location;
+    tag = widget.tag==null?_submitTag():widget.tag;
+  }
+
+  Tag _submitTag() {
+    tag = Tag(name: widget.name);
+    _submit();
+    return tag;
   }
 
   @override
@@ -50,35 +57,20 @@ class _LocationDialogState extends State<LocationDialog> {
         children: [
           Container(
             width: 400,
-            child: Text("Location", style: TextStyle(fontSize: 36),),
+            child: Text("Tag", style: TextStyle(fontSize: 36),),
           ),
           Container(height: 10, width: 0,),
           Text("Name"),
           Container(
             width: 400,
             child: TextField(
-              controller: TextEditingController(text: location.name),
+              controller: TextEditingController(text: tag.name),
               decoration: new InputDecoration(
                 border: new OutlineInputBorder(
                     borderSide: new BorderSide(color: Colors.teal)),
               ),
               onChanged: (val) {
-                location.name = val;
-              },
-            ),
-          ),
-          Container(height: 10, width: 0,),
-          Text("Code"),
-          Container(
-            width: 400,
-            child: TextField(
-              controller: TextEditingController(text: location.country),
-              decoration: new InputDecoration(
-                border: new OutlineInputBorder(
-                    borderSide: new BorderSide(color: Colors.teal)),
-              ),
-              onChanged: (val) {
-                location.country = val;
+                tag.name = val;
               },
             ),
           ),
@@ -90,21 +82,23 @@ class _LocationDialogState extends State<LocationDialog> {
                 Navigator.pop(context, null);
               }, text: "Schließen", color: Colors.red,),
               Container(width: 10,),
-              RoundedButtonWidget(onPressed: () async {
-                setState(() { _isActive = false; });
-                if (location != null) {
-                  location = Location.copy(location);
-                  await widget.ks.editLocation(EditingTypEnum.UPDATE, location);
-                } else {
-                  await widget.ks.editLocation(EditingTypEnum.CREATE, location);
-                }
-                Navigator.pop(context, location);
-              }, text: "Save", color: Colors.green,
-                isActive: _isActive,)
+              RoundedButtonWidget(onPressed: _submit, text: "Save", color: Colors.green,
+              isActive: _isActive,)
             ],
           )
         ],
       ),
     );
+  }
+
+  void _submit() async {
+    setState(() { _isActive = false; });
+    if (tag != null) {
+      tag = Tag.copy(tag);
+      await widget.ks.editTag(EditingTypEnum.UPDATE, tag);
+    } else {
+      await widget.ks.editTag(EditingTypEnum.CREATE, tag);
+    }
+    Navigator.pop(context, tag);
   }
 }

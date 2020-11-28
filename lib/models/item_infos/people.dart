@@ -4,6 +4,15 @@ class People {
   String firstName;
   String lastName;
 
+  People({this.key, this.dateOfBirth, this.firstName, this.lastName});
+
+  People.copy(People people) {
+    key = people.key;
+    dateOfBirth = people.dateOfBirth;
+    firstName = people.firstName;
+    lastName = people.lastName;
+  }
+
   People.fromJson(json, key) {
     if (json == null)
       return;

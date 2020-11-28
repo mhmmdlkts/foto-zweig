@@ -3,6 +3,14 @@ class RightOwner {
   String name;
   String contactInformation;
 
+  RightOwner({this.key, this.name, this.contactInformation});
+
+  RightOwner.copy(RightOwner rightOwner) {
+    this.key = rightOwner.key;
+    this.name = rightOwner.name;
+    this.contactInformation = rightOwner.contactInformation;
+  }
+
   RightOwner.fromJson(json, key) {
     if (json == null)
       return;

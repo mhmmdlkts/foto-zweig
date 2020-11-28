@@ -1,41 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:foto_zweig/enums/editing_typ_enum.dart';
 import 'package:foto_zweig/enums/item_type_enum.dart';
+import 'package:foto_zweig/models/item_infos/institution.dart';
 import 'package:foto_zweig/models/item_infos/location.dart';
+import 'package:foto_zweig/models/item_infos/right_owner.dart';
+import 'package:foto_zweig/models/item_infos/tag.dart';
 import 'package:foto_zweig/models/main_foto.dart';
 import 'package:foto_zweig/services/keyword_service.dart';
 import 'package:foto_zweig/services/upload_service.dart';
 import 'package:foto_zweig/widgets/rounded_button.dart';
 import 'package:image_picker_web_redux/image_picker_web_redux.dart';
 
-class LocationDialog extends StatefulWidget {
-  final Location location;
+class RightOwnerDialog extends StatefulWidget {
+  final RightOwner rightOwner;
   final KeywordService ks;
   final String name;
 
-  LocationDialog({this.location, this.name, this.ks});
+  RightOwnerDialog({this.rightOwner, this.name, this.ks});
 
   @override
-  _LocationDialogState createState() => _LocationDialogState();
+  _RightOwnerDialogState createState() => _RightOwnerDialogState();
 }
 
-class _LocationDialogState extends State<LocationDialog> {
+class _RightOwnerDialogState extends State<RightOwnerDialog> {
 
-  Location location;
+  RightOwner rightOwner;
   bool _isActive = true;
 
   @override
   void initState() {
     super.initState();
-    location = widget.location==null?Location(name: widget.name):widget.location;
+    rightOwner = widget.rightOwner==null?RightOwner(name: widget.name):widget.rightOwner;
   }
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
-      ),      
+        borderRadius: BorderRadius.circular(5),
+      ),
       elevation: 0.0,
       backgroundColor: Colors.white,
       child: dialogContent(context),
@@ -50,35 +53,35 @@ class _LocationDialogState extends State<LocationDialog> {
         children: [
           Container(
             width: 400,
-            child: Text("Location", style: TextStyle(fontSize: 36),),
+            child: Text("Right Owner", style: TextStyle(fontSize: 36),),
           ),
           Container(height: 10, width: 0,),
           Text("Name"),
           Container(
             width: 400,
             child: TextField(
-              controller: TextEditingController(text: location.name),
+              controller: TextEditingController(text: rightOwner.name),
               decoration: new InputDecoration(
                 border: new OutlineInputBorder(
                     borderSide: new BorderSide(color: Colors.teal)),
               ),
               onChanged: (val) {
-                location.name = val;
+                rightOwner.name = val;
               },
             ),
           ),
           Container(height: 10, width: 0,),
-          Text("Code"),
+          Text("Contact Information"),
           Container(
             width: 400,
             child: TextField(
-              controller: TextEditingController(text: location.country),
+              controller: TextEditingController(text: rightOwner.contactInformation),
               decoration: new InputDecoration(
                 border: new OutlineInputBorder(
                     borderSide: new BorderSide(color: Colors.teal)),
               ),
               onChanged: (val) {
-                location.country = val;
+                rightOwner.contactInformation = val;
               },
             ),
           ),
@@ -92,13 +95,13 @@ class _LocationDialogState extends State<LocationDialog> {
               Container(width: 10,),
               RoundedButtonWidget(onPressed: () async {
                 setState(() { _isActive = false; });
-                if (location != null) {
-                  location = Location.copy(location);
-                  await widget.ks.editLocation(EditingTypEnum.UPDATE, location);
+                if (rightOwner != null) {
+                  rightOwner = RightOwner.copy(rightOwner);
+                  await widget.ks.editRightOwner(EditingTypEnum.UPDATE, rightOwner);
                 } else {
-                  await widget.ks.editLocation(EditingTypEnum.CREATE, location);
+                  await widget.ks.editRightOwner(EditingTypEnum.CREATE, rightOwner);
                 }
-                Navigator.pop(context, location);
+                Navigator.pop(context, rightOwner);
               }, text: "Save", color: Colors.green,
                 isActive: _isActive,)
             ],
