@@ -87,6 +87,7 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
       child: Row(
         children: [
           Text(e.name),
+          new Spacer(),
           _settingButtons(
             onEdit: () => _showLocationDialog(location: e),
             onDelete: () => _deleteLocation(location: e)
@@ -102,6 +103,7 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
       child: Row(
         children: [
           Text(e.name),
+          new Spacer(),
           _settingButtons(
             onEdit: () => _showTagDialog(tag: e),
             onDelete: () => _deleteTag(tag: e)
@@ -117,6 +119,7 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
       child: Row(
         children: [
           Text(e.firstName + " " + e.lastName),
+          new Spacer(),
           _settingButtons(
             onEdit: () => _showPeopleDialog(people: e),
             onDelete: () => _deletePeople(people: e)
@@ -132,6 +135,7 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
       child: Row(
         children: [
           Text(e.name),
+          new Spacer(),
           _settingButtons(
             onEdit: () => _showInstitutionDialog(institution: e),
             onDelete: () => _deleteInstitution(institution: e)
@@ -147,6 +151,7 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
       child: Row(
         children: [
           Text(e.name),
+          new Spacer(),
           _settingButtons(
             onEdit: () => _showRightOwnerDialog(rightOwner: e),
             onDelete: () => _deleteRightOwner(rightOwner: e)
@@ -162,6 +167,7 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
       child: Row(
         children: [
           Text(e.name),
+          new Spacer(),
           _settingButtons(
             onEdit: () => _showSubtypesDialog(itemSubtype: e),
             onDelete: () => _deleteSubtype(itemSubtype: e)
