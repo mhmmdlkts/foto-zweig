@@ -13,6 +13,7 @@ import 'package:foto_zweig/services/sorting_service.dart';
 import 'package:foto_zweig/widgets/image_content.dart';
 import 'package:foto_zweig/widgets/rounded_button.dart';
 import 'package:foto_zweig/dialogs/upload_dialog.dart';
+import 'package:foto_zweig/dialogs/signin_dialog.dart';
 import 'decoration/button_colors.dart';
 import 'enums/auth_mode_enum.dart';
 
@@ -68,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ).then((value) => setState(() {
       _sortingService.list = value;
       _shownItems = _sortingService.sortFilterList();
-      _openAutoEditingScreen(2);
+      _openAutoEditingScreen(0);
     }));
   }
 
@@ -170,7 +171,15 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           InkWell(
-              onTap: () {
+              onTap: () async {
+                       final rtn = await showDialog(
+                  context: context,
+                  builder: (BuildContext context){
+                    return SigninDialog();
+                  });
+                  if(rtn ?? false) _initContent();
+              
+         
                 setState(() {
                   _shownItems = List();
                   _authModeEnum = _authModeEnum == AuthModeEnum.READ_ONLY
