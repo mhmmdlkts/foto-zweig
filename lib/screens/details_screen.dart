@@ -8,11 +8,11 @@ import 'package:foto_zweig/widgets/rounded_button.dart';
 import 'package:foto_zweig/enums/auth_mode_enum.dart';
 
 class DetailsScreen extends StatefulWidget {
-  final KeywordService keywordService;
+  final KeywordService ks;
   final SmallFotoItem smallFotoItem;
   final AuthModeEnum authModeEnum;
 
-  DetailsScreen(this.smallFotoItem, this.authModeEnum, this.keywordService);
+  DetailsScreen(this.smallFotoItem, this.authModeEnum, this.ks);
 
   @override
   _DetailsScreenState createState() => _DetailsScreenState();
@@ -43,7 +43,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   child: _isEditing
                       ? Container(
                           padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: AdminViewEdit(context, _cancelEdit, widget.smallFotoItem, widget.keywordService))
+                          child: AdminViewEdit(context, _cancelEdit, widget.smallFotoItem, widget.ks))
                       : _showContent(context))
             ],
           ),
@@ -138,7 +138,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
                 Flexible(
                   child:
-                      SelectableText(widget.smallFotoItem?.location?.name??""),
+                      SelectableText(widget.smallFotoItem?.getLocation(widget.ks)?.name??""),
                 )
               ],
             ),
@@ -153,7 +153,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
                 Flexible(
                     child: SelectableText(
-                        widget.smallFotoItem.itemSubType?.name ?? ""))
+                        widget.smallFotoItem.getItemSubType(widget.ks)?.name ?? ""))
               ],
             ),
             Divider(
@@ -167,7 +167,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
                 Flexible(
                     child: SelectableText(
-                        widget.smallFotoItem.rightOwner?.name ?? "unbekannt"))
+                        widget.smallFotoItem.getRightOwner(widget.ks)?.name ?? "unbekannt"))
               ],
             ),
             Divider(
@@ -181,7 +181,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
                 Flexible(
                     child: SelectableText(
-                        widget.smallFotoItem.institution?.name ?? ""))
+                        widget.smallFotoItem.getInstitution(widget.ks)?.name ?? ""))
               ],
             ),
             Divider(
@@ -207,7 +207,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   width: 150,
                   child: SelectableText("Stichworte:"),
                 ),
-                Flexible(child: SelectableText(widget.smallFotoItem?.getTags()??""))
+                Flexible(child: SelectableText(widget.smallFotoItem?.getTagsReadable(widget.ks)??""))
               ],
             ),
             Divider(

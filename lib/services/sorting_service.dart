@@ -1,5 +1,6 @@
 import 'package:foto_zweig/enums/sorting_typs_enum.dart';
 import 'package:foto_zweig/models/main_foto.dart';
+import 'package:foto_zweig/services/keyword_service.dart';
 
 class SortingService {
   List<SmallFotoItem> list;
@@ -8,6 +9,7 @@ class SortingService {
   
 
   List<SmallFotoItem> sortFilterList(
+      KeywordService ks,
     {
       SortingTypsEnum sortingTyp,
       bool isDesc = true,
@@ -26,14 +28,14 @@ class SortingService {
             list.sort((a, b) => ((a?.date?.startDate?.millisecondsSinceEpoch??0) - (b?.date?.startDate?.millisecondsSinceEpoch ?? 0)) * (this.isDesc?1:-1));
           break;
         case SortingTypsEnum.ORT:
-            list.sort((a, b) => a?.location?.country?.compareTo(b?.location?.country ?? "")??0 * (this.isDesc?1:-1));
+            list.sort((a, b) => a?.getLocation(ks)?.country?.compareTo(b?.getLocation(ks)?.country ?? "")??0 * (this.isDesc?1:-1));
           break;
         case SortingTypsEnum.DESCRIPTION:
             list.sort((a, b) => a?.shortDescription?.compareTo(b?.shortDescription??"")??0 * (this.isDesc?1:-1));
           break;
       }
       return list.where((element) => element.contains(searchText)).toList();
-      return list.where((element) => element.location.country.toLowerCase().trim().contains(placeFiler.toLowerCase().trim()))
+      return list.where((element) => element.getLocation(ks).country.toLowerCase().trim().contains(placeFiler.toLowerCase().trim()))
         .toList();
     }
 

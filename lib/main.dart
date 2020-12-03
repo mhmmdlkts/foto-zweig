@@ -68,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _authModeEnum == AuthModeEnum.ADMIN ? "admin":null, _keywordService
     ).then((value) => setState(() {
       _sortingService.list = value;
-      _shownItems = _sortingService.sortFilterList();
+      _shownItems = _sortingService.sortFilterList(_keywordService);
       _openAutoEditingScreen(0);
     }));
   }
@@ -131,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 fillColor: Colors.white,
               ),
               onChanged: (val) => setState(() {
-                _shownItems = _sortingService.sortFilterList(searchText: val);
+                _shownItems = _sortingService.sortFilterList(_keywordService, searchText: val);
               }),
             ),
           )),
@@ -243,6 +243,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         : Icons.arrow_downward),
                     onPressed: () => setState(() {
                           _shownItems = _sortingService.sortFilterList(
+                              _keywordService,
                               isDesc: !_sortingService.isDesc);
                         })),
               ],
@@ -306,7 +307,7 @@ class _MyHomePageState extends State<MyHomePage> {
         if (newValue == 'Kurzbezeichnung') a = SortingTypsEnum.DESCRIPTION;
         setState(() {
           _sortingService.sortingTyp = a;
-          _shownItems = _sortingService.sortFilterList();
+          _shownItems = _sortingService.sortFilterList(_keywordService);
         });
       },
       items: <String>['Ort', 'Datum', 'Kurzbezeichnung']

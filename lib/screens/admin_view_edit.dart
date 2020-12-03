@@ -75,11 +75,11 @@ class _AdminViewEditState extends State<AdminViewEdit> {
     _initLists();
 
     _annotationController = TextEditingController(text: widget.smallFotoItem?.annotation??"");
-    _locationController = TextEditingController(text: widget.smallFotoItem?.location?.name??"");
-    _institutionController = TextEditingController(text: widget.smallFotoItem?.institution?.name??"");
-    _creatorController = TextEditingController(text: (widget.smallFotoItem?.creator?.firstName??"") + ((widget.smallFotoItem?.creator?.firstName)!=null?" ":"") + (widget.smallFotoItem?.creator?.lastName??""));
-    _itemSubtypeController = TextEditingController(text: (widget.smallFotoItem?.itemSubType?.name??""));
-    _rightOwnerController = TextEditingController(text: widget.smallFotoItem?.rightOwner?.name??"");
+    _locationController = TextEditingController(text: widget.smallFotoItem?.getLocation(widget.ks)?.name??"");
+    _institutionController = TextEditingController(text: widget.smallFotoItem?.getInstitution(widget.ks)?.name??"");
+    _creatorController = TextEditingController(text: (widget.smallFotoItem?.getCreator(widget.ks)?.firstName??"") + ((widget.smallFotoItem?.getCreator(widget.ks)?.firstName)!=null?" ":"") + (widget.smallFotoItem?.getCreator(widget.ks)?.lastName??""));
+    _itemSubtypeController = TextEditingController(text: (widget.smallFotoItem?.getItemSubType(widget.ks)?.name??""));
+    _rightOwnerController = TextEditingController(text: widget.smallFotoItem?.getRightOwner(widget.ks)?.name??"");
     _startDateController = TextEditingController(text: widget.smallFotoItem?.date?.startDate?.toString()?.split(" ")?.first??"");
     _endDateController = TextEditingController(text: widget.smallFotoItem?.date?.endDate?.toString()?.split(" ")?.first??"");
   }
@@ -235,7 +235,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         controller: _locationController,
         itemSubmitted: (item) {
           _locationController.text = item.name;
-          widget.smallFotoItem.location = item;
+          widget.smallFotoItem.locationKey = item.key;
         },
         clearOnSubmit: false,
         submitOnSuggestionTap: true,
@@ -279,7 +279,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
       Container(
         padding: EdgeInsets.only(top: 10),
         child: Wrap(
-          children: widget.smallFotoItem.tags.map((e) => _createTagWidget(e)).toList(),
+          children: widget.smallFotoItem.getTags(widget.ks).map((e) => _createTagWidget(e)).toList(),
         ),
       ),
       AutoCompleteTextField<Tag>(
@@ -288,7 +288,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         key: _tagsKey,
         itemSubmitted: (item) {
           setState(() {
-            widget.smallFotoItem.tags.add(item);
+            widget.smallFotoItem.tagKeys.add(item.key);
             _tagsKey.currentState.updateSuggestions(_getTagSuggestions());
           });
         },
@@ -384,7 +384,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         controller: _rightOwnerController,
         itemSubmitted: (item) {
           _rightOwnerController.text = item.name;
-          widget.smallFotoItem.rightOwner = item;
+          widget.smallFotoItem.rightOwnerKey = item.key;
         },
         clearOnSubmit: false,
         submitOnSuggestionTap: true,
@@ -428,7 +428,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         controller: _institutionController,
         itemSubmitted: (item) {
           _institutionController.text = item.name;
-          widget.smallFotoItem.institution = item;
+          widget.smallFotoItem.institutionKey = item.key;
         },
         clearOnSubmit: false,
         submitOnSuggestionTap: true,
@@ -472,7 +472,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         controller: _itemSubtypeController,
         itemSubmitted: (item) {
           _itemSubtypeController.text = item.name;
-          widget.smallFotoItem.itemSubType = item;
+          widget.smallFotoItem.itemSubTypeKey = item.key;
         },
         clearOnSubmit: false,
         submitOnSuggestionTap: true,
@@ -515,7 +515,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         focusNode: _creatorFocusNode,
         itemSubmitted: (item) {
           _creatorController.text = (item.firstName??"") + " " + (item.lastName??"");
-          widget.smallFotoItem.creator = item;
+          widget.smallFotoItem.creatorKey = item.key;
         },
         clearOnSubmit: false,
         submitOnSuggestionTap: true,
@@ -603,7 +603,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
             child: Icon(Icons.close, color: Colors.white,),
             onTap: () {
               setState(() {
-                widget.smallFotoItem.tags.remove(e);
+                widget.smallFotoItem.tagKeys.remove(e.key);
                 _tagsKey.currentState.updateSuggestions(_getTagSuggestions());
               });
             },
@@ -665,7 +665,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
     }
     setState(() {
       _initLocationList();
-      widget.smallFotoItem.location = result;
+      widget.smallFotoItem.locationKey = result.key;
       _updateLocationSuggestions();
     });
   }
@@ -695,7 +695,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
     }
     setState(() {
       _initTagList();
-      widget.smallFotoItem.tags.add(result);
+      widget.smallFotoItem.tagKeys.add(result.key);
       _updateTagSuggestions();
     });
   }
@@ -727,7 +727,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
     setState(() {
       _initPeopleList();
       if (forCreator)
-        widget.smallFotoItem.creator = result;
+        widget.smallFotoItem.creatorKey = result.key;
       else
         widget.smallFotoItem.photographedPeople.add(result);
       _updatePeopleSuggestions(forCreator: forCreator);
@@ -765,7 +765,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
     }
     setState(() {
       _initInstitutionList();
-      widget.smallFotoItem.institution = result;
+      widget.smallFotoItem.institutionKey = result.key;
       _updateInstitutionSuggestions();
     });
   }
@@ -795,7 +795,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
     }
     setState(() {
       _initRightOwnerList();
-      widget.smallFotoItem.rightOwner = result;
+      widget.smallFotoItem.rightOwnerKey = result.key;
       _updateRightOwnerSuggestions();
     });
   }
@@ -825,7 +825,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
     }
     setState(() {
       _initItemSubTypeList();
-      widget.smallFotoItem.itemSubType = result;
+      widget.smallFotoItem.itemSubTypeKey = result.key;
       _updateSubtypesSuggestions();
     });
   }
@@ -839,8 +839,8 @@ class _AdminViewEditState extends State<AdminViewEdit> {
   List<Tag> _getTagSuggestions() {
     List<Tag> list = List();
     list.addAll(_tagList.where((element) {
-      for(int i = 0; i < widget.smallFotoItem.tags.length; i++)
-        if (widget.smallFotoItem.tags[i].key == element.key)
+      for(int i = 0; i < widget.smallFotoItem.tagKeys.length; i++)
+        if (widget.smallFotoItem.tagKeys[i] == element.key)
           return false;
       return true;
     }).toList());

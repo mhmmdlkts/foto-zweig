@@ -20,14 +20,14 @@ class SmallFotoItem implements Comparable {
   String filename;
   String thumbnailPath;
   String path;
-  List<Tag> tags = List();
+  List<String> tagKeys = List();
   List<People> photographedPeople = List();
-  Location location;
-  RightOwner rightOwner;
-  Institution institution;
+  String locationKey;
+  String rightOwnerKey;
+  String institutionKey;
   ItemTypeEnum itemType;
-  ItemSubtype itemSubType;
-  People creator;
+  String itemSubTypeKey;
+  String creatorKey;
   bool isPublic;
 
   SmallFotoItem({this.shortDescription, this.itemType});
@@ -46,8 +46,7 @@ class SmallFotoItem implements Comparable {
       path = json["urls"]["watermark"];
     if (json["tags"] != null) {
       json["tags"].forEach((element) {
-        print(element);
-        tags.add(Tag.fromJson(ks.tagJson[element], element));
+        tagKeys.add(element);
       });
     }
     if (json["photographedPeople"] != null) {
@@ -56,14 +55,21 @@ class SmallFotoItem implements Comparable {
       });
     }
 
-    location = Location.fromJson(ks.locationsJson[json["location"]], json["location"]);
-    rightOwner = RightOwner.fromJson(ks.rightOwnerJson[json["rightOwner"]], json["rightOwner"]);
-    institution = Institution.fromJson(ks.institutionJson[json["institution"]], json["institution"]);
+    locationKey = json["location"];
+    rightOwnerKey = json["rightOwner"];
+    institutionKey = json["institution"];
+    itemSubTypeKey = json["itemSubtype"];
+    creatorKey = json["creator"];
     itemType = intToItemTypeEnum(json["itemType"]);
-    itemSubType = ItemSubtype.fromJson(ks.itemSubtypeJson[json["itemSubtype"]], json["itemSubtype"]);
-    creator = People.fromJson(ks.peopleJson[json["creator"]], json["creator"]);
     isPublic = json["isPublic"] == 'true';
   }
+
+  List<Tag> getTags(KeywordService ks) => tagKeys.map((e) => Tag.fromJson(ks.tagJson[e], e)).toList();
+  Location getLocation(KeywordService ks) => Location.fromJson(ks.locationsJson[locationKey], locationKey);
+  RightOwner getRightOwner(KeywordService ks) => RightOwner.fromJson(ks.rightOwnerJson[rightOwnerKey], rightOwnerKey);
+  Institution getInstitution(KeywordService ks) => Institution.fromJson(ks.institutionJson[institutionKey], institutionKey);
+  ItemSubtype getItemSubType(KeywordService ks) => ItemSubtype.fromJson(ks.itemSubtypeJson[itemSubTypeKey], itemSubTypeKey);
+  People getCreator(KeywordService ks) => People.fromJson(ks.peopleJson[creatorKey], creatorKey);
 
   static ItemTypeEnum intToItemTypeEnum(int id) {
     switch (id) {
@@ -86,12 +92,8 @@ class SmallFotoItem implements Comparable {
   }
 
   @override
-  int compareTo(other) {
-    final int diff = (date?.startDate?.millisecondsSinceEpoch ?? 0) -
+  int compareTo(other) => (date?.startDate?.millisecondsSinceEpoch ?? 0) -
         (other?.date?.startDate?.millisecondsSinceEpoch ?? 0);
-    if (diff == 0) return other.location.country.compareTo(location.country);
-    return diff;
-  }
 
   String getReadablePersons() {
     String result = "";
@@ -102,7 +104,8 @@ class SmallFotoItem implements Comparable {
     return result;
   }
 
-  String getTags() {
+  String getTagsReadable(KeywordService ks) {
+    List<Tag> tags = getTags(ks);
     String result = "";
     for (int i = 0; i < tags.length; i++) {
       result += tags[i].name + (tags.length - 1 != i ? ", " : "");
@@ -110,11 +113,11 @@ class SmallFotoItem implements Comparable {
     return result;
   }
 
-  bool contains(String val) {
-    if (val == null || tags.length == 0) return true;
-    if (tags == null) return false;
-    for (int i = 0; i < tags.length; i++) {
-      if (tags[i].name.toLowerCase().contains(val.toLowerCase())) return true;
+  bool contains(String tagKey) {
+    if (tagKey == null || tagKeys.length == 0) return true;
+    if (tagKeys == null) return false;
+    for (int i = 0; i < tagKeys.length; i++) {
+      if (tagKeys[i] == tagKey) return true;
     }
     return false;
   }
@@ -125,14 +128,14 @@ class SmallFotoItem implements Comparable {
     "description": description,
     "annotation": annotation,
     "filename": filename,
-    "tags": tags.map((e) => e.key).toList(),
+    "tags": tagKeys,
     "photographedPeople": photographedPeople?.map((e) => e?.key)?.toList(),
-    "location": location?.key,
-    "rightOwner": rightOwner?.key,
-    "institution": institution?.key,
+    "location": locationKey,
+    "rightOwner": rightOwnerKey,
+    "institution": institutionKey,
     "itemType": itemTypeEnumToInt(),
-    "itemSubtype": itemSubType?.key,
-    "creator": creator?.key,
+    "itemSubtype": itemSubTypeKey,
+    "creator": creatorKey,
     "isPublic": isPublic?.toString(),
   };
 }

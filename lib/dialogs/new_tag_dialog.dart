@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:foto_zweig/enums/editing_typ_enum.dart';
-import 'package:foto_zweig/enums/item_type_enum.dart';
-import 'package:foto_zweig/models/item_infos/location.dart';
 import 'package:foto_zweig/models/item_infos/tag.dart';
-import 'package:foto_zweig/models/main_foto.dart';
 import 'package:foto_zweig/services/keyword_service.dart';
-import 'package:foto_zweig/services/upload_service.dart';
 import 'package:foto_zweig/widgets/rounded_button.dart';
-import 'package:image_picker_web_redux/image_picker_web_redux.dart';
 
 class TagDialog extends StatefulWidget {
   final Tag tag;
