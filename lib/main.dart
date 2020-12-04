@@ -172,13 +172,11 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           InkWell(
               onTap: () async {
-                       final rtn = await showDialog(
-                  context: context,
-                  builder: (BuildContext context){
-                    return SigninDialog();
-                  });
-                  if(rtn ?? false) _initContent();
-              
+                //_authService.signInWithGoogle();
+
+                await showDialog( context: context, builder: (BuildContext context){
+                  return SigninDialog();
+                });
          
                 setState(() {
                   _shownItems = List();
@@ -187,8 +185,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       : AuthModeEnum.READ_ONLY;
                 });
                 _initContent();
-                // end   for Test
-                //_authService.signInWithGoogle();
               },
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10),
