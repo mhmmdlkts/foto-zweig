@@ -10,6 +10,7 @@ class SigninDialog extends StatefulWidget {
 class _SigninDialogState extends State<SigninDialog> {
   String _email = "";
   String _pwd = "";
+  bool _obscureText = false;
 
 
   @override
@@ -45,7 +46,6 @@ class _SigninDialogState extends State<SigninDialog> {
                 ),
               onChanged: (val) {
                 _email = val;
-                print(_email);
               },
             ),
           ),
@@ -54,15 +54,46 @@ class _SigninDialogState extends State<SigninDialog> {
             width: 500,
             height: 40,
             child: TextField(
+              obscureText: !_obscureText,
               decoration: new InputDecoration(
                 border: new OutlineInputBorder(
                     borderSide: new BorderSide(color: Colors.teal)),
                 ),
               onChanged: (val) {
                 _pwd = val;
+                
               },
             ),
           ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+             Container(
+            alignment: Alignment.bottomLeft,
+            width: 30,
+            height: 40,
+            child: Checkbox(
+            
+            value: _obscureText,
+            onChanged: (newValue) { 
+                  setState(() {
+                    _obscureText = newValue; 
+                  }); 
+                },
+            )
+            ),
+            Container(
+            alignment: Alignment.bottomLeft,
+            width: 200,
+            height: 25,
+              child: Text(
+                "Passwort anzeigen: "
+              )
+            )
+          
+            
+          ],),
 
           Container(height: 20, width: 0,),
           Row(
