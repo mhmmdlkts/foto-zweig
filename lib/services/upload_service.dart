@@ -6,9 +6,11 @@ import 'package:mime_type/mime_type.dart';
 import 'package:path/path.dart';
 import 'package:image_picker_web_redux/image_picker_web_redux.dart';
 
+import 'init_fotos.dart';
+
 class UploadService {
 
-  String getUrl(name) => 'https://europe-west1-foto-zweig-312d2.cloudfunctions.net/$name';
+  String getUrl(name) => '$API_URL/$name';
 
   Future<void> editImage(SmallFotoItem smallFotoItem) async {
     String url = getUrl('edit') + '?foto=${Uri.encodeComponent(json.encode(smallFotoItem.toJson()))}&key=${smallFotoItem.key}';
@@ -45,7 +47,7 @@ class UploadService {
   }
 
   Future<String> _getFotoKey() async {
-    String url = 'https://europe-west1-foto-zweig-312d2.cloudfunctions.net/getNotExistingFotoKey';
+    String url = '$API_URL/getNotExistingFotoKey';
     http.Response response = await http.get(url);
     return response.body.trim();
   }

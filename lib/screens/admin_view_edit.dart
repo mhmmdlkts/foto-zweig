@@ -17,7 +17,9 @@ import 'package:foto_zweig/models/item_infos/right_owner.dart';
 import 'package:foto_zweig/models/item_infos/tag.dart';
 import 'package:foto_zweig/models/main_foto.dart';
 import 'package:foto_zweig/services/keyword_service.dart';
+import 'package:foto_zweig/services/logs_service.dart';
 import 'package:foto_zweig/services/upload_service.dart';
+import 'package:foto_zweig/widgets/logs_box.dart';
 import 'package:foto_zweig/widgets/rounded_button.dart';
 
 class AdminViewEdit extends StatefulWidget {
@@ -34,6 +36,7 @@ class AdminViewEdit extends StatefulWidget {
 
 class _AdminViewEditState extends State<AdminViewEdit> {
   final UploadService _uploadService = UploadService();
+  final LogsService _logsService = LogsService();
   final List<Location> _locationList = List();
   final List<RightOwner> _rightOwnerList = List();
   final List<Institution> _institutionList = List();
@@ -73,6 +76,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
   void initState() {
     super.initState();
     _initLists();
+    _logsService.init(widget.smallFotoItem.key).then((value) => setState((){}));
 
     _annotationController = TextEditingController(text: widget.smallFotoItem?.annotation??"");
     _locationController = TextEditingController(text: widget.smallFotoItem?.getLocation(widget.ks)?.name??"");
@@ -130,6 +134,11 @@ class _AdminViewEditState extends State<AdminViewEdit> {
                 borderSide: new BorderSide(color: Colors.teal)),
             hintText: 'Enter a search term'),
       ),
+      LogsBox(
+        title: "Kurzbezeichnung",
+        logs: _logsService.shortDescriptionLogs,
+        valueTyp: ValueTyp.TEXT
+      ),
       SelectableText("Beschreibung:",
           style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -146,6 +155,11 @@ class _AdminViewEditState extends State<AdminViewEdit> {
             border: new OutlineInputBorder(
                 borderSide: new BorderSide(color: Colors.teal)),
             hintText: 'Enter a search term'),
+      ),
+      LogsBox(
+          title: "Beschreibung",
+          logs: _logsService.descriptionLogs,
+          valueTyp: ValueTyp.TEXT
       ),
       Container(
         padding: EdgeInsets.symmetric(vertical: 20),
@@ -177,6 +191,11 @@ class _AdminViewEditState extends State<AdminViewEdit> {
             )
           ],
         ),
+      ),
+      LogsBox(
+          title: "Is Public",
+          logs: _logsService.isPublicLogs,
+          valueTyp: ValueTyp.TEXT
       ),
       SelectableText("Zeit:",
           style: TextStyle(
@@ -269,6 +288,12 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         itemFilter: (suggestion, input) => _locationFocusNode.hasFocus &&
               (suggestion.name.toLowerCase().startsWith(input.toLowerCase()) || (suggestion.key == "-1" && _locationList.map((e) => e.name).where((element) => element == input).toList().isEmpty)),
       ),
+      LogsBox(
+          title: "Ort",
+          logs: _logsService.locationLogs,
+          valueTyp: ValueTyp.KEY,
+          json: widget.ks.locationsJson,
+      ),
       SelectableText("Stichworte:",
         style: TextStyle(
           fontWeight: FontWeight.bold,
@@ -323,6 +348,12 @@ class _AdminViewEditState extends State<AdminViewEdit> {
             (suggestion.name.toLowerCase().startsWith(input.toLowerCase()) ||
             suggestion.key == "-1" && _tagList.map((e) => e.name).where((element) => element == input).toList().isEmpty),
       ),
+      LogsBox(
+          title: "Stichworte",
+          logs: _logsService.tagsLogs,
+          valueTyp: ValueTyp.LIST,
+          json: widget.ks.tagJson,
+      ),
       SelectableText("Abgebildete Personen:",
           style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -374,6 +405,12 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         itemFilter: (suggestion, input) => _photographedPeopleFocusNode.hasFocus &&
             ((suggestion.firstName + " " + suggestion.lastName).toLowerCase().contains(input.toLowerCase()) || (suggestion.key == "-1" && _peopleList.map((e) => (e.firstName + " " + e.lastName)).where((element) => element == input).toList().isEmpty)),
       ),
+      LogsBox(
+          title: "Abgebildete Personen",
+          logs: _logsService.photographedPeopleLogs,
+          valueTyp: ValueTyp.LIST,
+          json: widget.ks.peopleJson,
+      ),
       SelectableText("Rechteinhaber:",
           style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -417,6 +454,12 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         },
         itemFilter: (suggestion, input) => _rightOwnerFocusNode.hasFocus &&
             (suggestion.name.toLowerCase().startsWith(input.toLowerCase()) || (suggestion.key == "-1" && _rightOwnerList.map((e) => (e.name + " " + e.name)).where((element) => element == input).toList().isEmpty)),
+      ),
+      LogsBox(
+          title: "Rechteinhaber",
+          logs: _logsService.rightOwnerLogs,
+          valueTyp: ValueTyp.KEY,
+          json: widget.ks.rightOwnerJson,
       ),
       SelectableText("Institution:",
           style: TextStyle(
@@ -462,6 +505,12 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         itemFilter: (suggestion, input) => _institutionFocusNode.hasFocus &&
             (suggestion.name.toLowerCase().startsWith(input.toLowerCase()) || (suggestion.key == "-1" && _institutionList.map((e) => (e.name + " " + e.name)).where((element) => element == input).toList().isEmpty)),
       ),
+      LogsBox(
+          title: "Institution",
+          logs: _logsService.institutionLogs,
+          valueTyp: ValueTyp.KEY,
+          json: widget.ks.institutionJson,
+      ),
       SelectableText("Foto - Typ:",
           style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -504,6 +553,12 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         },
         itemFilter: (suggestion, input) => _itemSubtypeFocusNode.hasFocus &&
             (suggestion.name.toLowerCase().startsWith(input.toLowerCase()) || (suggestion.key == "-1" && _itemSubTypeList.map((e) => (e.name + " " + e.name)).where((element) => element == input).toList().isEmpty)),
+      ),
+      LogsBox(
+          title: "Foto - Typ",
+          logs: _logsService.itemSubtypeLogs,
+          valueTyp: ValueTyp.KEY,
+          json: widget.ks.itemSubtypeJson,
       ),
       SelectableText("Fotograf:",
           style: TextStyle(
@@ -548,6 +603,12 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         itemFilter: (suggestion, input) => _creatorFocusNode.hasFocus &&
             ((suggestion.firstName + " " + suggestion.lastName).toLowerCase().contains(input) || (suggestion.key == "-1" && _peopleList.map((e) => (e.firstName + " " + e.lastName)).where((element) => element == input).toList().isEmpty)),
       ),
+      LogsBox(
+          title: "Fotograf",
+          logs: _logsService.creatorLogs,
+          valueTyp: ValueTyp.KEY,
+          json: widget.ks.peopleJson,
+      ),
       SelectableText("Vermerk:",
           style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -564,6 +625,11 @@ class _AdminViewEditState extends State<AdminViewEdit> {
             border: new OutlineInputBorder(
                 borderSide: new BorderSide(color: Colors.teal)),
             hintText: 'Enter a search term'),
+      ),
+      LogsBox(
+          title: "Vermerk",
+          logs: _logsService.annotationLogs,
+          valueTyp: ValueTyp.TEXT
       ),
       Container(height: 10,)
     ]);

@@ -4,9 +4,10 @@ import 'package:foto_zweig/models/main_foto.dart';
 import 'package:foto_zweig/services/keyword_service.dart';
 import 'package:http/http.dart' as http;
 
+const String API_URL = "https://europe-west1-foto-zweig-312d2.cloudfunctions.net/";
+
 class InitFotos {
 
-  static const String API_URL = "https://europe-west1-foto-zweig-312d2.cloudfunctions.net/";
   static String getApiUrl(extension) => '$API_URL/$extension';
 
   static Future<List<SmallFotoItem>> getAllItems(String uid, KeywordService keywordService) async {

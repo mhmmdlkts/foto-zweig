@@ -19,7 +19,6 @@ class KeywordService {
   Map tagJson;
   Map peopleJson;
 
-  static const String API_URL = "https://europe-west1-foto-zweig-312d2.cloudfunctions.net/";
   static String getApiUrl(extension) => '$API_URL/$extension';
   static String getRemoveUrl(keyword, key) => '$API_URL/removeKeyword?keyword=$keyword&key=$key';
 
