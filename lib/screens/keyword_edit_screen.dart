@@ -53,7 +53,7 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
           _getLocations(),
           _title("Tags", () => _showTagDialog(),),
           _getTags(),
-          _title("Peoples", () => _showPeopleDialog(),),
+          _title("People", () => _showPeopleDialog(),),
           _getPeoples(),
           _title("Institution", () => _showInstitutionDialog(),),
           _getInstitution(),

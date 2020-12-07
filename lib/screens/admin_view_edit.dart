@@ -249,19 +249,35 @@ class _AdminViewEditState extends State<AdminViewEdit> {
               fontWeight: FontWeight.bold,
               color: ButtonColors.appBarColor,
               fontSize: 17)),
+              
       AutoCompleteTextField<Location>(
+        
+        onFocusChanged: (val) {
+          if(_locationController.text.isNotEmpty){
+          return;
+          }
+          setState(() {
+                if(val){
+            _locationKey.currentState.filteredSuggestions = _getLocationSuggestions();
+        }
+          });
+      
+
+        },
         focusNode: _locationFocusNode,
         controller: _locationController,
         itemSubmitted: (item) {
           _locationController.text = item.name;
           widget.smallFotoItem.locationKey = item.key;
         },
+        
         clearOnSubmit: false,
         submitOnSuggestionTap: true,
         decoration: InputDecoration(
             border: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.teal)),
             hintText: 'Enter a search term'),
+            
         suggestions: _getLocationSuggestions(),
         textSubmitted: (val) {
           _showLocationDialog(name: _locationController.text);
@@ -285,8 +301,10 @@ class _AdminViewEditState extends State<AdminViewEdit> {
           if (b.key == "-1") return -(1<<62);
           return (a?.name ?? "").compareTo(b?.name ?? "");
         },
-        itemFilter: (suggestion, input) => _locationFocusNode.hasFocus &&
-              (suggestion.name.toLowerCase().startsWith(input.toLowerCase()) || (suggestion.key == "-1" && _locationList.map((e) => e.name).where((element) => element == input).toList().isEmpty)),
+        itemFilter: (suggestion, input){
+          return _locationFocusNode.hasFocus &&
+              (suggestion.name.toLowerCase().startsWith(_locationController.text.toLowerCase().trim()) || (suggestion.key == "-1" && _locationList.map((e) => e.name).where((element) => element == _locationController.text).toList().isEmpty));
+        }
       ),
       LogsBox(
           title: "Ort",
@@ -308,6 +326,17 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         ),
       ),
       AutoCompleteTextField<Tag>(
+        
+        onFocusChanged: (val) {
+          if(_tagController.text.isNotEmpty){
+          return;
+          }
+          setState(() {
+                if(val){
+            _tagsKey.currentState.filteredSuggestions = _getTagSuggestions();
+        }
+          });
+        },
         focusNode: _tagsFocusNode,
         controller: _tagController,
         key: _tagsKey,
@@ -366,6 +395,18 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         ),
       ),
       AutoCompleteTextField<People>(
+        onFocusChanged: (val) {
+          if(_photographedPeopleController.text.isNotEmpty){
+          return;
+          }
+          setState(() {
+                if(val){
+            _photographedPeopleKey.currentState.filteredSuggestions = _getPeopleSuggestions();
+        }
+          });
+      
+
+        },
         controller: _photographedPeopleController,
         focusNode: _photographedPeopleFocusNode,
         key: _photographedPeopleKey,
@@ -417,6 +458,18 @@ class _AdminViewEditState extends State<AdminViewEdit> {
               color: ButtonColors.appBarColor,
               fontSize: 17)),
       AutoCompleteTextField<RightOwner>(
+
+        onFocusChanged: (val) {
+          if(_rightOwnerController.text.isNotEmpty){
+          return;
+          }
+          setState(() {
+                if(val){
+            _rightOwnerKey.currentState.filteredSuggestions = _getRightOwnerSuggestions();
+        }
+          });
+        },
+        
         focusNode: _rightOwnerFocusNode,
         controller: _rightOwnerController,
         itemSubmitted: (item) {
@@ -467,6 +520,16 @@ class _AdminViewEditState extends State<AdminViewEdit> {
               color: ButtonColors.appBarColor,
               fontSize: 17)),
       AutoCompleteTextField<Institution>(
+        onFocusChanged: (val) {
+          if(_institutionController.text.isNotEmpty){
+          return;
+          }
+          setState(() {
+                if(val){
+            _institutionKey.currentState.filteredSuggestions = _getInstitutionSuggestions();
+        }
+          });
+        },
         focusNode: _institutionFocusNode,
         controller: _institutionController,
         itemSubmitted: (item) {
@@ -517,6 +580,16 @@ class _AdminViewEditState extends State<AdminViewEdit> {
               color: ButtonColors.appBarColor,
               fontSize: 17)),
       AutoCompleteTextField<ItemSubtype>(
+        onFocusChanged: (val) {
+          if(_itemSubtypeController.text.isNotEmpty){
+          return;
+          }
+          setState(() {
+                if(val){
+            _itemSubtypeKey.currentState.filteredSuggestions = _getItemSubTypeSuggestions();
+        }
+          });
+        },
         focusNode: _itemSubtypeFocusNode,
         controller: _itemSubtypeController,
         itemSubmitted: (item) {
@@ -566,6 +639,16 @@ class _AdminViewEditState extends State<AdminViewEdit> {
               color: ButtonColors.appBarColor,
               fontSize: 17)),
       AutoCompleteTextField<People>(
+        onFocusChanged: (val) {
+          if(_creatorController.text.isNotEmpty){
+          return;
+          }
+          setState(() {
+                if(val){
+            _creatorKey.currentState.filteredSuggestions = _getPeopleSuggestions();
+        }
+          });
+        },
         controller: _creatorController,
         focusNode: _creatorFocusNode,
         itemSubmitted: (item) {
