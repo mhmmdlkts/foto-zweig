@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -64,6 +66,8 @@ class _AdminViewEditState extends State<AdminViewEdit> {
 
   final TextEditingController _tagController = TextEditingController();
   final TextEditingController _photographedPeopleController = TextEditingController();
+  TextEditingController _shortDescriptionController;
+  TextEditingController _descriptionController;
   TextEditingController _locationController;
   TextEditingController _creatorController;
   TextEditingController _startDateController;
@@ -79,7 +83,8 @@ class _AdminViewEditState extends State<AdminViewEdit> {
     super.initState();
     _initLists();
     _logsService.init(widget.smallFotoItem.key).then((value) => setState((){}));
-
+    _shortDescriptionController = TextEditingController(text: widget.smallFotoItem?.shortDescription??"");
+    _descriptionController = TextEditingController(text: widget.smallFotoItem?.description??"");
     _annotationController = TextEditingController(text: widget.smallFotoItem?.annotation??"");
     _locationController = TextEditingController(text: widget.smallFotoItem?.getLocation(widget.ks)?.name??"");
     _institutionController = TextEditingController(text: widget.smallFotoItem?.getInstitution(widget.ks)?.name??"");
@@ -127,7 +132,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
               color: ButtonColors.appBarColor,
               fontSize: 17)),
       TextField(
-        controller: TextEditingController(text: widget.smallFotoItem?.shortDescription??""),
+        controller: _shortDescriptionController,
         onChanged: (val) {
           widget.smallFotoItem.shortDescription = val;
         },
@@ -139,7 +144,11 @@ class _AdminViewEditState extends State<AdminViewEdit> {
       LogsBox(
         title: "Kurzbezeichnung",
         logs: _logsService.shortDescriptionLogs,
-        valueTyp: ValueTyp.TEXT
+        valueTyp: ValueTyp.TEXT,
+        callback: (val) => setState(() {
+          widget.smallFotoItem.shortDescription = val;
+          _shortDescriptionController.text = val;
+        }),
       ),
       SelectableText("Beschreibung:",
           style: TextStyle(
@@ -147,7 +156,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
               color: ButtonColors.appBarColor,
               fontSize: 17)),
       TextField(
-        controller: TextEditingController(text: widget.smallFotoItem?.description??""),
+        controller: _descriptionController,
         onChanged: (val) {
           widget.smallFotoItem.description = val;
         },
@@ -159,9 +168,13 @@ class _AdminViewEditState extends State<AdminViewEdit> {
             hintText: 'Enter a search term'),
       ),
       LogsBox(
-          title: "Beschreibung",
-          logs: _logsService.descriptionLogs,
-          valueTyp: ValueTyp.TEXT
+        title: "Beschreibung",
+        logs: _logsService.descriptionLogs,
+        valueTyp: ValueTyp.TEXT,
+        callback: (val) => setState(() {
+          widget.smallFotoItem.description = val;
+          _descriptionController.text = val;
+        }),
       ),
       Container(
         padding: EdgeInsets.symmetric(vertical: 20),
@@ -197,7 +210,10 @@ class _AdminViewEditState extends State<AdminViewEdit> {
       LogsBox(
           title: "Ist Öffentlich",
           logs: _logsService.isPublicLogs,
-          valueTyp: ValueTyp.TEXT
+          valueTyp: ValueTyp.TEXT,
+          callback: (val) => setState(() {
+            widget.smallFotoItem.isPublic = val == "true";
+          }),
       ),
       SelectableText("Zeit:",
           style: TextStyle(
@@ -309,10 +325,14 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         }
       ),
       LogsBox(
-          title: "Ort",
-          logs: _logsService.locationLogs,
-          valueTyp: ValueTyp.KEY,
-          json: widget.ks.locationsJson,
+        title: "Ort",
+        logs: _logsService.locationLogs,
+        valueTyp: ValueTyp.KEY,
+        json: widget.ks.locationsJson,
+        callback: (val) => setState(() {
+          widget.smallFotoItem.locationKey = val;
+          _locationController.text = Location.fromJson(widget.ks.locationsJson[val], val).name;
+        }),
       ),
       SelectableText("Stichworte:",
         style: TextStyle(
@@ -380,10 +400,13 @@ class _AdminViewEditState extends State<AdminViewEdit> {
             suggestion.key == "-1" && _tagList.map((e) => e.name).where((element) => element == input).toList().isEmpty),
       ),
       LogsBox(
-          title: "Stichworte",
-          logs: _logsService.tagsLogs,
-          valueTyp: ValueTyp.LIST,
-          json: widget.ks.tagJson,
+        title: "Stichworte",
+        logs: _logsService.tagsLogs,
+        valueTyp: ValueTyp.LIST,
+        json: widget.ks.tagJson,
+        callback: (val) => setState(() {
+          widget.smallFotoItem.tagKeys = List<String>.from(val);
+        }),
       ),
       SelectableText("Abgebildete Personen:",
           style: TextStyle(
@@ -449,10 +472,15 @@ class _AdminViewEditState extends State<AdminViewEdit> {
             ((suggestion.firstName + " " + suggestion.lastName).toLowerCase().contains(input.toLowerCase()) || (suggestion.key == "-1" && _peopleList.map((e) => (e.firstName + " " + e.lastName)).where((element) => element == input).toList().isEmpty)),
       ),
       LogsBox(
-          title: "Abgebildete Personen",
-          logs: _logsService.photographedPeopleLogs,
-          valueTyp: ValueTyp.LIST,
-          json: widget.ks.peopleJson,
+        title: "Abgebildete Personen",
+        logs: _logsService.photographedPeopleLogs,
+        valueTyp: ValueTyp.LIST,
+        json: widget.ks.peopleJson,
+        callback: (val) => setState(() {
+          List<People> list = List();
+          val.forEach((e) => list.add(People.fromJson(widget.ks.peopleJson[e], e)));
+          widget.smallFotoItem.photographedPeople = list;
+        }),
       ),
       SelectableText("Rechteinhaber:",
           style: TextStyle(
@@ -466,9 +494,9 @@ class _AdminViewEditState extends State<AdminViewEdit> {
           return;
           }
           setState(() {
-                if(val){
-            _rightOwnerKey.currentState.filteredSuggestions = _getRightOwnerSuggestions();
-        }
+            if(val){
+              _rightOwnerKey.currentState.filteredSuggestions = _getRightOwnerSuggestions();
+            }
           });
         },
         
@@ -511,10 +539,14 @@ class _AdminViewEditState extends State<AdminViewEdit> {
             (suggestion.name.toLowerCase().startsWith(input.toLowerCase()) || (suggestion.key == "-1" && _rightOwnerList.map((e) => (e.name + " " + e.name)).where((element) => element == input).toList().isEmpty)),
       ),
       LogsBox(
-          title: "Rechteinhaber",
-          logs: _logsService.rightOwnerLogs,
-          valueTyp: ValueTyp.KEY,
-          json: widget.ks.rightOwnerJson,
+        title: "Rechteinhaber",
+        logs: _logsService.rightOwnerLogs,
+        valueTyp: ValueTyp.KEY,
+        json: widget.ks.rightOwnerJson,
+        callback: (val) => setState(() {
+          widget.smallFotoItem.rightOwnerKey = val;
+          _rightOwnerController.text = RightOwner.fromJson(widget.ks.rightOwnerJson[val], val).name;
+        }),
       ),
       SelectableText("Institution:",
           style: TextStyle(
@@ -571,10 +603,14 @@ class _AdminViewEditState extends State<AdminViewEdit> {
             (suggestion.name.toLowerCase().startsWith(input.toLowerCase()) || (suggestion.key == "-1" && _institutionList.map((e) => (e.name + " " + e.name)).where((element) => element == input).toList().isEmpty)),
       ),
       LogsBox(
-          title: "Institution",
-          logs: _logsService.institutionLogs,
-          valueTyp: ValueTyp.KEY,
-          json: widget.ks.institutionJson,
+        title: "Institution",
+        logs: _logsService.institutionLogs,
+        valueTyp: ValueTyp.KEY,
+        json: widget.ks.institutionJson,
+        callback: (val) => setState(() {
+          widget.smallFotoItem.institutionKey = val;
+          _institutionController.text = Institution.fromJson(widget.ks.institutionJson[val], val).name;
+        }),
       ),
       SelectableText("Foto - Typ:",
           style: TextStyle(
@@ -630,10 +666,14 @@ class _AdminViewEditState extends State<AdminViewEdit> {
             (suggestion.name.toLowerCase().startsWith(input.toLowerCase()) || (suggestion.key == "-1" && _itemSubTypeList.map((e) => (e.name + " " + e.name)).where((element) => element == input).toList().isEmpty)),
       ),
       LogsBox(
-          title: "Foto - Typ",
-          logs: _logsService.itemSubtypeLogs,
-          valueTyp: ValueTyp.KEY,
-          json: widget.ks.itemSubtypeJson,
+        title: "Foto - Typ",
+        logs: _logsService.itemSubtypeLogs,
+        valueTyp: ValueTyp.KEY,
+        json: widget.ks.itemSubtypeJson,
+        callback: (val) => setState(() {
+          widget.smallFotoItem.itemSubTypeKey = val;
+          _itemSubtypeController.text = ItemSubtype.fromJson(widget.ks.itemSubtypeJson[val], val).name;
+        }),
       ),
       SelectableText("Fotograf:",
           style: TextStyle(
@@ -689,10 +729,14 @@ class _AdminViewEditState extends State<AdminViewEdit> {
             ((suggestion.firstName + " " + suggestion.lastName).toLowerCase().contains(input) || (suggestion.key == "-1" && _peopleList.map((e) => (e.firstName + " " + e.lastName)).where((element) => element == input).toList().isEmpty)),
       ),
       LogsBox(
-          title: "Fotograf",
-          logs: _logsService.creatorLogs,
-          valueTyp: ValueTyp.KEY,
-          json: widget.ks.peopleJson,
+        title: "Fotograf",
+        logs: _logsService.creatorLogs,
+        valueTyp: ValueTyp.KEY,
+        json: widget.ks.peopleJson,
+        callback: (val) => setState(() {
+          widget.smallFotoItem.creatorKey = val;
+          _creatorController.text = People.fromJson(widget.ks.peopleJson[val], val).firstName;
+        }),
       ),
       SelectableText("Vermerk:",
           style: TextStyle(
@@ -712,9 +756,13 @@ class _AdminViewEditState extends State<AdminViewEdit> {
             hintText: 'Enter a search term'),
       ),
       LogsBox(
-          title: "Vermerk",
-          logs: _logsService.annotationLogs,
-          valueTyp: ValueTyp.TEXT
+        title: "Vermerk",
+        logs: _logsService.annotationLogs,
+        valueTyp: ValueTyp.TEXT,
+        callback: (val) => setState(() {
+          widget.smallFotoItem.annotation = val;
+          _annotationController.text = val;
+        }),
       ),
       Container(height: 10,)
     ]);

@@ -6,6 +6,8 @@ class FotoUser {
   String email;
   AuthModeEnum authMode = AuthModeEnum.READ_ONLY;
 
+  FotoUser({this.uid, this.name, this.email, this.authMode});
+
   FotoUser.fromJson(json) {
     uid = json["uid"];
     name = json["name"];

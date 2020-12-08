@@ -13,12 +13,14 @@ class LogsBox extends StatefulWidget {
   final LogList logs;
   final ValueTyp valueTyp;
   final Map json;
+  final void Function(dynamic) callback;
 
   LogsBox({
     this.title,
     this.logs,
     this.valueTyp,
-    this.json
+    this.json,
+    this.callback
   });
 
   @override
@@ -37,8 +39,12 @@ class _LogsBoxState extends State<LogsBox> {
           _title(),
           Visibility(
             visible: _isOpen,
-            child: Column(
-              children: widget.logs.logs.map((e) => _getLogWidget(e)).toList(),
+            child: Container(
+              constraints: BoxConstraints(maxHeight: 360),
+              child: ListView(
+                shrinkWrap: true,
+                children: widget.logs.logs.map((e) => _getLogWidget(e)).toList(),
+              ),
             ),
           )
         ],
@@ -49,6 +55,7 @@ class _LogsBoxState extends State<LogsBox> {
   Widget _getLogWidget(Log log) => Container(
     margin: EdgeInsets.only(top: 10),
     child: InkWell(
+      onTap: () => widget.callback.call(log.val),
       borderRadius: BorderRadius.all(Radius.circular(10)),
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),

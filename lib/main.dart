@@ -73,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ).then((value) => setState(() {
       _sortingService.list = value;
       _shownItems = _sortingService.sortFilterList(_keywordService);
-      _openAutoEditingScreen(0);
+      _openAutoEditingScreen(2);
     }));
   }
 
@@ -264,6 +264,9 @@ class _MyHomePageState extends State<MyHomePage> {
           KeywordEditScreen(ks: _keywordService)));
     }
     else if (i == 2) {
+      setState(() {
+        _fotoUser = FotoUser(name: "Ali", email: "mh", authMode: AuthModeEnum.ADMIN, uid: "id");
+      });
       if (_shownItems.isEmpty)
         return;
       Navigator.push(context, MaterialPageRoute(builder: (context) =>
