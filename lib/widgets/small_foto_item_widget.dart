@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foto_zweig/enums/auth_mode_enum.dart';
+import 'package:foto_zweig/models/foto_user.dart';
 import 'package:foto_zweig/models/main_foto.dart';
 import 'package:foto_zweig/screens/details_screen.dart';
 import 'package:foto_zweig/services/keyword_service.dart';
@@ -10,7 +11,9 @@ class SmallFotoItemWidget extends StatelessWidget {
   final VoidCallback onPop;
   final SmallFotoItem smallFotoItem;
   final AuthModeEnum authModeEnum;
-  SmallFotoItemWidget(this.smallFotoItem, this.authModeEnum, this.keywordService,
+  final FotoUser fotoUser;
+
+  SmallFotoItemWidget(this.fotoUser, this.smallFotoItem, this.authModeEnum, this.keywordService,
       {
         this.onPop,
         Key key
@@ -21,7 +24,7 @@ class SmallFotoItemWidget extends StatelessWidget {
     return InkWell(
       onTap: (){
         Navigator.push(context, MaterialPageRoute(builder: (context) =>
-            DetailsScreen(smallFotoItem, authModeEnum, keywordService,
+            DetailsScreen(fotoUser, smallFotoItem, authModeEnum, keywordService,
             ))).then((value) => {
               if (value??false)
                 onPop.call()

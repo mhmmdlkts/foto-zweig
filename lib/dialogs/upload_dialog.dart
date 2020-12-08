@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:foto_zweig/enums/item_type_enum.dart';
+import 'package:foto_zweig/models/foto_user.dart';
 import 'package:foto_zweig/models/main_foto.dart';
 import 'package:foto_zweig/services/upload_service.dart';
 import 'package:foto_zweig/widgets/rounded_button.dart';
 import 'package:image_picker_web_redux/image_picker_web_redux.dart';
 
 class UploadDialog extends StatefulWidget {
+  final FotoUser user;
+
+  UploadDialog(this.user);
+
   @override
   _UploadDialogState createState() => _UploadDialogState();
 }
@@ -87,7 +92,7 @@ class _UploadDialogState extends State<UploadDialog> {
                     _isUploading = true;
                   });
                   SmallFotoItem smallFotoItem = SmallFotoItem(shortDescription: _shortDescription, itemType: _itemType);
-                  await UploadService().uploadImage(smallFotoItem, _mediaInfo);
+                  await UploadService().uploadImage(smallFotoItem, _mediaInfo, widget.user);
                   Navigator.pop(context, true);
                 },
               ),

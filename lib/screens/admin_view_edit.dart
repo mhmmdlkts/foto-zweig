@@ -9,6 +9,7 @@ import 'package:foto_zweig/dialogs/new_right_owner_dialog.dart';
 import 'package:foto_zweig/dialogs/new_subtype_dialog.dart';
 import 'package:foto_zweig/dialogs/new_tag_dialog.dart';
 import 'package:foto_zweig/enums/editing_typ_enum.dart';
+import 'package:foto_zweig/models/foto_user.dart';
 import 'package:foto_zweig/models/item_infos/institution.dart';
 import 'package:foto_zweig/models/item_infos/item_subtype.dart';
 import 'package:foto_zweig/models/item_infos/location.dart';
@@ -27,8 +28,9 @@ class AdminViewEdit extends StatefulWidget {
   final BuildContext context;
   final SmallFotoItem smallFotoItem;
   final VoidCallback onCancel;
+  final FotoUser user;
 
-  AdminViewEdit(this.context, this.onCancel, this.smallFotoItem, this.ks);
+  AdminViewEdit(this.user, this.context, this.onCancel, this.smallFotoItem, this.ks);
 
   @override
   _AdminViewEditState createState() => _AdminViewEditState();
@@ -113,7 +115,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
               setState(() {
                 isSaving = true;
               });
-              await _uploadService.editImage(widget.smallFotoItem);
+              await _uploadService.editImage(widget.smallFotoItem, widget.user);
               Navigator.pop(context, true);
             },
           )

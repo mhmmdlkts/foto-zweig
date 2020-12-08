@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foto_zweig/decoration/button_colors.dart';
+import 'package:foto_zweig/models/foto_user.dart';
 import 'package:foto_zweig/models/main_foto.dart';
 import 'package:foto_zweig/screens/admin_view_edit.dart';
 import 'package:foto_zweig/services/keyword_service.dart';
@@ -11,8 +12,9 @@ class DetailsScreen extends StatefulWidget {
   final KeywordService ks;
   final SmallFotoItem smallFotoItem;
   final AuthModeEnum authModeEnum;
+  final FotoUser user;
 
-  DetailsScreen(this.smallFotoItem, this.authModeEnum, this.ks);
+  DetailsScreen(this.user, this.smallFotoItem, this.authModeEnum, this.ks);
 
   @override
   _DetailsScreenState createState() => _DetailsScreenState();
@@ -20,7 +22,7 @@ class DetailsScreen extends StatefulWidget {
 
 class _DetailsScreenState extends State<DetailsScreen> {
   final UploadService _uploadService = UploadService();
-  bool _isEditing = true;
+  bool _isEditing = false;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +45,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   child: _isEditing
                       ? Container(
                           padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: AdminViewEdit(context, _cancelEdit, widget.smallFotoItem, widget.ks))
+                          child: AdminViewEdit(widget.user, context, _cancelEdit, widget.smallFotoItem, widget.ks))
                       : _showContent(context))
             ],
           ),
@@ -72,7 +74,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     text: "Löschen",
                     onPressed: () async {
                       print(widget.smallFotoItem.key);
-                      await _uploadService.deleteImage(widget.smallFotoItem.key);
+                      await _uploadService.deleteImage(widget.smallFotoItem.key, widget.user);
                       Navigator.pop(context, true);
                     },
                   ),

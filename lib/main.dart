@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:foto_zweig/enums/item_type_enum.dart';
 import 'package:foto_zweig/enums/sorting_typs_enum.dart';
+import 'package:foto_zweig/models/foto_user.dart';
 import 'package:foto_zweig/models/main_foto.dart';
 import 'package:foto_zweig/screens/details_screen.dart';
 import 'package:foto_zweig/screens/keyword_edit_screen.dart';
@@ -15,6 +16,7 @@ import 'package:foto_zweig/widgets/rounded_button.dart';
 import 'package:foto_zweig/dialogs/upload_dialog.dart';
 import 'package:foto_zweig/dialogs/signin_dialog.dart';
 import 'decoration/button_colors.dart';
+import 'dialogs/logout_dialog.dart';
 import 'enums/auth_mode_enum.dart';
 
 void main() {
@@ -50,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ItemTypeEnum _itemType = ItemTypeEnum.FOTO;
   Color _myColor = Colors.white;
   bool _isFilterMenuOpen = false;
-  AuthModeEnum _authModeEnum = AuthModeEnum.ADMIN;
+  FotoUser _fotoUser;
   final KeywordService _keywordService = KeywordService();
 
   List<SmallFotoItem> _shownItems = List();
@@ -61,11 +63,13 @@ class _MyHomePageState extends State<MyHomePage> {
     _initContent();
   }
 
+  AuthModeEnum _getAuthMode() => _fotoUser?.authMode??AuthModeEnum.READ_ONLY;
+
   Future<void> _initContent() async {
     await _keywordService.initKeywords();
 
     InitFotos.getAllItems(
-      _authModeEnum == AuthModeEnum.ADMIN ? "admin":null, _keywordService
+        _getAuthMode() == AuthModeEnum.ADMIN ? "admin":null, _keywordService
     ).then((value) => setState(() {
       _sortingService.list = value;
       _shownItems = _sortingService.sortFilterList(_keywordService);
@@ -136,14 +140,14 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           )),
           Visibility(
-            visible: _authModeEnum == AuthModeEnum.ADMIN,
+            visible: _getAuthMode() == AuthModeEnum.ADMIN,
             child: Center(
               child: RoundedButtonWidget(
                 onPressed: () async {
                   final rtn = await showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return UploadDialog();
+                        return UploadDialog(_fotoUser);
                       });
                   if (rtn ?? false) _initContent();
                 },
@@ -156,7 +160,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Container(width: 10,),
           Visibility(
-            visible: _authModeEnum == AuthModeEnum.ADMIN,
+            visible: _getAuthMode() == AuthModeEnum.ADMIN,
             child: Center(
               child: RoundedButtonWidget(
                 onPressed: () async {
@@ -174,17 +178,23 @@ class _MyHomePageState extends State<MyHomePage> {
               onTap: () async {
                 //_authService.signInWithGoogle();
 
-                await showDialog( context: context, builder: (BuildContext context){
-                  return SigninDialog();
-                });
-         
-                setState(() {
-                  _shownItems = List();
-                  _authModeEnum = _authModeEnum == AuthModeEnum.READ_ONLY
-                      ? AuthModeEnum.ADMIN
-                      : AuthModeEnum.READ_ONLY;
-                });
-                _initContent();
+                if (_fotoUser == null) {
+                  _fotoUser = await showDialog(
+                      context: context, builder: (BuildContext context) {
+                    return SigninDialog();
+                  });
+                  if (_fotoUser != null)
+                    _refreshContent();
+                } else {
+                  bool rtn = await showDialog(
+                      context: context, builder: (BuildContext context) {
+                    return LogoutDialog(_fotoUser);
+                  });
+                  if (rtn??false) {
+                    _fotoUser = null;
+                    _refreshContent();
+                  }
+                }
               },
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10),
@@ -192,19 +202,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Stack(
                     children: [
                       Icon(
-                        Icons.account_circle,
+                        _fotoUser==null?Icons.account_circle:Icons.verified_user,
                         color: Colors.white,
                         size: 42,
                       ),
-                      Visibility(
-                        visible: _authModeEnum == AuthModeEnum.ADMIN,
-                        child: CircleAvatar(
-                          radius: 20,
-                          backgroundImage: NetworkImage(
-                              'https://cdnb.artstation.com/p/assets/images/images/011/693/779/large/youssef-hesham-heisenberg-upres.jpg?1530893146'),
-                          backgroundColor: Colors.transparent,
-                        ),
-                      )
                     ],
                   ),
                 ),
@@ -248,7 +249,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Padding(
               padding: EdgeInsets.only(right: 16),
-              child: ImageContentWidget(_shownItems, _itemType, _authModeEnum, _keywordService, onPop: () => _initContent())
+              child: ImageContentWidget(_fotoUser, _shownItems, _itemType, _getAuthMode(), _keywordService, onPop: () => _initContent())
           )
         ],
       ),
@@ -266,8 +267,15 @@ class _MyHomePageState extends State<MyHomePage> {
       if (_shownItems.isEmpty)
         return;
       Navigator.push(context, MaterialPageRoute(builder: (context) =>
-          DetailsScreen(_shownItems[0], AuthModeEnum.ADMIN, _keywordService)));
+          DetailsScreen(_fotoUser, _shownItems[0], AuthModeEnum.ADMIN, _keywordService)));
     }
+  }
+
+  _refreshContent() {
+    setState(() {
+      _shownItems = List();
+    });
+    _initContent();
   }
 
   Widget _getFilters() {

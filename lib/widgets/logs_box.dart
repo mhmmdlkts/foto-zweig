@@ -78,7 +78,17 @@ class _LogsBoxState extends State<LogsBox> {
   );
 
   Color _getColor(int i) {
-    List<Color> colors = [Colors.blue, Colors.purple, Colors.cyan];
+    List<Color> colors = [
+      Colors.blue,
+      Colors.purple,
+      Colors.cyan,
+      Colors.orange,
+      Colors.pink,
+      Colors.red,
+      Colors.lightGreenAccent,
+      Colors.indigo,
+      Colors.teal
+    ];
     return colors[i%colors.length];
   }
 
