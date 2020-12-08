@@ -193,7 +193,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         ),
       ),
       LogsBox(
-          title: "Is Public",
+          title: "Ist Öffentlich",
           logs: _logsService.isPublicLogs,
           valueTyp: ValueTyp.TEXT
       ),
