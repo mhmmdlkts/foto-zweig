@@ -43,23 +43,23 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Keywords Editing"),
+        title: Text("Schlüsselwörter editieren"),
         backgroundColor: ButtonColors.appBarColor,
       ),
       body: ListView(
         padding: EdgeInsets.all(15),
         children: [
-          _title("Locations", () => _showLocationDialog(),),
+          _title("Orte", () => _showLocationDialog(),),
           _getLocations(),
-          _title("Tags", () => _showTagDialog(),),
+          _title("Stichworte", () => _showTagDialog(),),
           _getTags(),
-          _title("Peoples", () => _showPeopleDialog(),),
+          _title("Abgebildete Personen", () => _showPeopleDialog(),),
           _getPeoples(),
           _title("Institution", () => _showInstitutionDialog(),),
           _getInstitution(),
-          _title("Right Owners", () => _showRightOwnerDialog(),),
+          _title("Rechteinhaber", () => _showRightOwnerDialog(),),
           _getRightOwners(),
-          _title("Item Subtypes", () => _showSubtypesDialog(),),
+          _title("Foto - Typ", () => _showSubtypesDialog(),),
           _getSubtypes()
         ],
       )

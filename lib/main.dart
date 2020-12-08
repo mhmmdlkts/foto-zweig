@@ -169,7 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 color: Colors.white,
                 secondColor: ButtonColors.appBarColor,
-                text: "Settings",
+                text: "Einstellungen",
                 icon: MbCheck.isMobile(context) ? Icons.settings : null,
               ),
             ),
