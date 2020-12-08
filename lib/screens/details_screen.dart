@@ -31,8 +31,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
         ),
         body: SingleChildScrollView(
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Flexible(
+
                   flex: 1,
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16),
