@@ -73,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ).then((value) => setState(() {
       _sortingService.list = value;
       _shownItems = _sortingService.sortFilterList(_keywordService);
-      _openAutoEditingScreen(2);
+      _openAutoEditingScreen(0);
     }));
   }
 

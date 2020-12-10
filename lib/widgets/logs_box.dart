@@ -132,6 +132,8 @@ class _LogsBoxState extends State<LogsBox> {
       case ValueTyp.KEY:
         return Text(widget.json[val].toString());
       case ValueTyp.LIST:
+        if (val == null)
+          return Container();
         return Text(val.map((e) => widget.json[e]).toList().toString());
       default:
         return Text(val);

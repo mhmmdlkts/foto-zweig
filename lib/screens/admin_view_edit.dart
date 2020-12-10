@@ -86,7 +86,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
 
   String shortDescription = "";
   String description = "";
-  bool isPublic;
+  bool isPublic = false;
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
   String locationKey = "";
@@ -433,8 +433,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         clearOnSubmit: true,
         submitOnSuggestionTap: true,
         decoration: InputDecoration(
-            border:
-                OutlineInputBorder(borderSide: BorderSide(color: Colors.teal)),
+            border: OutlineInputBorder(borderSide: BorderSide(color: Colors.teal)),
             hintText: 'Stichwort eingeben'),
         suggestions: _getTagSuggestions(),
         textSubmitted: (val) {
@@ -473,6 +472,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         valueTyp: ValueTyp.LIST,
         json: widget.ks.tagJson,
         callback: (val) => setState(() {
+          print(val);
           tagKeys = List<String>.from(val);
         }),
       ),
