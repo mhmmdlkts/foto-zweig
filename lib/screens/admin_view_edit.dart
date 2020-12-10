@@ -312,7 +312,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
             return Padding(
               padding: EdgeInsets.all(8.0),
               child: ListTile(
-                  title: Text(location.name),
+                  title: Text(location?.name??""),
                   trailing: Text("Country: ${location?.country?.toUpperCase()}")
               ),
             );
@@ -390,7 +390,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
           return Padding(
             padding: EdgeInsets.all(8.0),
             child: ListTile(
-              title: Text(tag.name),
+              title: Text(tag?.name??""),
             ),
           );
         },
@@ -463,7 +463,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
           return Padding(
             padding: EdgeInsets.all(8.0),
             child: ListTile(
-              title: Text(people.firstName + " " + people.lastName),
+              title: Text(people?.firstName??"" + " " + people?.lastName??""),
             ),
           );
         },
@@ -528,8 +528,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
           return Padding(
             padding: EdgeInsets.all(8.0),
             child: ListTile(
-                title: Text(rightOwner.name),
-                trailing: Text(rightOwner.contactInformation)
+                title: Text(rightOwner?.name??""),
             ),
           );
         },
@@ -592,8 +591,8 @@ class _AdminViewEditState extends State<AdminViewEdit> {
           return Padding(
             padding: EdgeInsets.all(8.0),
             child: ListTile(
-                title: Text(institution.name),
-                trailing: Text(institution.contactInformation)
+                title: Text(institution?.name??""),
+                trailing: Text(institution?.contactInformation??"")
             ),
           );
         },
@@ -656,7 +655,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
           return Padding(
             padding: EdgeInsets.all(8.0),
             child: ListTile(
-              title: Text(subtype.name),
+              title: Text(subtype?.name??""),
             ),
           );
         },
@@ -719,7 +718,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
           return Padding(
             padding: EdgeInsets.all(8.0),
             child: ListTile(
-              title: Text(creator.firstName + " " + creator.lastName),
+              title: Text(creator?.firstName??"" + " " + creator?.lastName??""),
             ),
           );
         },
