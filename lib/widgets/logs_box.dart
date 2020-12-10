@@ -128,12 +128,14 @@ class _LogsBoxState extends State<LogsBox> {
   );
 
   Widget _getValueWidget(val) {
+    if (val.runtimeType == bool)
+      val = val?'true':'false';
+    if (val == null)
+      return Container();
     switch (widget.valueTyp) {
       case ValueTyp.KEY:
         return Text(widget.json[val].toString());
       case ValueTyp.LIST:
-        if (val == null)
-          return Container();
         return Text(val.map((e) => widget.json[e]).toList().toString());
       default:
         return Text(val);
