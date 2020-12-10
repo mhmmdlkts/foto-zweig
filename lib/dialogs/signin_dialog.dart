@@ -202,7 +202,7 @@ class _SigninDialogState extends State<SigninDialog> {
             child: RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
-                  text: 'Haben Sie ${_isSignUp?"k":""}ein account? ',
+                  text: 'Haben Sie ${_isSignUp?"k":""}einen Account? ',
                   style: TextStyle(
                       color: darkColor,
                       fontSize: fontSize

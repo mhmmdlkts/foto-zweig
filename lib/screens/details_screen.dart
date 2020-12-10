@@ -22,7 +22,7 @@ class DetailsScreen extends StatefulWidget {
 
 class _DetailsScreenState extends State<DetailsScreen> {
   final UploadService _uploadService = UploadService();
-  bool _isEditing = true;
+  bool _isEditing = false;
 
   @override
   Widget build(BuildContext context) {
