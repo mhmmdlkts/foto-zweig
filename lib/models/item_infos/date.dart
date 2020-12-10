@@ -10,7 +10,12 @@ class Date {
     if (json["endDate"] != null)
       endDate = DateTime.parse(json["endDate"]);
   }
-
+  
+  Date.copy(Date obj) {
+    startDate = obj.startDate;
+    endDate = obj.endDate;
+  }
+  
   String getReadableTime() {
     if (isStartAndEndSame())
       return getReadableStartDate();

@@ -20,8 +20,8 @@ class SmallFotoItem implements Comparable {
   String filename;
   String thumbnailPath;
   String path;
-  List<String> tagKeys = List();
-  List<People> photographedPeople = List();
+  List<String> tagKeys = [];
+  List<People> photographedPeople = [];
   String locationKey;
   String rightOwnerKey;
   String institutionKey;
@@ -31,6 +31,28 @@ class SmallFotoItem implements Comparable {
   bool isPublic;
 
   SmallFotoItem({this.shortDescription, this.itemType});
+
+  SmallFotoItem.copy(SmallFotoItem obj) { replace(obj); }
+
+  replace(SmallFotoItem obj) {
+    key = obj.key;
+    shortDescription = obj.shortDescription;
+    date = Date.copy(obj.date);
+    description = obj.description;
+    annotation = obj.annotation;
+    filename = obj.filename;
+    thumbnailPath = obj.thumbnailPath;
+    path = obj.path;
+    tagKeys = List.from(obj.tagKeys);
+    photographedPeople = List.from(obj.photographedPeople);
+    locationKey = obj.locationKey;
+    rightOwnerKey = obj.rightOwnerKey;
+    institutionKey = obj.institutionKey;
+    itemType = obj.itemType;
+    itemSubTypeKey = obj.itemSubTypeKey;
+    creatorKey = obj.creatorKey;
+    isPublic = obj.isPublic;
+  }
 
   SmallFotoItem.fromJson(json, key, KeywordService ks) {
     if (json == null) json = Map();
