@@ -84,6 +84,20 @@ class _AdminViewEditState extends State<AdminViewEdit> {
   TextEditingController _institutionController;
   TextEditingController _annotationController;
 
+  String shortDescription = "";
+  String description = "";
+  bool isPublic;
+  DateTime startDate = DateTime.now();
+  DateTime endDate = DateTime.now();
+  String locationKey = "";
+  List<String> tagKeys = List();
+  List<People> photographedPeople = List();
+  String rightOwnerKey = "";
+  String institutionKey = "";
+  String itemSubTypeKey = "";
+  String creatorKey = "";
+  String annotation = "";
+
   bool isSaving = false;
   @override
   void initState() {
@@ -150,6 +164,19 @@ class _AdminViewEditState extends State<AdminViewEdit> {
             text: "Speichern",
             isActive: !isSaving,
             onPressed: () async {
+              widget.smallFotoItem.shortDescription = shortDescription;
+              widget.smallFotoItem.description = description;
+              widget.smallFotoItem.isPublic = isPublic;
+              widget.smallFotoItem.date.startDate = startDate;
+              widget.smallFotoItem.date.endDate = endDate;
+              widget.smallFotoItem.locationKey = locationKey;
+              widget.smallFotoItem.tagKeys = tagKeys;
+              widget.smallFotoItem.photographedPeople = photographedPeople;
+              widget.smallFotoItem.rightOwnerKey = rightOwnerKey;
+              widget.smallFotoItem.institutionKey = institutionKey;
+              widget.smallFotoItem.itemSubTypeKey = itemSubTypeKey;
+              widget.smallFotoItem.creatorKey = creatorKey;
+              widget.smallFotoItem.annotation = annotation;
               setState(() {
                 isSaving = true;
               });
@@ -167,19 +194,19 @@ class _AdminViewEditState extends State<AdminViewEdit> {
       TextField(
         controller: _shortDescriptionController,
         onChanged: (val) {
-          widget.smallFotoItem.shortDescription = val;
+          shortDescription = val;
         },
         decoration: InputDecoration(
             border: new OutlineInputBorder(
                 borderSide: new BorderSide(color: Colors.teal)),
-            hintText: 'Enter a search term'),
+            hintText: 'Kurzbezeichnung hinzufügen'),
       ),
       LogsBox(
         title: "Kurzbezeichnung",
         logs: _logsService.shortDescriptionLogs,
         valueTyp: ValueTyp.TEXT,
         callback: (val) => setState(() {
-          widget.smallFotoItem.shortDescription = val;
+          shortDescription = val;
           _shortDescriptionController.text = val;
         }),
       ),
@@ -191,21 +218,21 @@ class _AdminViewEditState extends State<AdminViewEdit> {
       TextField(
         controller: _descriptionController,
         onChanged: (val) {
-          widget.smallFotoItem.description = val;
+          description = val;
         },
         minLines: 3,
         maxLines: 10,
         decoration: InputDecoration(
             border: new OutlineInputBorder(
                 borderSide: new BorderSide(color: Colors.teal)),
-            hintText: 'Enter a search term'),
+            hintText: 'Beschreibung hinzufügen'),
       ),
       LogsBox(
         title: "Beschreibung",
         logs: _logsService.descriptionLogs,
         valueTyp: ValueTyp.TEXT,
         callback: (val) => setState(() {
-          widget.smallFotoItem.description = val;
+          description = val;
           _descriptionController.text = val;
         }),
       ),
@@ -217,28 +244,24 @@ class _AdminViewEditState extends State<AdminViewEdit> {
               child: RoundedButtonWidget(
                 onPressed: () {
                   setState(() {
-                    widget.smallFotoItem.isPublic = true;
+                    isPublic = true;
                   });
                 },
                 text: "öffentlich sichtbar",
-                color:
-                    widget.smallFotoItem.isPublic ? Colors.white : Colors.grey,
-                secondColor:
-                    widget.smallFotoItem.isPublic ? Colors.blue : Colors.white,
+                color: isPublic ? Colors.white : Colors.grey,
+                secondColor: isPublic ? Colors.blue : Colors.white,
               ),
             ),
             Expanded(
               child: RoundedButtonWidget(
                 onPressed: () {
                   setState(() {
-                    widget.smallFotoItem.isPublic = false;
+                    isPublic = false;
                   });
                 },
                 text: "privat sichtbar",
-                color:
-                    !widget.smallFotoItem.isPublic ? Colors.white : Colors.grey,
-                secondColor:
-                    !widget.smallFotoItem.isPublic ? Colors.blue : Colors.white,
+                color: !isPublic ? Colors.white : Colors.grey,
+                secondColor: !isPublic ? Colors.blue : Colors.white,
               ),
             )
           ],
@@ -249,7 +272,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         logs: _logsService.isPublicLogs,
         valueTyp: ValueTyp.TEXT,
         callback: (val) => setState(() {
-          widget.smallFotoItem.isPublic = val == "true";
+          isPublic = val == "true";
         }),
       ),
       SelectableText("Zeit:",
@@ -320,14 +343,14 @@ class _AdminViewEditState extends State<AdminViewEdit> {
           controller: _locationController,
           itemSubmitted: (item) {
             _locationController.text = item.name;
-            widget.smallFotoItem.locationKey = item.key;
+            locationKey = item.key;
           },
           clearOnSubmit: false,
           submitOnSuggestionTap: true,
           decoration: InputDecoration(
               border: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.teal)),
-              hintText: 'Enter a search term'),
+              hintText: 'Ort eingeben'),
           suggestions: _getLocationSuggestions(),
           textSubmitted: (val) {
             _showLocationDialog(name: _locationController.text);
@@ -368,7 +391,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         valueTyp: ValueTyp.KEY,
         json: widget.ks.locationsJson,
         callback: (val) => setState(() {
-          widget.smallFotoItem.locationKey = val;
+          locationKey = val;
           _locationController.text =
               Location.fromJson(widget.ks.locationsJson[val], val).name;
         }),
@@ -403,7 +426,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         key: _tagsKey,
         itemSubmitted: (item) {
           setState(() {
-            widget.smallFotoItem.tagKeys.add(item.key);
+            tagKeys.add(item.key);
             _tagsKey.currentState.updateSuggestions(_getTagSuggestions());
           });
         },
@@ -412,7 +435,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         decoration: InputDecoration(
             border:
                 OutlineInputBorder(borderSide: BorderSide(color: Colors.teal)),
-            hintText: 'Enter a search term'),
+            hintText: 'Stichwort eingeben'),
         suggestions: _getTagSuggestions(),
         textSubmitted: (val) {
           _showTagDialog(name: _tagController.text);
@@ -450,7 +473,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         valueTyp: ValueTyp.LIST,
         json: widget.ks.tagJson,
         callback: (val) => setState(() {
-          widget.smallFotoItem.tagKeys = List<String>.from(val);
+          tagKeys = List<String>.from(val);
         }),
       ),
       SelectableText("Abgebildete Personen:",
@@ -461,9 +484,8 @@ class _AdminViewEditState extends State<AdminViewEdit> {
       Container(
         padding: EdgeInsets.only(top: 10),
         child: Wrap(
-          children: widget.smallFotoItem.photographedPeople
-              .map((e) => _createPeopleWidget(e))
-              .toList(),
+          children:
+              photographedPeople.map((e) => _createPeopleWidget(e)).toList(),
         ),
       ),
       AutoCompleteTextField<People>(
@@ -483,7 +505,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         key: _photographedPeopleKey,
         itemSubmitted: (item) {
           setState(() {
-            widget.smallFotoItem.photographedPeople.add(item);
+            photographedPeople.add(item);
             _photographedPeopleKey.currentState
                 .updateSuggestions(_getPeopleSuggestions());
           });
@@ -493,7 +515,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         decoration: InputDecoration(
             border:
                 OutlineInputBorder(borderSide: BorderSide(color: Colors.teal)),
-            hintText: 'Enter a search term'),
+            hintText: 'Person eingeben'),
         suggestions: _getPeopleSuggestions(),
         textSubmitted: (val) {
           _showPeopleDialog(false, name: _photographedPeopleController.text);
@@ -537,7 +559,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
           List<People> list = List();
           val.forEach(
               (e) => list.add(People.fromJson(widget.ks.peopleJson[e], e)));
-          widget.smallFotoItem.photographedPeople = list;
+          photographedPeople = list;
         }),
       ),
       SelectableText("Rechteinhaber:",
@@ -561,14 +583,14 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         controller: _rightOwnerController,
         itemSubmitted: (item) {
           _rightOwnerController.text = item.name;
-          widget.smallFotoItem.rightOwnerKey = item.key;
+          rightOwnerKey = item.key;
         },
         clearOnSubmit: false,
         submitOnSuggestionTap: true,
         decoration: InputDecoration(
             border:
                 OutlineInputBorder(borderSide: BorderSide(color: Colors.teal)),
-            hintText: 'Enter a search term'),
+            hintText: 'Rechteinhaber eingeben'),
         suggestions: _getRightOwnerSuggestions(),
         textSubmitted: (val) {
           _showRightOwnerDialog(name: _rightOwnerController.text);
@@ -607,7 +629,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         valueTyp: ValueTyp.KEY,
         json: widget.ks.rightOwnerJson,
         callback: (val) => setState(() {
-          widget.smallFotoItem.rightOwnerKey = val;
+          rightOwnerKey = val;
           _rightOwnerController.text =
               RightOwner.fromJson(widget.ks.rightOwnerJson[val], val).name;
         }),
@@ -633,14 +655,14 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         controller: _institutionController,
         itemSubmitted: (item) {
           _institutionController.text = item.name;
-          widget.smallFotoItem.institutionKey = item.key;
+          institutionKey = item.key;
         },
         clearOnSubmit: false,
         submitOnSuggestionTap: true,
         decoration: InputDecoration(
             border:
                 OutlineInputBorder(borderSide: BorderSide(color: Colors.teal)),
-            hintText: 'Enter a search term'),
+            hintText: 'Institution eingeben'),
         suggestions: _getInstitutionSuggestions(),
         textSubmitted: (val) {
           _showInstitutionDialog(name: _institutionController.text);
@@ -679,7 +701,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         valueTyp: ValueTyp.KEY,
         json: widget.ks.institutionJson,
         callback: (val) => setState(() {
-          widget.smallFotoItem.institutionKey = val;
+          institutionKey = val;
           _institutionController.text =
               Institution.fromJson(widget.ks.institutionJson[val], val).name;
         }),
@@ -705,14 +727,14 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         controller: _itemSubtypeController,
         itemSubmitted: (item) {
           _itemSubtypeController.text = item.name;
-          widget.smallFotoItem.itemSubTypeKey = item.key;
+          itemSubTypeKey = item.key;
         },
         clearOnSubmit: false,
         submitOnSuggestionTap: true,
         decoration: InputDecoration(
             border:
                 OutlineInputBorder(borderSide: BorderSide(color: Colors.teal)),
-            hintText: 'Enter a search term'),
+            hintText: 'Foto-Typ eingeben'),
         suggestions: _getItemSubTypeSuggestions(),
         textSubmitted: (val) {
           _showSubtypeDialog(name: _itemSubtypeController.text);
@@ -751,7 +773,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         valueTyp: ValueTyp.KEY,
         json: widget.ks.itemSubtypeJson,
         callback: (val) => setState(() {
-          widget.smallFotoItem.itemSubTypeKey = val;
+          itemSubTypeKey = val;
           _itemSubtypeController.text =
               ItemSubtype.fromJson(widget.ks.itemSubtypeJson[val], val).name;
         }),
@@ -778,14 +800,14 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         itemSubmitted: (item) {
           _creatorController.text =
               (item.firstName ?? "") + " " + (item.lastName ?? "");
-          widget.smallFotoItem.creatorKey = item.key;
+          creatorKey = item.key;
         },
         clearOnSubmit: false,
         submitOnSuggestionTap: true,
         decoration: InputDecoration(
             border:
                 OutlineInputBorder(borderSide: BorderSide(color: Colors.teal)),
-            hintText: 'Enter a search term'),
+            hintText: 'Fotograf eingeben'),
         suggestions: _getPeopleSuggestions(),
         textSubmitted: (val) {
           _showPeopleDialog(true, name: _creatorController.text);
@@ -826,7 +848,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         valueTyp: ValueTyp.KEY,
         json: widget.ks.peopleJson,
         callback: (val) => setState(() {
-          widget.smallFotoItem.creatorKey = val;
+          creatorKey = val;
           _creatorController.text =
               People.fromJson(widget.ks.peopleJson[val], val).firstName;
         }),
@@ -838,7 +860,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
               fontSize: 17)),
       TextField(
         onChanged: (val) {
-          widget.smallFotoItem.annotation = val;
+          annotation = val;
         },
         controller: _annotationController,
         minLines: 3,
@@ -846,14 +868,14 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         decoration: InputDecoration(
             border: new OutlineInputBorder(
                 borderSide: new BorderSide(color: Colors.teal)),
-            hintText: 'Enter a search term'),
+            hintText: 'Vermerk eingeben'),
       ),
       LogsBox(
         title: "Vermerk",
         logs: _logsService.annotationLogs,
         valueTyp: ValueTyp.TEXT,
         callback: (val) => setState(() {
-          widget.smallFotoItem.annotation = val;
+          annotation = val;
           _annotationController.text = val;
         }),
       ),
@@ -871,19 +893,12 @@ class _AdminViewEditState extends State<AdminViewEdit> {
       lastDate: DateTime(DateTime.now().year + 1),
     );
     if (isStart) {
-      widget.smallFotoItem.date.startDate = val;
-      _startDateController.text = widget.smallFotoItem?.date?.startDate
-              ?.toString()
-              ?.split(" ")
-              ?.first ??
-          "";
+      startDate = val;
+      _startDateController.text =
+          startDate?.toString()?.split(" ")?.first ?? "";
     } else {
-      widget.smallFotoItem.date.endDate = val;
-      _endDateController.text = widget.smallFotoItem?.date?.startDate
-              ?.toString()
-              ?.split(" ")
-              ?.first ??
-          "";
+      endDate = val;
+      _endDateController.text = endDate?.toString()?.split(" ")?.first ?? "";
     }
   }
 
