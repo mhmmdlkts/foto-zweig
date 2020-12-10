@@ -22,7 +22,6 @@ class PeopleDialog extends StatefulWidget {
 }
 
 class _PeopleDialogState extends State<PeopleDialog> {
-
   TextEditingController _dateOfBirthController;
   People people;
   bool _isActive = true;
@@ -30,16 +29,18 @@ class _PeopleDialogState extends State<PeopleDialog> {
   @override
   void initState() {
     super.initState();
-    people = widget.people==null?People(firstName: widget.name):widget.people;
-    _dateOfBirthController = TextEditingController(text: people.dateOfBirth?.toString()?.split(" ")?.first??"");
+    people =
+        widget.people == null ? People(firstName: widget.name) : widget.people;
+    _dateOfBirthController = TextEditingController(
+        text: people.dateOfBirth?.toString()?.split(" ")?.first ?? "");
   }
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
-      ),      
+        borderRadius: BorderRadius.circular(5),
+      ),
       elevation: 0.0,
       backgroundColor: Colors.white,
       child: dialogContent(context),
@@ -54,10 +55,16 @@ class _PeopleDialogState extends State<PeopleDialog> {
         children: [
           Container(
             width: 400,
-            child: Text("People", style: TextStyle(fontSize: 36),),
+            child: Text(
+              "Personen",
+              style: TextStyle(fontSize: 36),
+            ),
           ),
-          Container(height: 10, width: 0,),
-          Text("First Name"),
+          Container(
+            height: 10,
+            width: 0,
+          ),
+          Text("Vorname"),
           Container(
             width: 400,
             child: TextField(
@@ -71,8 +78,11 @@ class _PeopleDialogState extends State<PeopleDialog> {
               },
             ),
           ),
-          Container(height: 10, width: 0,),
-          Text("Last Name"),
+          Container(
+            height: 10,
+            width: 0,
+          ),
+          Text("Nachname"),
           Container(
             width: 400,
             child: TextField(
@@ -86,8 +96,11 @@ class _PeopleDialogState extends State<PeopleDialog> {
               },
             ),
           ),
-          Container(height: 10, width: 0,),
-          Text("Date Of Birth"),
+          Container(
+            height: 10,
+            width: 0,
+          ),
+          Text("Anmerkungen"),
           Container(
             width: 400,
             child: TextField(
@@ -100,25 +113,40 @@ class _PeopleDialogState extends State<PeopleDialog> {
               ),
             ),
           ),
-          Container(height: 10, width: 0,),
+          Container(
+            height: 10,
+            width: 0,
+          ),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              RoundedButtonWidget(onPressed: () {
-                Navigator.pop(context, null);
-              }, text: "Schließen", color: Colors.red,),
-              Container(width: 10,),
-              RoundedButtonWidget(onPressed: () async {
-                setState(() { _isActive = false; });
-                if (people != null) {
-                  people = People.copy(people);
-                  await widget.ks.editPeople(EditingTypEnum.UPDATE, people);
-                } else {
-                  await widget.ks.editPeople(EditingTypEnum.CREATE, people);
-                }
-                Navigator.pop(context, people);
-              }, text: "Save", color: Colors.green,
-                isActive: _isActive,)
+              RoundedButtonWidget(
+                onPressed: () {
+                  Navigator.pop(context, null);
+                },
+                text: "Schließen",
+                color: Colors.red,
+              ),
+              Container(
+                width: 10,
+              ),
+              RoundedButtonWidget(
+                onPressed: () async {
+                  setState(() {
+                    _isActive = false;
+                  });
+                  if (people != null) {
+                    people = People.copy(people);
+                    await widget.ks.editPeople(EditingTypEnum.UPDATE, people);
+                  } else {
+                    await widget.ks.editPeople(EditingTypEnum.CREATE, people);
+                  }
+                  Navigator.pop(context, people);
+                },
+                text: "Speichern",
+                color: Colors.green,
+                isActive: _isActive,
+              )
             ],
           )
         ],
@@ -126,16 +154,14 @@ class _PeopleDialogState extends State<PeopleDialog> {
     );
   }
 
-
-
   void _showDatePicker() async {
     DateTime val = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(DateTime.now().year-1000),
-      lastDate: DateTime(DateTime.now().year+1),
+      firstDate: DateTime(DateTime.now().year - 1000),
+      lastDate: DateTime(DateTime.now().year + 1),
     );
     people.dateOfBirth = val;
-    _dateOfBirthController.text = val?.toString()?.split(" ")?.first??"";
+    _dateOfBirthController.text = val?.toString()?.split(" ")?.first ?? "";
   }
 }

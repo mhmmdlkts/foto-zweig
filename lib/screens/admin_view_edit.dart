@@ -32,7 +32,8 @@ class AdminViewEdit extends StatefulWidget {
   final VoidCallback onCancel;
   final FotoUser user;
 
-  AdminViewEdit(this.user, this.context, this.onCancel, this.smallFotoItem, this.ks);
+  AdminViewEdit(
+      this.user, this.context, this.onCancel, this.smallFotoItem, this.ks);
 
   @override
   _AdminViewEditState createState() => _AdminViewEditState();
@@ -48,13 +49,18 @@ class _AdminViewEditState extends State<AdminViewEdit> {
   final List<People> _peopleList = List();
   final List<Tag> _tagList = List();
 
-  final GlobalKey<AutoCompleteTextFieldState<Location>> _locationKey = GlobalKey();
+  final GlobalKey<AutoCompleteTextFieldState<Location>> _locationKey =
+      GlobalKey();
   final GlobalKey<AutoCompleteTextFieldState<Tag>> _tagsKey = GlobalKey();
   final GlobalKey<AutoCompleteTextFieldState<People>> _creatorKey = GlobalKey();
-  final GlobalKey<AutoCompleteTextFieldState<People>> _photographedPeopleKey = GlobalKey();
-  final GlobalKey<AutoCompleteTextFieldState<RightOwner>> _rightOwnerKey = GlobalKey();
-  final GlobalKey<AutoCompleteTextFieldState<ItemSubtype>> _itemSubtypeKey = GlobalKey();
-  final GlobalKey<AutoCompleteTextFieldState<Institution>> _institutionKey = GlobalKey();
+  final GlobalKey<AutoCompleteTextFieldState<People>> _photographedPeopleKey =
+      GlobalKey();
+  final GlobalKey<AutoCompleteTextFieldState<RightOwner>> _rightOwnerKey =
+      GlobalKey();
+  final GlobalKey<AutoCompleteTextFieldState<ItemSubtype>> _itemSubtypeKey =
+      GlobalKey();
+  final GlobalKey<AutoCompleteTextFieldState<Institution>> _institutionKey =
+      GlobalKey();
 
   final FocusNode _locationFocusNode = FocusNode();
   final FocusNode _tagsFocusNode = FocusNode();
@@ -65,7 +71,8 @@ class _AdminViewEditState extends State<AdminViewEdit> {
   final FocusNode _photographedPeopleFocusNode = FocusNode();
 
   final TextEditingController _tagController = TextEditingController();
-  final TextEditingController _photographedPeopleController = TextEditingController();
+  final TextEditingController _photographedPeopleController =
+      TextEditingController();
   TextEditingController _shortDescriptionController;
   TextEditingController _descriptionController;
   TextEditingController _locationController;
@@ -82,23 +89,49 @@ class _AdminViewEditState extends State<AdminViewEdit> {
   void initState() {
     super.initState();
     _initLists();
-    _logsService.init(widget.smallFotoItem.key).then((value) => setState((){}));
-    _shortDescriptionController = TextEditingController(text: widget.smallFotoItem?.shortDescription??"");
-    _descriptionController = TextEditingController(text: widget.smallFotoItem?.description??"");
-    _annotationController = TextEditingController(text: widget.smallFotoItem?.annotation??"");
-    _locationController = TextEditingController(text: widget.smallFotoItem?.getLocation(widget.ks)?.name??"");
-    _institutionController = TextEditingController(text: widget.smallFotoItem?.getInstitution(widget.ks)?.name??"");
-    _creatorController = TextEditingController(text: (widget.smallFotoItem?.getCreator(widget.ks)?.firstName??"") + ((widget.smallFotoItem?.getCreator(widget.ks)?.firstName)!=null?" ":"") + (widget.smallFotoItem?.getCreator(widget.ks)?.lastName??""));
-    _itemSubtypeController = TextEditingController(text: (widget.smallFotoItem?.getItemSubType(widget.ks)?.name??""));
-    _rightOwnerController = TextEditingController(text: widget.smallFotoItem?.getRightOwner(widget.ks)?.name??"");
-    _startDateController = TextEditingController(text: widget.smallFotoItem?.date?.startDate?.toString()?.split(" ")?.first??"");
-    _endDateController = TextEditingController(text: widget.smallFotoItem?.date?.endDate?.toString()?.split(" ")?.first??"");
+    _logsService
+        .init(widget.smallFotoItem.key)
+        .then((value) => setState(() {}));
+    _shortDescriptionController = TextEditingController(
+        text: widget.smallFotoItem?.shortDescription ?? "");
+    _descriptionController =
+        TextEditingController(text: widget.smallFotoItem?.description ?? "");
+    _annotationController =
+        TextEditingController(text: widget.smallFotoItem?.annotation ?? "");
+    _locationController = TextEditingController(
+        text: widget.smallFotoItem?.getLocation(widget.ks)?.name ?? "");
+    _institutionController = TextEditingController(
+        text: widget.smallFotoItem?.getInstitution(widget.ks)?.name ?? "");
+    _creatorController = TextEditingController(
+        text: (widget.smallFotoItem?.getCreator(widget.ks)?.firstName ?? "") +
+            ((widget.smallFotoItem?.getCreator(widget.ks)?.firstName) != null
+                ? " "
+                : "") +
+            (widget.smallFotoItem?.getCreator(widget.ks)?.lastName ?? ""));
+    _itemSubtypeController = TextEditingController(
+        text: (widget.smallFotoItem?.getItemSubType(widget.ks)?.name ?? ""));
+    _rightOwnerController = TextEditingController(
+        text: widget.smallFotoItem?.getRightOwner(widget.ks)?.name ?? "");
+    _startDateController = TextEditingController(
+        text: widget.smallFotoItem?.date?.startDate
+                ?.toString()
+                ?.split(" ")
+                ?.first ??
+            "");
+    _endDateController = TextEditingController(
+        text: widget.smallFotoItem?.date?.endDate
+                ?.toString()
+                ?.split(" ")
+                ?.first ??
+            "");
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Container(height: 10,),
+      Container(
+        height: 10,
+      ),
       Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -188,8 +221,10 @@ class _AdminViewEditState extends State<AdminViewEdit> {
                   });
                 },
                 text: "öffentlich sichtbar",
-                color: widget.smallFotoItem.isPublic?Colors.white:Colors.grey,
-                secondColor: widget.smallFotoItem.isPublic?Colors.blue:Colors.white,
+                color:
+                    widget.smallFotoItem.isPublic ? Colors.white : Colors.grey,
+                secondColor:
+                    widget.smallFotoItem.isPublic ? Colors.blue : Colors.white,
               ),
             ),
             Expanded(
@@ -200,20 +235,22 @@ class _AdminViewEditState extends State<AdminViewEdit> {
                   });
                 },
                 text: "privat sichtbar",
-                color: !widget.smallFotoItem.isPublic?Colors.white:Colors.grey,
-                secondColor: !widget.smallFotoItem.isPublic?Colors.blue:Colors.white,
+                color:
+                    !widget.smallFotoItem.isPublic ? Colors.white : Colors.grey,
+                secondColor:
+                    !widget.smallFotoItem.isPublic ? Colors.blue : Colors.white,
               ),
             )
           ],
         ),
       ),
       LogsBox(
-          title: "Ist Öffentlich",
-          logs: _logsService.isPublicLogs,
-          valueTyp: ValueTyp.TEXT,
-          callback: (val) => setState(() {
-            widget.smallFotoItem.isPublic = val == "true";
-          }),
+        title: "Ist Öffentlich",
+        logs: _logsService.isPublicLogs,
+        valueTyp: ValueTyp.TEXT,
+        callback: (val) => setState(() {
+          widget.smallFotoItem.isPublic = val == "true";
+        }),
       ),
       SelectableText("Zeit:",
           style: TextStyle(
@@ -267,63 +304,64 @@ class _AdminViewEditState extends State<AdminViewEdit> {
               fontWeight: FontWeight.bold,
               color: ButtonColors.appBarColor,
               fontSize: 17)),
-              
       AutoCompleteTextField<Location>(
-        
-        onFocusChanged: (val) {
-          if(_locationController.text.isNotEmpty){
-          return;
-          }
-          setState(() {
-                if(val){
-            _locationKey.currentState.filteredSuggestions = _getLocationSuggestions();
-        }
-          });
-      
-
-        },
-        focusNode: _locationFocusNode,
-        controller: _locationController,
-        itemSubmitted: (item) {
-          _locationController.text = item.name;
-          widget.smallFotoItem.locationKey = item.key;
-        },
-        
-        clearOnSubmit: false,
-        submitOnSuggestionTap: true,
-        decoration: InputDecoration(
-            border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.teal)),
-            hintText: 'Enter a search term'),
-            
-        suggestions: _getLocationSuggestions(),
-        textSubmitted: (val) {
-          _showLocationDialog(name: _locationController.text);
-        },
-        itemBuilder: (context, location) {
-          if (location.key == "-1")
-            return _getAddButton(onPressed: () {
-              _showLocationDialog(name: _locationController.text);
+          onFocusChanged: (val) {
+            if (_locationController.text.isNotEmpty) {
+              return;
+            }
+            setState(() {
+              if (val) {
+                _locationKey.currentState.filteredSuggestions =
+                    _getLocationSuggestions();
+              }
             });
-          return Padding(
-            padding: EdgeInsets.all(8.0),
-            child: ListTile(
-                title: Text(location.name),
-                trailing: Text("Country: ${location?.country?.toUpperCase()}")
-            ),
-          );
-        },
-        key: _locationKey,
-        itemSorter: (a, b) {
-          if (a.key == "-1") return (1<<62);
-          if (b.key == "-1") return -(1<<62);
-          return (a?.name ?? "").compareTo(b?.name ?? "");
-        },
-        itemFilter: (suggestion, input){
-          return _locationFocusNode.hasFocus &&
-              (suggestion.name.toLowerCase().startsWith(_locationController.text.toLowerCase().trim()) || (suggestion.key == "-1" && _locationList.map((e) => e.name).where((element) => element == _locationController.text).toList().isEmpty));
-        }
-      ),
+          },
+          focusNode: _locationFocusNode,
+          controller: _locationController,
+          itemSubmitted: (item) {
+            _locationController.text = item.name;
+            widget.smallFotoItem.locationKey = item.key;
+          },
+          clearOnSubmit: false,
+          submitOnSuggestionTap: true,
+          decoration: InputDecoration(
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.teal)),
+              hintText: 'Enter a search term'),
+          suggestions: _getLocationSuggestions(),
+          textSubmitted: (val) {
+            _showLocationDialog(name: _locationController.text);
+          },
+          itemBuilder: (context, location) {
+            if (location.key == "-1")
+              return _getAddButton(onPressed: () {
+                _showLocationDialog(name: _locationController.text);
+              });
+            return Padding(
+              padding: EdgeInsets.all(8.0),
+              child: ListTile(
+                  title: Text(location.name),
+                  trailing: Text("Land: ${location?.country?.toUpperCase()}")),
+            );
+          },
+          key: _locationKey,
+          itemSorter: (a, b) {
+            if (a.key == "-1") return (1 << 62);
+            if (b.key == "-1") return -(1 << 62);
+            return (a?.name ?? "").compareTo(b?.name ?? "");
+          },
+          itemFilter: (suggestion, input) {
+            return _locationFocusNode.hasFocus &&
+                (suggestion.name.toLowerCase().startsWith(
+                        _locationController.text.toLowerCase().trim()) ||
+                    (suggestion.key == "-1" &&
+                        _locationList
+                            .map((e) => e.name)
+                            .where((element) =>
+                                element == _locationController.text)
+                            .toList()
+                            .isEmpty));
+          }),
       LogsBox(
         title: "Ort",
         logs: _logsService.locationLogs,
@@ -331,32 +369,33 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         json: widget.ks.locationsJson,
         callback: (val) => setState(() {
           widget.smallFotoItem.locationKey = val;
-          _locationController.text = Location.fromJson(widget.ks.locationsJson[val], val).name;
+          _locationController.text =
+              Location.fromJson(widget.ks.locationsJson[val], val).name;
         }),
       ),
       SelectableText("Stichworte:",
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: ButtonColors.appBarColor,
-          fontSize: 17
-        )
-      ),
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: ButtonColors.appBarColor,
+              fontSize: 17)),
       Container(
         padding: EdgeInsets.only(top: 10),
         child: Wrap(
-          children: widget.smallFotoItem.getTags(widget.ks).map((e) => _createTagWidget(e)).toList(),
+          children: widget.smallFotoItem
+              .getTags(widget.ks)
+              .map((e) => _createTagWidget(e))
+              .toList(),
         ),
       ),
       AutoCompleteTextField<Tag>(
-        
         onFocusChanged: (val) {
-          if(_tagController.text.isNotEmpty){
-          return;
+          if (_tagController.text.isNotEmpty) {
+            return;
           }
           setState(() {
-                if(val){
-            _tagsKey.currentState.filteredSuggestions = _getTagSuggestions();
-        }
+            if (val) {
+              _tagsKey.currentState.filteredSuggestions = _getTagSuggestions();
+            }
           });
         },
         focusNode: _tagsFocusNode,
@@ -371,8 +410,8 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         clearOnSubmit: true,
         submitOnSuggestionTap: true,
         decoration: InputDecoration(
-            border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.teal)),
+            border:
+                OutlineInputBorder(borderSide: BorderSide(color: Colors.teal)),
             hintText: 'Enter a search term'),
         suggestions: _getTagSuggestions(),
         textSubmitted: (val) {
@@ -391,13 +430,19 @@ class _AdminViewEditState extends State<AdminViewEdit> {
           );
         },
         itemSorter: (a, b) {
-          if (a.key == "-1") return (1<<62);
-          if (b.key == "-1") return -(1<<62);
-          return (a?.name??"").compareTo(b?.name??"");
+          if (a.key == "-1") return (1 << 62);
+          if (b.key == "-1") return -(1 << 62);
+          return (a?.name ?? "").compareTo(b?.name ?? "");
         },
-        itemFilter: (suggestion, input) => _tagsFocusNode.hasFocus &&
+        itemFilter: (suggestion, input) =>
+            _tagsFocusNode.hasFocus &&
             (suggestion.name.toLowerCase().startsWith(input.toLowerCase()) ||
-            suggestion.key == "-1" && _tagList.map((e) => e.name).where((element) => element == input).toList().isEmpty),
+                suggestion.key == "-1" &&
+                    _tagList
+                        .map((e) => e.name)
+                        .where((element) => element == input)
+                        .toList()
+                        .isEmpty),
       ),
       LogsBox(
         title: "Stichworte",
@@ -416,21 +461,22 @@ class _AdminViewEditState extends State<AdminViewEdit> {
       Container(
         padding: EdgeInsets.only(top: 10),
         child: Wrap(
-          children: widget.smallFotoItem.photographedPeople.map((e) => _createPeopleWidget(e)).toList(),
+          children: widget.smallFotoItem.photographedPeople
+              .map((e) => _createPeopleWidget(e))
+              .toList(),
         ),
       ),
       AutoCompleteTextField<People>(
         onFocusChanged: (val) {
-          if(_photographedPeopleController.text.isNotEmpty){
-          return;
+          if (_photographedPeopleController.text.isNotEmpty) {
+            return;
           }
           setState(() {
-                if(val){
-            _photographedPeopleKey.currentState.filteredSuggestions = _getPeopleSuggestions();
-        }
+            if (val) {
+              _photographedPeopleKey.currentState.filteredSuggestions =
+                  _getPeopleSuggestions();
+            }
           });
-      
-
         },
         controller: _photographedPeopleController,
         focusNode: _photographedPeopleFocusNode,
@@ -438,14 +484,15 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         itemSubmitted: (item) {
           setState(() {
             widget.smallFotoItem.photographedPeople.add(item);
-            _photographedPeopleKey.currentState.updateSuggestions(_getPeopleSuggestions());
+            _photographedPeopleKey.currentState
+                .updateSuggestions(_getPeopleSuggestions());
           });
         },
         clearOnSubmit: true,
         submitOnSuggestionTap: true,
         decoration: InputDecoration(
-            border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.teal)),
+            border:
+                OutlineInputBorder(borderSide: BorderSide(color: Colors.teal)),
             hintText: 'Enter a search term'),
         suggestions: _getPeopleSuggestions(),
         textSubmitted: (val) {
@@ -454,7 +501,8 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         itemBuilder: (context, people) {
           if (people.key == "-1")
             return _getAddButton(onPressed: () {
-              _showPeopleDialog(false, name: _photographedPeopleController.text);
+              _showPeopleDialog(false,
+                  name: _photographedPeopleController.text);
             });
           return Padding(
             padding: EdgeInsets.all(8.0),
@@ -464,12 +512,21 @@ class _AdminViewEditState extends State<AdminViewEdit> {
           );
         },
         itemSorter: (a, b) {
-          if (a.key == "-1") return (1<<62);
-          if (b.key == "-1") return -(1<<62);
-          return (a?.firstName??"").compareTo(b?.firstName??"");
+          if (a.key == "-1") return (1 << 62);
+          if (b.key == "-1") return -(1 << 62);
+          return (a?.firstName ?? "").compareTo(b?.firstName ?? "");
         },
-        itemFilter: (suggestion, input) => _photographedPeopleFocusNode.hasFocus &&
-            ((suggestion.firstName + " " + suggestion.lastName).toLowerCase().contains(input.toLowerCase()) || (suggestion.key == "-1" && _peopleList.map((e) => (e.firstName + " " + e.lastName)).where((element) => element == input).toList().isEmpty)),
+        itemFilter: (suggestion, input) =>
+            _photographedPeopleFocusNode.hasFocus &&
+            ((suggestion.firstName + " " + suggestion.lastName)
+                    .toLowerCase()
+                    .contains(input.toLowerCase()) ||
+                (suggestion.key == "-1" &&
+                    _peopleList
+                        .map((e) => (e.firstName + " " + e.lastName))
+                        .where((element) => element == input)
+                        .toList()
+                        .isEmpty)),
       ),
       LogsBox(
         title: "Abgebildete Personen",
@@ -478,7 +535,8 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         json: widget.ks.peopleJson,
         callback: (val) => setState(() {
           List<People> list = List();
-          val.forEach((e) => list.add(People.fromJson(widget.ks.peopleJson[e], e)));
+          val.forEach(
+              (e) => list.add(People.fromJson(widget.ks.peopleJson[e], e)));
           widget.smallFotoItem.photographedPeople = list;
         }),
       ),
@@ -488,18 +546,17 @@ class _AdminViewEditState extends State<AdminViewEdit> {
               color: ButtonColors.appBarColor,
               fontSize: 17)),
       AutoCompleteTextField<RightOwner>(
-
         onFocusChanged: (val) {
-          if(_rightOwnerController.text.isNotEmpty){
-          return;
+          if (_rightOwnerController.text.isNotEmpty) {
+            return;
           }
           setState(() {
-            if(val){
-              _rightOwnerKey.currentState.filteredSuggestions = _getRightOwnerSuggestions();
+            if (val) {
+              _rightOwnerKey.currentState.filteredSuggestions =
+                  _getRightOwnerSuggestions();
             }
           });
         },
-        
         focusNode: _rightOwnerFocusNode,
         controller: _rightOwnerController,
         itemSubmitted: (item) {
@@ -509,8 +566,8 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         clearOnSubmit: false,
         submitOnSuggestionTap: true,
         decoration: InputDecoration(
-            border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.teal)),
+            border:
+                OutlineInputBorder(borderSide: BorderSide(color: Colors.teal)),
             hintText: 'Enter a search term'),
         suggestions: _getRightOwnerSuggestions(),
         textSubmitted: (val) {
@@ -525,18 +582,24 @@ class _AdminViewEditState extends State<AdminViewEdit> {
             padding: EdgeInsets.all(8.0),
             child: ListTile(
                 title: Text(rightOwner.name),
-                trailing: Text(rightOwner.contactInformation)
-            ),
+                trailing: Text(rightOwner.contactInformation)),
           );
         },
         key: _rightOwnerKey,
         itemSorter: (a, b) {
-          if (a.key == "-1") return (1<<62);
-          if (b.key == "-1") return -(1<<62);
-          return (a?.name??"").compareTo(b?.name??"");
+          if (a.key == "-1") return (1 << 62);
+          if (b.key == "-1") return -(1 << 62);
+          return (a?.name ?? "").compareTo(b?.name ?? "");
         },
-        itemFilter: (suggestion, input) => _rightOwnerFocusNode.hasFocus &&
-            (suggestion.name.toLowerCase().startsWith(input.toLowerCase()) || (suggestion.key == "-1" && _rightOwnerList.map((e) => (e.name + " " + e.name)).where((element) => element == input).toList().isEmpty)),
+        itemFilter: (suggestion, input) =>
+            _rightOwnerFocusNode.hasFocus &&
+            (suggestion.name.toLowerCase().startsWith(input.toLowerCase()) ||
+                (suggestion.key == "-1" &&
+                    _rightOwnerList
+                        .map((e) => (e.name + " " + e.name))
+                        .where((element) => element == input)
+                        .toList()
+                        .isEmpty)),
       ),
       LogsBox(
         title: "Rechteinhaber",
@@ -545,7 +608,8 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         json: widget.ks.rightOwnerJson,
         callback: (val) => setState(() {
           widget.smallFotoItem.rightOwnerKey = val;
-          _rightOwnerController.text = RightOwner.fromJson(widget.ks.rightOwnerJson[val], val).name;
+          _rightOwnerController.text =
+              RightOwner.fromJson(widget.ks.rightOwnerJson[val], val).name;
         }),
       ),
       SelectableText("Institution:",
@@ -555,13 +619,14 @@ class _AdminViewEditState extends State<AdminViewEdit> {
               fontSize: 17)),
       AutoCompleteTextField<Institution>(
         onFocusChanged: (val) {
-          if(_institutionController.text.isNotEmpty){
-          return;
+          if (_institutionController.text.isNotEmpty) {
+            return;
           }
           setState(() {
-                if(val){
-            _institutionKey.currentState.filteredSuggestions = _getInstitutionSuggestions();
-        }
+            if (val) {
+              _institutionKey.currentState.filteredSuggestions =
+                  _getInstitutionSuggestions();
+            }
           });
         },
         focusNode: _institutionFocusNode,
@@ -573,8 +638,8 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         clearOnSubmit: false,
         submitOnSuggestionTap: true,
         decoration: InputDecoration(
-            border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.teal)),
+            border:
+                OutlineInputBorder(borderSide: BorderSide(color: Colors.teal)),
             hintText: 'Enter a search term'),
         suggestions: _getInstitutionSuggestions(),
         textSubmitted: (val) {
@@ -589,18 +654,24 @@ class _AdminViewEditState extends State<AdminViewEdit> {
             padding: EdgeInsets.all(8.0),
             child: ListTile(
                 title: Text(institution.name),
-                trailing: Text(institution.contactInformation)
-            ),
+                trailing: Text(institution.contactInformation)),
           );
         },
         key: _institutionKey,
         itemSorter: (a, b) {
-          if (a.key == "-1") return (1<<62);
-          if (b.key == "-1") return -(1<<62);
-          return (a?.name??"").compareTo(b?.name??"");
+          if (a.key == "-1") return (1 << 62);
+          if (b.key == "-1") return -(1 << 62);
+          return (a?.name ?? "").compareTo(b?.name ?? "");
         },
-        itemFilter: (suggestion, input) => _institutionFocusNode.hasFocus &&
-            (suggestion.name.toLowerCase().startsWith(input.toLowerCase()) || (suggestion.key == "-1" && _institutionList.map((e) => (e.name + " " + e.name)).where((element) => element == input).toList().isEmpty)),
+        itemFilter: (suggestion, input) =>
+            _institutionFocusNode.hasFocus &&
+            (suggestion.name.toLowerCase().startsWith(input.toLowerCase()) ||
+                (suggestion.key == "-1" &&
+                    _institutionList
+                        .map((e) => (e.name + " " + e.name))
+                        .where((element) => element == input)
+                        .toList()
+                        .isEmpty)),
       ),
       LogsBox(
         title: "Institution",
@@ -609,7 +680,8 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         json: widget.ks.institutionJson,
         callback: (val) => setState(() {
           widget.smallFotoItem.institutionKey = val;
-          _institutionController.text = Institution.fromJson(widget.ks.institutionJson[val], val).name;
+          _institutionController.text =
+              Institution.fromJson(widget.ks.institutionJson[val], val).name;
         }),
       ),
       SelectableText("Foto - Typ:",
@@ -619,13 +691,14 @@ class _AdminViewEditState extends State<AdminViewEdit> {
               fontSize: 17)),
       AutoCompleteTextField<ItemSubtype>(
         onFocusChanged: (val) {
-          if(_itemSubtypeController.text.isNotEmpty){
-          return;
+          if (_itemSubtypeController.text.isNotEmpty) {
+            return;
           }
           setState(() {
-                if(val){
-            _itemSubtypeKey.currentState.filteredSuggestions = _getItemSubTypeSuggestions();
-        }
+            if (val) {
+              _itemSubtypeKey.currentState.filteredSuggestions =
+                  _getItemSubTypeSuggestions();
+            }
           });
         },
         focusNode: _itemSubtypeFocusNode,
@@ -637,8 +710,8 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         clearOnSubmit: false,
         submitOnSuggestionTap: true,
         decoration: InputDecoration(
-            border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.teal)),
+            border:
+                OutlineInputBorder(borderSide: BorderSide(color: Colors.teal)),
             hintText: 'Enter a search term'),
         suggestions: _getItemSubTypeSuggestions(),
         textSubmitted: (val) {
@@ -658,12 +731,19 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         },
         key: _itemSubtypeKey,
         itemSorter: (a, b) {
-          if (a.key == "-1") return (1<<62);
-          if (b.key == "-1") return -(1<<62);
-          return (a?.name??"").compareTo(b?.name??"");
+          if (a.key == "-1") return (1 << 62);
+          if (b.key == "-1") return -(1 << 62);
+          return (a?.name ?? "").compareTo(b?.name ?? "");
         },
-        itemFilter: (suggestion, input) => _itemSubtypeFocusNode.hasFocus &&
-            (suggestion.name.toLowerCase().startsWith(input.toLowerCase()) || (suggestion.key == "-1" && _itemSubTypeList.map((e) => (e.name + " " + e.name)).where((element) => element == input).toList().isEmpty)),
+        itemFilter: (suggestion, input) =>
+            _itemSubtypeFocusNode.hasFocus &&
+            (suggestion.name.toLowerCase().startsWith(input.toLowerCase()) ||
+                (suggestion.key == "-1" &&
+                    _itemSubTypeList
+                        .map((e) => (e.name + " " + e.name))
+                        .where((element) => element == input)
+                        .toList()
+                        .isEmpty)),
       ),
       LogsBox(
         title: "Foto - Typ",
@@ -672,7 +752,8 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         json: widget.ks.itemSubtypeJson,
         callback: (val) => setState(() {
           widget.smallFotoItem.itemSubTypeKey = val;
-          _itemSubtypeController.text = ItemSubtype.fromJson(widget.ks.itemSubtypeJson[val], val).name;
+          _itemSubtypeController.text =
+              ItemSubtype.fromJson(widget.ks.itemSubtypeJson[val], val).name;
         }),
       ),
       SelectableText("Fotograf:",
@@ -682,26 +763,28 @@ class _AdminViewEditState extends State<AdminViewEdit> {
               fontSize: 17)),
       AutoCompleteTextField<People>(
         onFocusChanged: (val) {
-          if(_creatorController.text.isNotEmpty){
-          return;
+          if (_creatorController.text.isNotEmpty) {
+            return;
           }
           setState(() {
-                if(val){
-            _creatorKey.currentState.filteredSuggestions = _getPeopleSuggestions();
-        }
+            if (val) {
+              _creatorKey.currentState.filteredSuggestions =
+                  _getPeopleSuggestions();
+            }
           });
         },
         controller: _creatorController,
         focusNode: _creatorFocusNode,
         itemSubmitted: (item) {
-          _creatorController.text = (item.firstName??"") + " " + (item.lastName??"");
+          _creatorController.text =
+              (item.firstName ?? "") + " " + (item.lastName ?? "");
           widget.smallFotoItem.creatorKey = item.key;
         },
         clearOnSubmit: false,
         submitOnSuggestionTap: true,
         decoration: InputDecoration(
-            border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.teal)),
+            border:
+                OutlineInputBorder(borderSide: BorderSide(color: Colors.teal)),
             hintText: 'Enter a search term'),
         suggestions: _getPeopleSuggestions(),
         textSubmitted: (val) {
@@ -721,12 +804,21 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         },
         key: _creatorKey,
         itemSorter: (a, b) {
-          if (a.key == "-1") return (1<<62);
-          if (b.key == "-1") return -(1<<62);
-          return (a?.firstName??"").compareTo(b?.firstName??"");
+          if (a.key == "-1") return (1 << 62);
+          if (b.key == "-1") return -(1 << 62);
+          return (a?.firstName ?? "").compareTo(b?.firstName ?? "");
         },
-        itemFilter: (suggestion, input) => _creatorFocusNode.hasFocus &&
-            ((suggestion.firstName + " " + suggestion.lastName).toLowerCase().contains(input) || (suggestion.key == "-1" && _peopleList.map((e) => (e.firstName + " " + e.lastName)).where((element) => element == input).toList().isEmpty)),
+        itemFilter: (suggestion, input) =>
+            _creatorFocusNode.hasFocus &&
+            ((suggestion.firstName + " " + suggestion.lastName)
+                    .toLowerCase()
+                    .contains(input) ||
+                (suggestion.key == "-1" &&
+                    _peopleList
+                        .map((e) => (e.firstName + " " + e.lastName))
+                        .where((element) => element == input)
+                        .toList()
+                        .isEmpty)),
       ),
       LogsBox(
         title: "Fotograf",
@@ -735,7 +827,8 @@ class _AdminViewEditState extends State<AdminViewEdit> {
         json: widget.ks.peopleJson,
         callback: (val) => setState(() {
           widget.smallFotoItem.creatorKey = val;
-          _creatorController.text = People.fromJson(widget.ks.peopleJson[val], val).firstName;
+          _creatorController.text =
+              People.fromJson(widget.ks.peopleJson[val], val).firstName;
         }),
       ),
       SelectableText("Vermerk:",
@@ -764,7 +857,9 @@ class _AdminViewEditState extends State<AdminViewEdit> {
           _annotationController.text = val;
         }),
       ),
-      Container(height: 10,)
+      Container(
+        height: 10,
+      )
     ]);
   }
 
@@ -772,77 +867,109 @@ class _AdminViewEditState extends State<AdminViewEdit> {
     DateTime val = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(DateTime.now().year-1000),
-      lastDate: DateTime(DateTime.now().year+1),
+      firstDate: DateTime(DateTime.now().year - 1000),
+      lastDate: DateTime(DateTime.now().year + 1),
     );
     if (isStart) {
       widget.smallFotoItem.date.startDate = val;
-      _startDateController.text = widget.smallFotoItem?.date?.startDate?.toString()?.split(" ")?.first??"";
+      _startDateController.text = widget.smallFotoItem?.date?.startDate
+              ?.toString()
+              ?.split(" ")
+              ?.first ??
+          "";
     } else {
       widget.smallFotoItem.date.endDate = val;
-      _endDateController.text = widget.smallFotoItem?.date?.startDate?.toString()?.split(" ")?.first??"";
+      _endDateController.text = widget.smallFotoItem?.date?.startDate
+              ?.toString()
+              ?.split(" ")
+              ?.first ??
+          "";
     }
   }
 
   Widget _createTagWidget(Tag e) => Container(
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(15)),
-      color: Colors.blue,
-    ),
-    margin: EdgeInsets.only(right: 10,bottom: 10),
-    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(e.name, style: TextStyle(color: Colors.white, fontSize: 18),),
-        Container(width: 8,),
-        Material(
-          color: Colors.transparent,
-          child: InkWell(
-            child: Icon(Icons.close, color: Colors.white,),
-            onTap: () {
-              setState(() {
-                widget.smallFotoItem.tagKeys.remove(e.key);
-                _tagsKey.currentState.updateSuggestions(_getTagSuggestions());
-              });
-            },
-          ),
-        )
-      ],
-    ),
-  );
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+          color: Colors.blue,
+        ),
+        margin: EdgeInsets.only(right: 10, bottom: 10),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              e.name,
+              style: TextStyle(color: Colors.white, fontSize: 18),
+            ),
+            Container(
+              width: 8,
+            ),
+            Material(
+              color: Colors.transparent,
+              child: InkWell(
+                child: Icon(
+                  Icons.close,
+                  color: Colors.white,
+                ),
+                onTap: () {
+                  setState(() {
+                    widget.smallFotoItem.tagKeys.remove(e.key);
+                    _tagsKey.currentState
+                        .updateSuggestions(_getTagSuggestions());
+                  });
+                },
+              ),
+            )
+          ],
+        ),
+      );
 
   Widget _createPeopleWidget(People e) => Container(
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(15)),
-      color: Colors.blue,
-    ),
-    margin: EdgeInsets.only(right: 10,bottom: 10),
-    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(e.firstName, style: TextStyle(color: Colors.white, fontSize: 18),),
-        Container(width: 5,),
-        Text(e.lastName, style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),),
-        Container(width: 8,),
-        Material(
-          color: Colors.transparent,
-          child: InkWell(
-            child: Icon(Icons.close, color: Colors.white,),
-            onTap: () {
-              setState(() {
-                widget.smallFotoItem.photographedPeople.remove(e);
-                _photographedPeopleKey.currentState.updateSuggestions(_getPeopleSuggestions());
-              });
-            },
-          ),
-        )
-      ],
-    ),
-  );
-
-
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+          color: Colors.blue,
+        ),
+        margin: EdgeInsets.only(right: 10, bottom: 10),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              e.firstName,
+              style: TextStyle(color: Colors.white, fontSize: 18),
+            ),
+            Container(
+              width: 5,
+            ),
+            Text(
+              e.lastName,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            ),
+            Container(
+              width: 8,
+            ),
+            Material(
+              color: Colors.transparent,
+              child: InkWell(
+                child: Icon(
+                  Icons.close,
+                  color: Colors.white,
+                ),
+                onTap: () {
+                  setState(() {
+                    widget.smallFotoItem.photographedPeople.remove(e);
+                    _photographedPeopleKey.currentState
+                        .updateSuggestions(_getPeopleSuggestions());
+                  });
+                },
+              ),
+            )
+          ],
+        ),
+      );
 
   _deleteLocation({Location location}) async {
     widget.ks.editLocation(EditingTypEnum.DELETE, location);
@@ -933,12 +1060,14 @@ class _AdminViewEditState extends State<AdminViewEdit> {
     });
   }
 
-  _updatePeopleSuggestions({bool  forCreator}) {
+  _updatePeopleSuggestions({bool forCreator}) {
     _creatorKey.currentState.updateSuggestions(_getPeopleSuggestions());
-    _photographedPeopleKey.currentState.updateSuggestions(_getPeopleSuggestions());
-    if (forCreator??true) {
+    _photographedPeopleKey.currentState
+        .updateSuggestions(_getPeopleSuggestions());
+    if (forCreator ?? true) {
       _creatorFocusNode.unfocus();
-    } if (!(forCreator??false)) {
+    }
+    if (!(forCreator ?? false)) {
       _photographedPeopleFocusNode.unfocus();
       _photographedPeopleController.text = "";
     }
@@ -970,7 +1099,8 @@ class _AdminViewEditState extends State<AdminViewEdit> {
   }
 
   _updateInstitutionSuggestions() {
-    _institutionKey.currentState.updateSuggestions(_getInstitutionSuggestions());
+    _institutionKey.currentState
+        .updateSuggestions(_getInstitutionSuggestions());
     _institutionFocusNode.unfocus();
     FocusScope.of(context).requestFocus(FocusNode());
   }
@@ -1030,7 +1160,8 @@ class _AdminViewEditState extends State<AdminViewEdit> {
   }
 
   _updateSubtypesSuggestions() {
-    _itemSubtypeKey.currentState.updateSuggestions(_getItemSubTypeSuggestions());
+    _itemSubtypeKey.currentState
+        .updateSuggestions(_getItemSubTypeSuggestions());
     _itemSubtypeFocusNode.unfocus();
     FocusScope.of(context).requestFocus(FocusNode());
   }
@@ -1038,9 +1169,8 @@ class _AdminViewEditState extends State<AdminViewEdit> {
   List<Tag> _getTagSuggestions() {
     List<Tag> list = List();
     list.addAll(_tagList.where((element) {
-      for(int i = 0; i < widget.smallFotoItem.tagKeys.length; i++)
-        if (widget.smallFotoItem.tagKeys[i] == element.key)
-          return false;
+      for (int i = 0; i < widget.smallFotoItem.tagKeys.length; i++)
+        if (widget.smallFotoItem.tagKeys[i] == element.key) return false;
       return true;
     }).toList());
     list.add(Tag(key: "-1", name: "-1"));
@@ -1050,7 +1180,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
   List<People> _getPeopleSuggestions() {
     List<People> list = List();
     list.addAll(_peopleList.where((element) {
-      for(int i = 0; i < widget.smallFotoItem.photographedPeople.length; i++)
+      for (int i = 0; i < widget.smallFotoItem.photographedPeople.length; i++)
         if (widget.smallFotoItem.photographedPeople[i].key == element.key)
           return false;
       return true;
@@ -1058,7 +1188,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
     list.add(People(key: "-1", firstName: "-1", lastName: "-1"));
     return list;
   }
-  
+
   List<Location> _getLocationSuggestions() {
     List<Location> list = List();
     list.addAll(_locationList);
@@ -1088,42 +1218,48 @@ class _AdminViewEditState extends State<AdminViewEdit> {
   }
 
   void _initLists() => setState(() {
-    _initInstitutionList();
-    _initItemSubTypeList();
-    _initLocationList();
-    _initRightOwnerList();
-    _initPeopleList();
-    _initTagList();
-  });
+        _initInstitutionList();
+        _initItemSubTypeList();
+        _initLocationList();
+        _initRightOwnerList();
+        _initPeopleList();
+        _initTagList();
+      });
 
   void _initLocationList() {
     _locationList.clear();
-    widget.ks.locationsJson?.forEach((key, value) => _locationList.add(Location.fromJson(value, key)));
+    widget.ks.locationsJson?.forEach(
+        (key, value) => _locationList.add(Location.fromJson(value, key)));
   }
 
   void _initRightOwnerList() {
     _rightOwnerList.clear();
-    widget.ks.rightOwnerJson?.forEach((key, value) => _rightOwnerList.add(RightOwner.fromJson(value, key)));
+    widget.ks.rightOwnerJson?.forEach(
+        (key, value) => _rightOwnerList.add(RightOwner.fromJson(value, key)));
   }
 
   void _initInstitutionList() {
     _institutionList.clear();
-    widget.ks.institutionJson?.forEach((key, value) => _institutionList.add(Institution.fromJson(value, key)));
+    widget.ks.institutionJson?.forEach(
+        (key, value) => _institutionList.add(Institution.fromJson(value, key)));
   }
 
   void _initItemSubTypeList() {
     _itemSubTypeList.clear();
-    widget.ks.itemSubtypeJson?.forEach((key, value) => _itemSubTypeList.add(ItemSubtype.fromJson(value, key)));
+    widget.ks.itemSubtypeJson?.forEach(
+        (key, value) => _itemSubTypeList.add(ItemSubtype.fromJson(value, key)));
   }
 
   void _initPeopleList() {
     _peopleList.clear();
-    widget.ks.peopleJson?.forEach((key, value) => _peopleList.add(People.fromJson(value, key)));
+    widget.ks.peopleJson
+        ?.forEach((key, value) => _peopleList.add(People.fromJson(value, key)));
   }
 
   void _initTagList() {
     _tagList.clear();
-    widget.ks.tagJson?.forEach((key, value) => _tagList.add(Tag.fromJson(value, key)));
+    widget.ks.tagJson
+        ?.forEach((key, value) => _tagList.add(Tag.fromJson(value, key)));
   }
 
   Widget _getAddButton({VoidCallback onPressed}) {

@@ -23,14 +23,15 @@ class RightOwnerDialog extends StatefulWidget {
 }
 
 class _RightOwnerDialogState extends State<RightOwnerDialog> {
-
   RightOwner rightOwner;
   bool _isActive = true;
 
   @override
   void initState() {
     super.initState();
-    rightOwner = widget.rightOwner==null?RightOwner(name: widget.name):widget.rightOwner;
+    rightOwner = widget.rightOwner == null
+        ? RightOwner(name: widget.name)
+        : widget.rightOwner;
   }
 
   @override
@@ -53,9 +54,15 @@ class _RightOwnerDialogState extends State<RightOwnerDialog> {
         children: [
           Container(
             width: 400,
-            child: Text("Right Owner", style: TextStyle(fontSize: 36),),
+            child: Text(
+              "Rechteinhaber",
+              style: TextStyle(fontSize: 36),
+            ),
           ),
-          Container(height: 10, width: 0,),
+          Container(
+            height: 10,
+            width: 0,
+          ),
           Text("Name"),
           Container(
             width: 400,
@@ -70,12 +77,16 @@ class _RightOwnerDialogState extends State<RightOwnerDialog> {
               },
             ),
           ),
-          Container(height: 10, width: 0,),
-          Text("Contact Information"),
+          Container(
+            height: 10,
+            width: 0,
+          ),
+          Text("Anmerkungen"),
           Container(
             width: 400,
             child: TextField(
-              controller: TextEditingController(text: rightOwner.contactInformation),
+              controller:
+                  TextEditingController(text: rightOwner.contactInformation),
               decoration: new InputDecoration(
                 border: new OutlineInputBorder(
                     borderSide: new BorderSide(color: Colors.teal)),
@@ -85,25 +96,42 @@ class _RightOwnerDialogState extends State<RightOwnerDialog> {
               },
             ),
           ),
-          Container(height: 10, width: 0,),
+          Container(
+            height: 10,
+            width: 0,
+          ),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              RoundedButtonWidget(onPressed: () {
-                Navigator.pop(context, null);
-              }, text: "Schließen", color: Colors.red,),
-              Container(width: 10,),
-              RoundedButtonWidget(onPressed: () async {
-                setState(() { _isActive = false; });
-                if (rightOwner != null) {
-                  rightOwner = RightOwner.copy(rightOwner);
-                  await widget.ks.editRightOwner(EditingTypEnum.UPDATE, rightOwner);
-                } else {
-                  await widget.ks.editRightOwner(EditingTypEnum.CREATE, rightOwner);
-                }
-                Navigator.pop(context, rightOwner);
-              }, text: "Save", color: Colors.green,
-                isActive: _isActive,)
+              RoundedButtonWidget(
+                onPressed: () {
+                  Navigator.pop(context, null);
+                },
+                text: "Schließen",
+                color: Colors.red,
+              ),
+              Container(
+                width: 10,
+              ),
+              RoundedButtonWidget(
+                onPressed: () async {
+                  setState(() {
+                    _isActive = false;
+                  });
+                  if (rightOwner != null) {
+                    rightOwner = RightOwner.copy(rightOwner);
+                    await widget.ks
+                        .editRightOwner(EditingTypEnum.UPDATE, rightOwner);
+                  } else {
+                    await widget.ks
+                        .editRightOwner(EditingTypEnum.CREATE, rightOwner);
+                  }
+                  Navigator.pop(context, rightOwner);
+                },
+                text: "Speichern",
+                color: Colors.green,
+                isActive: _isActive,
+              )
             ],
           )
         ],

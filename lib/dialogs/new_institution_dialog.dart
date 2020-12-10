@@ -80,7 +80,7 @@ class _InstitutionDialogState extends State<InstitutionDialog> {
             height: 10,
             width: 0,
           ),
-          Text("Contact Information"),
+          Text("Anmerkungen"),
           Container(
             width: 400,
             child: TextField(
@@ -127,7 +127,7 @@ class _InstitutionDialogState extends State<InstitutionDialog> {
                   }
                   Navigator.pop(context, institution);
                 },
-                text: "Save",
+                text: "Speichern",
                 color: Colors.green,
                 isActive: _isActive,
               )
