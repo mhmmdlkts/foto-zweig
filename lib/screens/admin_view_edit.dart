@@ -876,8 +876,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
     } else {
       smallFotoItemNew.date.endDate = val;
       _endDateController.text =
-          smallFotoItemNew?.date?.startDate?.toString()?.split(" ")?.first ??
-              "";
+          smallFotoItemNew?.date?.endDate?.toString()?.split(" ")?.first ?? "";
     }
   }
 
