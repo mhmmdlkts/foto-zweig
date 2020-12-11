@@ -22,7 +22,6 @@ class PeopleDialog extends StatefulWidget {
 }
 
 class _PeopleDialogState extends State<PeopleDialog> {
-  TextEditingController _dateOfBirthController;
   People people;
   bool _isActive = true;
 
@@ -31,8 +30,6 @@ class _PeopleDialogState extends State<PeopleDialog> {
     super.initState();
     people =
         widget.people == null ? People(firstName: widget.name) : widget.people;
-    _dateOfBirthController = TextEditingController(
-        text: people.dateOfBirth?.toString()?.split(" ")?.first ?? "");
   }
 
   @override
@@ -104,13 +101,14 @@ class _PeopleDialogState extends State<PeopleDialog> {
           Container(
             width: 400,
             child: TextField(
-              readOnly: true,
-              onTap: _showDatePicker,
-              controller: _dateOfBirthController,
+              controller: TextEditingController(text: people.annotation),
               decoration: new InputDecoration(
                 border: new OutlineInputBorder(
                     borderSide: new BorderSide(color: Colors.teal)),
               ),
+              onChanged: (val) {
+                people.annotation = val;
+              },
             ),
           ),
           Container(
@@ -161,7 +159,5 @@ class _PeopleDialogState extends State<PeopleDialog> {
       firstDate: DateTime(DateTime.now().year - 1000),
       lastDate: DateTime(DateTime.now().year + 1),
     );
-    people.dateOfBirth = val;
-    _dateOfBirthController.text = val?.toString()?.split(" ")?.first ?? "";
   }
 }
