@@ -1,24 +1,22 @@
 class People {
   String key;
-  DateTime dateOfBirth;
+  String annotation;
   String firstName;
   String lastName;
 
-  People({this.key, this.dateOfBirth, this.firstName, this.lastName});
+  People({this.key, this.annotation, this.firstName, this.lastName});
 
   People.copy(People people) {
     key = people.key;
-    dateOfBirth = people.dateOfBirth;
+    annotation = people.annotation;
     firstName = people.firstName;
     lastName = people.lastName;
   }
 
   People.fromJson(json, key) {
-    if (json == null)
-      return;
+    if (json == null) return;
     this.key = key;
-    if (json["dateOfBirth"] != null)
-      dateOfBirth = DateTime.parse(json["dateOfBirth"]);
+    annotation = json["annotation"];
     firstName = json["firstName"];
     lastName = json["lastName"];
   }
@@ -26,9 +24,9 @@ class People {
   getName() => '$firstName $lastName';
 
   Map<String, dynamic> toJson() => {
-    "key": key,
-    "dateOfBirth": dateOfBirth?.toString()?.split(" ")?.first,
-    "firstName": firstName,
-    "lastName": lastName,
-  };
+        "key": key,
+        "annotation": annotation,
+        "firstName": firstName,
+        "lastName": lastName,
+      };
 }
