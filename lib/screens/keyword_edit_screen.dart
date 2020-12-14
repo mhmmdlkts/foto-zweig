@@ -6,6 +6,7 @@ import 'package:foto_zweig/dialogs/new_people_dialog.dart';
 import 'package:foto_zweig/dialogs/new_right_owner_dialog.dart';
 import 'package:foto_zweig/dialogs/new_subtype_dialog.dart';
 import 'package:foto_zweig/dialogs/new_tag_dialog.dart';
+import 'package:foto_zweig/dialogs/tag_delete_dialog.dart';
 import 'package:foto_zweig/enums/editing_typ_enum.dart';
 import 'package:foto_zweig/models/item_infos/right_owner.dart';
 import 'package:foto_zweig/models/item_infos/location.dart';
@@ -188,6 +189,8 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
   }
 
   _deleteLocation({Location location}) async {
+    if (!(await _openDeleteDialog(location.name, location.key)))
+      return;
     widget.ks.editLocation(EditingTypEnum.DELETE, location);
     setState(() {
       _initLocationList();
@@ -210,6 +213,8 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
   }
 
   _deleteTag({Tag tag}) async {
+    if (!(await _openDeleteDialog(tag.name, tag.key)))
+      return;
     widget.ks.editTag(EditingTypEnum.DELETE, tag);
     setState(() {
       _initTagList();
@@ -231,7 +236,18 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
     });
   }
 
+  Future<bool> _openDeleteDialog(String val, String key) async {
+    final rtn = await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return TagDeleteDialog(val??"", key??"");
+        });
+    return rtn ?? false;
+  }
+
   _deletePeople({People people}) async {
+    if (!(await _openDeleteDialog(people.firstName, people.key)))
+      return;
     widget.ks.editPeople(EditingTypEnum.DELETE, people);
     setState(() {
       _initPeopleList();
@@ -254,6 +270,8 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
   }
 
   _deleteInstitution({Institution institution}) async {
+    if (!(await _openDeleteDialog(institution.name, institution.key)))
+      return;
     widget.ks.editInstitution(EditingTypEnum.DELETE, institution);
     setState(() {
       _initInstitutionList();
@@ -276,6 +294,8 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
   }
 
   _deleteRightOwner({RightOwner rightOwner}) async {
+    if (!(await _openDeleteDialog(rightOwner.name, rightOwner.key)))
+      return;
     widget.ks.editRightOwner(EditingTypEnum.DELETE, rightOwner);
     setState(() {
       _initRightOwnerList();
@@ -298,6 +318,8 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
   }
 
   _deleteSubtype({ItemSubtype itemSubtype}) async {
+    if (!(await _openDeleteDialog(itemSubtype.name, itemSubtype.key)))
+      return;
     widget.ks.editItemSubType(EditingTypEnum.DELETE, itemSubtype);
     setState(() {
       _initItemSubTypeList();

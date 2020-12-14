@@ -797,7 +797,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
     child: Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(e.name, style: TextStyle(color: Colors.white, fontSize: 18),),
+        Text(e?.name??"", style: TextStyle(color: Colors.white, fontSize: 18),),
         Container(width: 8,),
         Material(
           color: Colors.transparent,
@@ -822,26 +822,28 @@ class _AdminViewEditState extends State<AdminViewEdit> {
     ),
     margin: EdgeInsets.only(right: 10,bottom: 10),
     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(e.firstName, style: TextStyle(color: Colors.white, fontSize: 18),),
-        Container(width: 5,),
-        Text(e.lastName, style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),),
-        Container(width: 8,),
-        Material(
-          color: Colors.transparent,
-          child: InkWell(
-            child: Icon(Icons.close, color: Colors.white,),
-            onTap: () {
-              setState(() {
-                smallFotoItemNew.photographedPeople.remove(e);
-                _photographedPeopleKey.currentState.updateSuggestions(_getPeopleSuggestions());
-              });
-            },
-          ),
-        )
-      ],
+    child: Flexible(
+      child:  Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(e?.firstName??"", style: TextStyle(color: Colors.white, fontSize: 18),),
+          Container(width: 5,),
+          Text(e?.lastName??"", style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),),
+          Container(width: 8,),
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              child: Icon(Icons.close, color: Colors.white,),
+              onTap: () {
+                setState(() {
+                  smallFotoItemNew.photographedPeople.remove(e);
+                  _photographedPeopleKey.currentState.updateSuggestions(_getPeopleSuggestions());
+                });
+              },
+            ),
+          )
+        ],
+      ),
     ),
   );
 

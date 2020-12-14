@@ -40,7 +40,7 @@ class _SigninDialogState extends State<SigninDialog> {
         mainAxisSize:  MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text("Einloggen", style: TextStyle(fontSize: 36),),
+          Text(!_isSignUp?'Einloggen!':'Registrieren!', style: TextStyle(fontSize: 36),),
           Container(
             width: 400,
             child: Divider(),
@@ -152,12 +152,9 @@ class _SigninDialogState extends State<SigninDialog> {
     String url = getUrl('signIn') + '?email=${Uri.encodeComponent(_email)}&pwd=${Uri.encodeComponent(_pwd)}';
     if (_isSignUp)
       url += '&name=${Uri.encodeComponent(_name)}';
-    print(_isSignUp);
     http.Response response = await http.get(url);
     Map<String, dynamic> jsonData = json.decode(response.body);
     FotoUser user;
-    print(url);
-    print(jsonData);
     if (jsonData['error'] != null) {
       setState(() {
         _errorCode = jsonData['error'];
@@ -202,7 +199,7 @@ class _SigninDialogState extends State<SigninDialog> {
             child: RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
-                  text: 'Haben Sie ${_isSignUp?"k":""}einen Account? ',
+                  text: 'Haben Sie ${!_isSignUp?"k":""}einen Account? ',
                   style: TextStyle(
                       color: darkColor,
                       fontSize: fontSize

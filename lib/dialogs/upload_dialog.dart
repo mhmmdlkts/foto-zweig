@@ -66,7 +66,7 @@ class _UploadDialogState extends State<UploadDialog> {
             children: [
               RoundedButtonWidget(
                 color: Colors.blueGrey,
-                text: "",
+                text: "Datei auswählen",
                 onPressed: () {
                   ImagePickerWeb.getImageInfo.then((value) {
                     setState((){
