@@ -651,7 +651,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
             padding: EdgeInsets.all(8.0),
             child: ListTile(
                 title: Text(institution?.name ?? ""),
-                trailing: Text(institution?.contactInformation ?? "")),
+            )
           );
         },
         key: _institutionKey,
