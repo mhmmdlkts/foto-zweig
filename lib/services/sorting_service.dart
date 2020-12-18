@@ -18,7 +18,6 @@ class SortingService {
       Location locationFilter,
       DateTime vonFilter,
       DateTime bisFilter}) {
-    if (searchText == "") searchText = null;
     if (sortingTyp != null) this.sortingTyp = sortingTyp;
 
     switch (this.sortingTyp) {
@@ -57,7 +56,7 @@ class SortingService {
         }
         break;
     }
-    List<SmallFotoItem> _tmpList = list.where((element) => element.contains(searchText)).toList();
+    List<SmallFotoItem> _tmpList = list.where((element) => element.contains(ks.tagJson, searchText)).toList();
     if(locationFilter != null && vonFilter != null && bisFilter != null){
       _tmpList = list.where((element) => (locationFilter.key == element.locationKey)&&bisFilter.isAfter(element?.date?.endDate??bisFilter.subtract(Duration(days: 364)))
       &&vonFilter.isBefore(element?.date?.startDate??vonFilter.add(Duration(days: 364)))).toList();
