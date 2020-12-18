@@ -60,7 +60,6 @@ class SortingService {
     if(locationFilter != null && vonFilter != null && bisFilter != null){
       _tmpList = list.where((element) => (locationFilter.key == element.locationKey)&&bisFilter.isAfter(element?.date?.endDate??bisFilter.subtract(Duration(days: 364)))
       &&vonFilter.isBefore(element?.date?.startDate??vonFilter.add(Duration(days: 364)))).toList();
-      _tmpList = list.where((element) => locationFilter.key == element.locationKey).toList();
       return _tmpList;
     }
     if(locationFilter != null && vonFilter != null){
@@ -72,7 +71,7 @@ class SortingService {
       return _tmpList;
     }
     if(vonFilter != null && bisFilter != null){
-      _tmpList = list.where((element) => (vonFilter.isBefore(element?.date?.startDate??vonFilter.add(Duration(days: 364)))&&bisFilter.isAfter(element?.date?.endDate??bisFilter.subtract(Duration(days: 364)))));
+      _tmpList = list.where((element) => (vonFilter.isBefore(element?.date?.startDate??vonFilter.add(Duration(days: 364)))&&bisFilter.isAfter(element?.date?.endDate??bisFilter.subtract(Duration(days: 364))))).toList();
       return _tmpList;
     }
 
