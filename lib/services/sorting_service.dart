@@ -1,4 +1,6 @@
 import 'package:foto_zweig/enums/sorting_typs_enum.dart';
+import 'package:foto_zweig/models/item_infos/date.dart';
+import 'package:foto_zweig/models/item_infos/location.dart';
 import 'package:foto_zweig/models/main_foto.dart';
 import 'package:foto_zweig/services/keyword_service.dart';
 
@@ -7,15 +9,17 @@ class SortingService {
   SortingTypsEnum sortingTyp = SortingTypsEnum.DATE;
   bool isDesc = true;
 
-  List<SmallFotoItem> sortFilterList(KeywordService ks,
+  List<SmallFotoItem> sortList(KeywordService ks,
       {SortingTypsEnum sortingTyp,
-      bool isDesc = true,
       String searchText,
       String placeFiler,
       String von,
-      String bis}) {
+      String bis,
+      Location locationFilter,
+      DateTime vonFilter,
+      DateTime bisFilter}) {
+    if (searchText == "") searchText = null;
     if (sortingTyp != null) this.sortingTyp = sortingTyp;
-    if (isDesc != null) this.isDesc = isDesc;
 
     switch (this.sortingTyp) {
       case SortingTypsEnum.DATE:
@@ -53,15 +57,15 @@ class SortingService {
         }
         break;
     }
-    return list.where((element) => element.contains(searchText)).toList();
-    return list
-        .where((element) => element
-            .getLocation(ks)
-            .country
-            .toLowerCase()
-            .trim()
-            .contains(placeFiler.toLowerCase().trim()))
-        .toList();
+    List<SmallFotoItem> _tmpList = list.where((element) => element.contains(searchText)).toList();
+    if (locationFilter != null)
+      _tmpList = list.where((element) => locationFilter.key == element.locationKey).toList();
+    if (vonFilter != null) {
+      _tmpList = list.where((element) => vonFilter.isBefore(element?.date?.startDate??vonFilter.add(Duration(days: 364)))).toList();
+    }
+    if (bisFilter != null)
+      _tmpList = list.where((element) => bisFilter.isAfter(element?.date?.endDate??bisFilter.subtract(Duration(days: 364)))).toList();
+    return _tmpList;
   }
 
   String getTyp() {

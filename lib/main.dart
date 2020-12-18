@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:foto_zweig/enums/item_type_enum.dart';
 import 'package:foto_zweig/enums/sorting_typs_enum.dart';
 import 'package:foto_zweig/models/foto_user.dart';
+import 'package:foto_zweig/models/item_infos/location.dart';
 import 'package:foto_zweig/models/main_foto.dart';
 import 'package:foto_zweig/screens/details_screen.dart';
 import 'package:foto_zweig/screens/keyword_edit_screen.dart';
@@ -47,6 +48,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final List<Location> _locationList = List();
   final AuthService _authService = AuthService();
   SortingService _sortingService = SortingService();
   ItemTypeEnum _itemType = ItemTypeEnum.FOTO;
@@ -54,6 +56,10 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _isFilterMenuOpen = false;
   FotoUser _fotoUser;
   final KeywordService _keywordService = KeywordService();
+  Location _filterLocationValue;
+  DateTime _filterVonDate;
+  DateTime _filterBisDate;
+  String _searchField = "";
 
   List<SmallFotoItem> _shownItems = List();
 
@@ -61,6 +67,11 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _initContent();
+  }
+  void _initLocationList() {
+    _locationList.clear();
+    _keywordService.locationsJson?.forEach(
+            (key, value) => _locationList.add(Location.fromJson(value, key)));
   }
 
   AuthModeEnum _getAuthMode() => _fotoUser?.authMode??AuthModeEnum.READ_ONLY;
@@ -72,8 +83,9 @@ class _MyHomePageState extends State<MyHomePage> {
         _getAuthMode() == AuthModeEnum.ADMIN ? "admin":null, _keywordService
     ).then((value) => setState(() {
       _sortingService.list = value;
-      _shownItems = _sortingService.sortFilterList(_keywordService);
+      _shownItems = _sortingService.sortList(_keywordService);
       _openAutoEditingScreen(0);
+      _initLocationList();
     }));
   }
 
@@ -134,9 +146,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 filled: true,
                 fillColor: Colors.white,
               ),
-              onChanged: (val) => setState(() {
-                _shownItems = _sortingService.sortFilterList(_keywordService, searchText: val);
-              }),
+              onChanged: (val) {
+                _searchField = val;
+                _sortFilterContent();
+              },
             ),
           )),
           Visibility(
@@ -218,31 +231,39 @@ class _MyHomePageState extends State<MyHomePage> {
             // TODO Sort filter field
             padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             color: ButtonColors.backgroundColor,
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Opacity(
-                  opacity: _isFilterMenuOpen ? 1 : 0.6,
-                  child: IconButton(
-                    icon: Icon(Icons.sort),
-                    onPressed: () => setState(() {
-                      _isFilterMenuOpen = !_isFilterMenuOpen;
-                    }),
-                  ),
+                Row(
+                  children: [
+                    Opacity(
+                      opacity: _isFilterMenuOpen ? 1 : 0.6,
+                      child: IconButton(
+                        icon: Icon(Icons.sort),
+                        onPressed: () => setState(() {
+                          _isFilterMenuOpen = !_isFilterMenuOpen;
+                          if (!_isFilterMenuOpen) {
+                            _filterLocationValue = null;
+                            _sortFilterContent();
+                          }
+                        }),
+                      ),
+                    ),
+                    _sortingDropDown(),
+                    IconButton(
+                        icon: Icon(_sortingService.isDesc
+                            ? Icons.arrow_upward
+                            : Icons.arrow_downward),
+                        onPressed: () => setState(() {
+                          _sortingService.isDesc = !_sortingService.isDesc;
+                          _sortFilterContent();
+                        })),
+                  ],
                 ),
                 Visibility(
                   visible: _isFilterMenuOpen,
                   child: _getFilters(),
                 ),
-                _sortingDropDown(),
-                IconButton(
-                    icon: Icon(_sortingService.isDesc
-                        ? Icons.arrow_upward
-                        : Icons.arrow_downward),
-                    onPressed: () => setState(() {
-                          _shownItems = _sortingService.sortFilterList(
-                              _keywordService,
-                              isDesc: !_sortingService.isDesc);
-                        })),
               ],
             ),
             alignment: Alignment.centerLeft,
@@ -282,21 +303,19 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _getFilters() {
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           margin: EdgeInsets.only(right: 10),
-          width: 100,
           child: _filterOrt(),
         ),
         Container(
           margin: EdgeInsets.only(right: 10),
-          width: 100,
           child: _filterVon(),
         ),
         Container(
           margin: EdgeInsets.only(right: 10),
-          width: 100,
           child: _filterBis(),
         )
       ],
@@ -308,14 +327,12 @@ class _MyHomePageState extends State<MyHomePage> {
       value: _sortingService.getTyp(),
       underline: Container(),
       onChanged: (String newValue) {
-        SortingTypsEnum a;
-        if (newValue == 'Ort') a = SortingTypsEnum.ORT;
-        if (newValue == 'Datum') a = SortingTypsEnum.DATE;
-        if (newValue == 'Kurzbezeichnung') a = SortingTypsEnum.DESCRIPTION;
-        setState(() {
-          _sortingService.sortingTyp = a;
-          _shownItems = _sortingService.sortFilterList(_keywordService);
-        });
+        SortingTypsEnum sortingTypEnum;
+        if (newValue == 'Ort') sortingTypEnum = SortingTypsEnum.ORT;
+        if (newValue == 'Datum') sortingTypEnum = SortingTypsEnum.DATE;
+        if (newValue == 'Kurzbezeichnung') sortingTypEnum = SortingTypsEnum.DESCRIPTION;
+        _sortingService.sortingTyp = sortingTypEnum;
+        _sortFilterContent();
       },
       items: <String>['Ort', 'Datum', 'Kurzbezeichnung']
           .map<DropdownMenuItem<String>>((String value) {
@@ -328,56 +345,81 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _filterOrt() {
-    return DropdownButton<String>(
-      value: "Ort",
+    return DropdownButton<Location>(
+      hint: Text("Ort"),
+      value: _filterLocationValue,
       elevation: 16,
       style: TextStyle(color: Colors.blue),
       underline: Container(),
-      onChanged: (String newValue) {
-        setState(() {});
+      onChanged: (Location newValue) {
+        setState(() {
+          _filterLocationValue = newValue;
+          _sortFilterContent();
+        });
       },
-      items: <String>['Ort'].map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
+      items: _locationList.map<DropdownMenuItem<Location>>((Location value) {
+        return DropdownMenuItem<Location>(
           value: value,
-          child: Text(value),
+          child: Text(value.name),
         );
       }).toList(),
     );
   }
 
   Widget _filterVon() {
-    return DropdownButton<String>(
-      value: "Von",
+    return DropdownButton<DateTime>(
+      hint: Text("Von"),
+      value: _filterVonDate,
       elevation: 16,
       style: TextStyle(color: Colors.blue),
       underline: Container(),
-      onChanged: (String newValue) {
-        setState(() {});
+      onChanged: (DateTime newValue) {
+        setState(() {
+          _filterVonDate = newValue;
+          _sortFilterContent();
+        });
       },
-      items: <String>['Von'].map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
+      items: _getDateTimes().map<DropdownMenuItem<DateTime>>((DateTime value) {
+        return DropdownMenuItem<DateTime>(
           value: value,
-          child: Text(value),
+          child: Text(value.year.toString()),
         );
       }).toList(),
     );
   }
 
   Widget _filterBis() {
-    return DropdownButton<String>(
-      value: "Bis",
+    return DropdownButton<DateTime>(
+      hint: Text("Bis"),
+      value: _filterBisDate,
       elevation: 16,
       style: TextStyle(color: Colors.blue),
       underline: Container(),
-      onChanged: (String newValue) {
-        setState(() {});
+      onChanged: (DateTime newValue) {
+        setState(() {
+          _filterBisDate = newValue;
+          _sortFilterContent();
+        });
       },
-      items: <String>['Bis'].map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
+      items: _getDateTimes().map<DropdownMenuItem<DateTime>>((DateTime value) {
+        return DropdownMenuItem<DateTime>(
           value: value,
-          child: Text(value),
+          child: Text(value.year.toString()),
         );
       }).toList(),
     );
+  }
+
+  List<DateTime> _getDateTimes() {
+    List<DateTime> list = [];
+    for (int i = 1880; i < 1950; i++)
+      list.add(DateTime(i));
+    return list;
+  }
+
+  void _sortFilterContent() {
+    setState(() {
+      _shownItems = _sortingService.sortList(_keywordService, searchText: _searchField, vonFilter: _filterVonDate, bisFilter: _filterBisDate, locationFilter: _filterLocationValue);
+    });
   }
 }
