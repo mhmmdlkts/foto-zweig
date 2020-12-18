@@ -120,7 +120,7 @@ class SmallFotoItem implements Comparable {
   String getReadablePersons() {
     String result = "";
     for (int i = 0; i < photographedPeople.length; i++) {
-      result += photographedPeople[i].getName() +
+      result += photographedPeople[i]?.getName()??"" +
           (photographedPeople.length - 1 != i ? ", " : "");
     }
     return result;
@@ -130,16 +130,19 @@ class SmallFotoItem implements Comparable {
     List<Tag> tags = getTags(ks);
     String result = "";
     for (int i = 0; i < tags.length; i++) {
-      result += tags[i].name + (tags.length - 1 != i ? ", " : "");
+      result += tags[i]?.name??"" + (tags.length - 1 != i ? ", " : "");
     }
     return result;
   }
 
-  bool contains(String tagKey) {
-    if (tagKey == null || tagKeys.length == 0) return true;
-    if (tagKeys == null) return false;
+  bool contains(Map tagJson, String tagKey) {
+    if (tagKey == null) return true;
+    if (tagKeys == null || tagKeys.length == 0) return false;
     for (int i = 0; i < tagKeys.length; i++) {
-      if (tagKeys[i] == tagKey) return true;
+      final tmp = tagJson[tagKeys[i]];
+      if (tmp == null)
+        continue;
+      if (tmp["name"]?.toString()?.toLowerCase()?.contains(tagKey?.toLowerCase())??false) return true;
     }
     return false;
   }
