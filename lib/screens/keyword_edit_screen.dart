@@ -19,7 +19,9 @@ import 'package:foto_zweig/services/keyword_service.dart';
 class KeywordEditScreen extends StatefulWidget {
   final KeywordService ks;
 
-  KeywordEditScreen({this.ks});
+  KeywordEditScreen({this.ks}) {
+    print ('selam1');
+  }
 
   @override
   _KeywordEditScreenState createState() => _KeywordEditScreenState();
@@ -76,7 +78,7 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(title, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
+        Text(title??"", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
         IconButton(icon: Icon(Icons.add, color: Colors.white,), onPressed: () => onAddPressed.call(),),
       ],
     ),
@@ -87,7 +89,7 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: [
-          Text(e.name),
+          Text(e?.name??""),
           new Spacer(),
           _settingButtons(
             onEdit: () => _showLocationDialog(location: e),
@@ -103,7 +105,7 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: [
-          Text(e.name),
+          Text(e?.name??""),
           new Spacer(),
           _settingButtons(
             onEdit: () => _showTagDialog(tag: e),
@@ -119,7 +121,7 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: [
-          Text(e.firstName + " " + e.lastName),
+          Text((e.firstName??"") + " " + (e.lastName??"")),
           new Spacer(),
           _settingButtons(
             onEdit: () => _showPeopleDialog(people: e),
@@ -135,7 +137,7 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: [
-          Text(e.name),
+          Text(e?.name??""),
           new Spacer(),
           _settingButtons(
             onEdit: () => _showInstitutionDialog(institution: e),
@@ -151,7 +153,7 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: [
-          Text(e.name),
+          Text(e?.name??""),
           new Spacer(),
           _settingButtons(
             onEdit: () => _showRightOwnerDialog(rightOwner: e),
@@ -167,7 +169,7 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: [
-          Text(e.name),
+          Text(e?.name??""),
           new Spacer(),
           _settingButtons(
             onEdit: () => _showSubtypesDialog(itemSubtype: e),
