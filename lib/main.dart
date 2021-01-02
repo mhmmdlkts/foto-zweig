@@ -228,7 +228,6 @@ class _MyHomePageState extends State<MyHomePage> {
       body: ListView(
         children: [
           Container(
-            // TODO Sort filter field
             padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             color: ButtonColors.backgroundColor,
             child: Column(
@@ -281,10 +280,12 @@ class _MyHomePageState extends State<MyHomePage> {
     if (i == 0)
       return;
     else if (i == 1) {
+      print("a");
       Navigator.push(context, MaterialPageRoute(builder: (context) =>
           KeywordEditScreen(ks: _keywordService)));
     }
     else if (i == 2) {
+      print("b");
       setState(() {
         _fotoUser = FotoUser(name: "Ali", email: "mh", authMode: AuthModeEnum.ADMIN, uid: "id");
       });
@@ -317,7 +318,16 @@ class _MyHomePageState extends State<MyHomePage> {
         Container(
           margin: EdgeInsets.only(right: 10),
           child: _filterBis(),
-        )
+        ),
+        RaisedButton(
+          child: Text('No Filter'),
+          onPressed: () => setState(() {
+            _shownItems = _sortingService.sortList(_keywordService);
+          
+            //print('You tapped on FlatButton');
+          }),
+        ),
+        
       ],
     );
   }

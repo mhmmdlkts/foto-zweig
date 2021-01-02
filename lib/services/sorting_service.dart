@@ -64,15 +64,13 @@ class SortingService {
     }
       _tmpList = list.where((element) => ((element.date.startDate!=null&&element.date.endDate!=null)&&locationFilter.key == element.locationKey)&&bisFilter.isAfter(element?.date?.endDate??bisFilter.subtract(Duration(days: 364)))
       &&vonFilter.isBefore(element?.date?.startDate??vonFilter.add(Duration(days: 364)))).toList();
-/*       _tmpList.forEach((SmallFotoItem sm) {
-          print(sm.date.startDate);
-      }); */
+
       return _tmpList;
     }else if(locationFilter != null && vonFilter != null){
       _tmpList = list.where((element) => ((element.date.startDate!=null&&element.date.endDate!=null)&&locationFilter.key == element.locationKey&&vonFilter.isBefore(element?.date?.startDate??vonFilter.add(Duration(days: 364))))).toList();
       return _tmpList;
     }else if(locationFilter != null&&bisFilter != null){
-      _tmpList = list.where((element) => ((element.date.startDate!=null&&element.date.endDate!=null)&&locationFilter.key == element.locationKey&&bisFilter.isBefore(element?.date?.startDate??vonFilter.add(Duration(days: 364))))).toList();
+      _tmpList = list.where((element) => ((element.date.startDate!=null&&element.date.endDate!=null)&&locationFilter.key == element.locationKey&&bisFilter.isBefore(element?.date?.startDate??bisFilter.add(Duration(days: 364))))).toList();
       return _tmpList;
     } else if(vonFilter != null && bisFilter != null){
       if(bisFilter.isBefore(vonFilter)){
@@ -80,6 +78,8 @@ class SortingService {
       return _tmpList;
     }
       _tmpList = list.where((element) => ((element.date.startDate!=null&&element.date.endDate!=null)&&vonFilter.isBefore(element?.date?.startDate??vonFilter.add(Duration(days: 364)))&&bisFilter.isAfter(element?.date?.endDate??bisFilter.subtract(Duration(days: 364))))).toList();
+      _tmpList.forEach((SmallFotoItem s) { 
+      });
       return _tmpList;
     }
     
