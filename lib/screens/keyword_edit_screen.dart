@@ -20,7 +20,7 @@ class KeywordEditScreen extends StatefulWidget {
   final KeywordService ks;
 
   KeywordEditScreen({this.ks}) {
-    print ('selam1');
+    print('selam1');
   }
 
   @override
@@ -28,7 +28,6 @@ class KeywordEditScreen extends StatefulWidget {
 }
 
 class _KeywordEditScreenState extends State<KeywordEditScreen> {
-
   final List<Location> _locationList = List();
   final List<RightOwner> _rightOwnerList = List();
   final List<Institution> _institutionList = List();
@@ -45,154 +44,195 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Schlüsselwörter editieren"),
-        backgroundColor: ButtonColors.appBarColor,
-      ),
-      body: ListView(
-        padding: EdgeInsets.all(15),
-        children: [
-          _title("Orte", () => _showLocationDialog(),),
-          _getLocations(),
-          _title("Stichworte", () => _showTagDialog(),),
-          _getTags(),
-          _title("Abgebildete Personen", () => _showPeopleDialog(),),
-          _getPeoples(),
-          _title("Institution", () => _showInstitutionDialog(),),
-          _getInstitution(),
-          _title("Rechteinhaber", () => _showRightOwnerDialog(),),
-          _getRightOwners(),
-          _title("Foto - Typ", () => _showSubtypesDialog(),),
-          _getSubtypes()
-        ],
-      )
-    );
+        appBar: AppBar(
+          title: Text("Schlüsselwörter editieren"),
+          backgroundColor: ButtonColors.appBarColor,
+        ),
+        body: ListView(
+          padding: EdgeInsets.all(15),
+          children: [
+            _title(
+              "Orte",
+              () => _showLocationDialog(),
+            ),
+            _getLocations(),
+            _title(
+              "Stichworte",
+              () => _showTagDialog(),
+            ),
+            _getTags(),
+            _title(
+              "Personen",
+              () => _showPeopleDialog(),
+            ),
+            _getPeoples(),
+            _title(
+              "Institution",
+              () => _showInstitutionDialog(),
+            ),
+            _getInstitution(),
+            _title(
+              "Rechteinhaber",
+              () => _showRightOwnerDialog(),
+            ),
+            _getRightOwners(),
+            _title(
+              "Foto - Typ",
+              () => _showSubtypesDialog(),
+            ),
+            _getSubtypes()
+          ],
+        ));
   }
 
   Widget _title(String title, VoidCallback onAddPressed) => Container(
-    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(10)),
-      color: Colors.black54,
-    ),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(title??"", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
-        IconButton(icon: Icon(Icons.add, color: Colors.white,), onPressed: () => onAddPressed.call(),),
-      ],
-    ),
-  );
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          color: Colors.black54,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title ?? "",
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+            IconButton(
+              icon: Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+              onPressed: () => onAddPressed.call(),
+            ),
+          ],
+        ),
+      );
 
   Widget _getLocations() => Column(
-    children: _locationList.map((e) => Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      child: Row(
-        children: [
-          Text(e?.name??""),
-          new Spacer(),
-          _settingButtons(
-            onEdit: () => _showLocationDialog(location: e),
-            onDelete: () => _deleteLocation(location: e)
-          )
-        ],
-      ),
-    )).toList(),
-  );
+        children: _locationList
+            .map((e) => Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: [
+                      Text(e?.name ?? ""),
+                      new Spacer(),
+                      _settingButtons(
+                          onEdit: () => _showLocationDialog(location: e),
+                          onDelete: () => _deleteLocation(location: e))
+                    ],
+                  ),
+                ))
+            .toList(),
+      );
 
   Widget _getTags() => Column(
-    children: _tagList.map((e) => Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      child: Row(
-        children: [
-          Text(e?.name??""),
-          new Spacer(),
-          _settingButtons(
-            onEdit: () => _showTagDialog(tag: e),
-            onDelete: () => _deleteTag(tag: e)
-          )
-        ],
-      ),
-    )).toList(),
-  );
+        children: _tagList
+            .map((e) => Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: [
+                      Text(e?.name ?? ""),
+                      new Spacer(),
+                      _settingButtons(
+                          onEdit: () => _showTagDialog(tag: e),
+                          onDelete: () => _deleteTag(tag: e))
+                    ],
+                  ),
+                ))
+            .toList(),
+      );
 
   Widget _getPeoples() => Column(
-    children: _peopleList.map((e) => Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      child: Row(
-        children: [
-          Text((e.firstName??"") + " " + (e.lastName??"")),
-          new Spacer(),
-          _settingButtons(
-            onEdit: () => _showPeopleDialog(people: e),
-            onDelete: () => _deletePeople(people: e)
-          )
-        ],
-      ),
-    )).toList(),
-  );
+        children: _peopleList
+            .map((e) => Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: [
+                      Text((e.firstName ?? "") + " " + (e.lastName ?? "")),
+                      new Spacer(),
+                      _settingButtons(
+                          onEdit: () => _showPeopleDialog(people: e),
+                          onDelete: () => _deletePeople(people: e))
+                    ],
+                  ),
+                ))
+            .toList(),
+      );
 
   Widget _getInstitution() => Column(
-    children: _institutionList.map((e) => Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      child: Row(
-        children: [
-          Text(e?.name??""),
-          new Spacer(),
-          _settingButtons(
-            onEdit: () => _showInstitutionDialog(institution: e),
-            onDelete: () => _deleteInstitution(institution: e)
-          )
-        ],
-      ),
-    )).toList(),
-  );
+        children: _institutionList
+            .map((e) => Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: [
+                      Text(e?.name ?? ""),
+                      new Spacer(),
+                      _settingButtons(
+                          onEdit: () => _showInstitutionDialog(institution: e),
+                          onDelete: () => _deleteInstitution(institution: e))
+                    ],
+                  ),
+                ))
+            .toList(),
+      );
 
   Widget _getRightOwners() => Column(
-    children: _rightOwnerList.map((e) => Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      child: Row(
-        children: [
-          Text(e?.name??""),
-          new Spacer(),
-          _settingButtons(
-            onEdit: () => _showRightOwnerDialog(rightOwner: e),
-            onDelete: () => _deleteRightOwner(rightOwner: e)
-          )
-        ],
-      ),
-    )).toList(),
-  );
+        children: _rightOwnerList
+            .map((e) => Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: [
+                      Text(e?.name ?? ""),
+                      new Spacer(),
+                      _settingButtons(
+                          onEdit: () => _showRightOwnerDialog(rightOwner: e),
+                          onDelete: () => _deleteRightOwner(rightOwner: e))
+                    ],
+                  ),
+                ))
+            .toList(),
+      );
 
   Widget _getSubtypes() => Column(
-    children: _itemSubTypeList.map((e) => Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      child: Row(
-        children: [
-          Text(e?.name??""),
-          new Spacer(),
-          _settingButtons(
-            onEdit: () => _showSubtypesDialog(itemSubtype: e),
-            onDelete: () => _deleteSubtype(itemSubtype: e)
-          )
-        ],
-      ),
-    )).toList(),
-  );
+        children: _itemSubTypeList
+            .map((e) => Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: [
+                      Text(e?.name ?? ""),
+                      new Spacer(),
+                      _settingButtons(
+                          onEdit: () => _showSubtypesDialog(itemSubtype: e),
+                          onDelete: () => _deleteSubtype(itemSubtype: e))
+                    ],
+                  ),
+                ))
+            .toList(),
+      );
 
   Widget _settingButtons({VoidCallback onDelete, VoidCallback onEdit}) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        IconButton(icon: Icon(Icons.edit), onPressed: () => onEdit.call(),),
-        IconButton(icon: Icon(Icons.delete, color: Colors.redAccent,), onPressed: () => onDelete.call(),),
+        IconButton(
+          icon: Icon(Icons.edit),
+          onPressed: () => onEdit.call(),
+        ),
+        IconButton(
+          icon: Icon(
+            Icons.delete,
+            color: Colors.redAccent,
+          ),
+          onPressed: () => onDelete.call(),
+        ),
       ],
     );
   }
 
   _deleteLocation({Location location}) async {
-    if (!(await _openDeleteDialog(location.name, location.key)))
-      return;
+    if (!(await _openDeleteDialog(location.name, location.key))) return;
     widget.ks.editLocation(EditingTypEnum.DELETE, location);
     setState(() {
       _initLocationList();
@@ -201,10 +241,10 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
 
   _showLocationDialog({Location location}) async {
     Location result = await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return LocationDialog(location: location, ks: widget.ks);
-    });
+        context: context,
+        builder: (BuildContext context) {
+          return LocationDialog(location: location, ks: widget.ks);
+        });
 
     if (result == null) {
       return;
@@ -215,8 +255,7 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
   }
 
   _deleteTag({Tag tag}) async {
-    if (!(await _openDeleteDialog(tag.name, tag.key)))
-      return;
+    if (!(await _openDeleteDialog(tag.name, tag.key))) return;
     widget.ks.editTag(EditingTypEnum.DELETE, tag);
     setState(() {
       _initTagList();
@@ -225,10 +264,10 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
 
   _showTagDialog({Tag tag}) async {
     Tag result = await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return TagDialog(tag: tag, ks: widget.ks);
-    });
+        context: context,
+        builder: (BuildContext context) {
+          return TagDialog(tag: tag, ks: widget.ks);
+        });
 
     if (result == null) {
       return;
@@ -242,14 +281,13 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
     final rtn = await showDialog(
         context: context,
         builder: (BuildContext context) {
-          return TagDeleteDialog(val??"", key??"");
+          return TagDeleteDialog(val ?? "", key ?? "");
         });
     return rtn ?? false;
   }
 
   _deletePeople({People people}) async {
-    if (!(await _openDeleteDialog(people.firstName, people.key)))
-      return;
+    if (!(await _openDeleteDialog(people.firstName, people.key))) return;
     widget.ks.editPeople(EditingTypEnum.DELETE, people);
     setState(() {
       _initPeopleList();
@@ -258,10 +296,10 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
 
   _showPeopleDialog({People people}) async {
     People result = await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return PeopleDialog(people: people, ks: widget.ks);
-    });
+        context: context,
+        builder: (BuildContext context) {
+          return PeopleDialog(people: people, ks: widget.ks);
+        });
 
     if (result == null) {
       return;
@@ -272,8 +310,7 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
   }
 
   _deleteInstitution({Institution institution}) async {
-    if (!(await _openDeleteDialog(institution.name, institution.key)))
-      return;
+    if (!(await _openDeleteDialog(institution.name, institution.key))) return;
     widget.ks.editInstitution(EditingTypEnum.DELETE, institution);
     setState(() {
       _initInstitutionList();
@@ -282,10 +319,10 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
 
   _showInstitutionDialog({Institution institution}) async {
     Institution result = await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return InstitutionDialog(institution: institution, ks: widget.ks);
-    });
+        context: context,
+        builder: (BuildContext context) {
+          return InstitutionDialog(institution: institution, ks: widget.ks);
+        });
 
     if (result == null) {
       return;
@@ -296,8 +333,7 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
   }
 
   _deleteRightOwner({RightOwner rightOwner}) async {
-    if (!(await _openDeleteDialog(rightOwner.name, rightOwner.key)))
-      return;
+    if (!(await _openDeleteDialog(rightOwner.name, rightOwner.key))) return;
     widget.ks.editRightOwner(EditingTypEnum.DELETE, rightOwner);
     setState(() {
       _initRightOwnerList();
@@ -306,10 +342,10 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
 
   _showRightOwnerDialog({RightOwner rightOwner}) async {
     RightOwner result = await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return RightOwnerDialog(rightOwner: rightOwner, ks: widget.ks);
-    });
+        context: context,
+        builder: (BuildContext context) {
+          return RightOwnerDialog(rightOwner: rightOwner, ks: widget.ks);
+        });
 
     if (result == null) {
       return;
@@ -320,8 +356,7 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
   }
 
   _deleteSubtype({ItemSubtype itemSubtype}) async {
-    if (!(await _openDeleteDialog(itemSubtype.name, itemSubtype.key)))
-      return;
+    if (!(await _openDeleteDialog(itemSubtype.name, itemSubtype.key))) return;
     widget.ks.editItemSubType(EditingTypEnum.DELETE, itemSubtype);
     setState(() {
       _initItemSubTypeList();
@@ -330,10 +365,10 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
 
   _showSubtypesDialog({ItemSubtype itemSubtype}) async {
     ItemSubtype result = await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return SubtypeDialog(itemSubtype: itemSubtype, ks: widget.ks);
-    });
+        context: context,
+        builder: (BuildContext context) {
+          return SubtypeDialog(itemSubtype: itemSubtype, ks: widget.ks);
+        });
 
     if (result == null) {
       return;
@@ -344,41 +379,47 @@ class _KeywordEditScreenState extends State<KeywordEditScreen> {
   }
 
   void _initLists() => setState(() {
-    _initInstitutionList();
-    _initItemSubTypeList();
-    _initLocationList();
-    _initRightOwnerList();
-    _initPeopleList();
-    _initTagList();
-  });
+        _initInstitutionList();
+        _initItemSubTypeList();
+        _initLocationList();
+        _initRightOwnerList();
+        _initPeopleList();
+        _initTagList();
+      });
 
   void _initLocationList() {
     _locationList.clear();
-    widget.ks.locationsJson?.forEach((key, value) => _locationList.add(Location.fromJson(value, key)));
+    widget.ks.locationsJson?.forEach(
+        (key, value) => _locationList.add(Location.fromJson(value, key)));
   }
 
   void _initRightOwnerList() {
     _rightOwnerList.clear();
-    widget.ks.rightOwnerJson?.forEach((key, value) => _rightOwnerList.add(RightOwner.fromJson(value, key)));
+    widget.ks.rightOwnerJson?.forEach(
+        (key, value) => _rightOwnerList.add(RightOwner.fromJson(value, key)));
   }
 
   void _initInstitutionList() {
     _institutionList.clear();
-    widget.ks.institutionJson?.forEach((key, value) => _institutionList.add(Institution.fromJson(value, key)));
+    widget.ks.institutionJson?.forEach(
+        (key, value) => _institutionList.add(Institution.fromJson(value, key)));
   }
 
   void _initItemSubTypeList() {
     _itemSubTypeList.clear();
-    widget.ks.itemSubtypeJson?.forEach((key, value) => _itemSubTypeList.add(ItemSubtype.fromJson(value, key)));
+    widget.ks.itemSubtypeJson?.forEach(
+        (key, value) => _itemSubTypeList.add(ItemSubtype.fromJson(value, key)));
   }
 
   void _initPeopleList() {
     _peopleList.clear();
-    widget.ks.peopleJson?.forEach((key, value) => _peopleList.add(People.fromJson(value, key)));
+    widget.ks.peopleJson
+        ?.forEach((key, value) => _peopleList.add(People.fromJson(value, key)));
   }
 
   void _initTagList() {
     _tagList.clear();
-    widget.ks.tagJson?.forEach((key, value) => _tagList.add(Tag.fromJson(value, key)));
+    widget.ks.tagJson
+        ?.forEach((key, value) => _tagList.add(Tag.fromJson(value, key)));
   }
 }

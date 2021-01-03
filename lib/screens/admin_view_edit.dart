@@ -503,8 +503,8 @@ class _AdminViewEditState extends State<AdminViewEdit> {
           return Padding(
             padding: EdgeInsets.all(8.0),
             child: ListTile(
-              title:
-                  Text(people?.firstName ?? "" + " " + people?.lastName ?? ""),
+              title: Text(
+                  (people?.firstName ?? "") + " " + (people?.lastName ?? "")),
             ),
           );
         },
@@ -648,11 +648,10 @@ class _AdminViewEditState extends State<AdminViewEdit> {
               _showInstitutionDialog(name: _institutionController.text);
             });
           return Padding(
-            padding: EdgeInsets.all(8.0),
-            child: ListTile(
+              padding: EdgeInsets.all(8.0),
+              child: ListTile(
                 title: Text(institution?.name ?? ""),
-            )
-          );
+              ));
         },
         key: _institutionKey,
         itemSorter: (a, b) {
@@ -881,88 +880,88 @@ class _AdminViewEditState extends State<AdminViewEdit> {
   }
 
   Widget _createTagWidget(Tag e) => Container(
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(15)),
-      color: Colors.blue,
-    ),
-    margin: EdgeInsets.only(right: 10, bottom: 10),
-    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          e?.name??"",
-          style: TextStyle(color: Colors.white, fontSize: 18),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+          color: Colors.blue,
         ),
-        Container(
-          width: 8,
-        ),
-        Material(
-          color: Colors.transparent,
-          child: InkWell(
-            child: Icon(
-              Icons.close,
-              color: Colors.white,
+        margin: EdgeInsets.only(right: 10, bottom: 10),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              e?.name ?? "",
+              style: TextStyle(color: Colors.white, fontSize: 18),
             ),
-            onTap: () {
-              setState(() {
-                smallFotoItemNew.tagKeys.remove(e.key);
-                _tagsKey.currentState
-                    .updateSuggestions(_getTagSuggestions());
-              });
-            },
-          ),
-        )
-      ],
-    ),
-  );
+            Container(
+              width: 8,
+            ),
+            Material(
+              color: Colors.transparent,
+              child: InkWell(
+                child: Icon(
+                  Icons.close,
+                  color: Colors.white,
+                ),
+                onTap: () {
+                  setState(() {
+                    smallFotoItemNew.tagKeys.remove(e.key);
+                    _tagsKey.currentState
+                        .updateSuggestions(_getTagSuggestions());
+                  });
+                },
+              ),
+            )
+          ],
+        ),
+      );
 
   Widget _createPeopleWidget(People e) => Container(
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(15)),
-      color: Colors.blue,
-    ),
-    margin: EdgeInsets.only(right: 10, bottom: 10),
-    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          e?.firstName??"",
-          style: TextStyle(color: Colors.white, fontSize: 18),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+          color: Colors.blue,
         ),
-        Container(
-          width: 5,
-        ),
-        Text(
-          e?.lastName??"",
-          style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.bold),
-        ),
-        Container(
-          width: 8,
-        ),
-        Material(
-          color: Colors.transparent,
-          child: InkWell(
-            child: Icon(
-              Icons.close,
-              color: Colors.white,
+        margin: EdgeInsets.only(right: 10, bottom: 10),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              e?.firstName ?? "",
+              style: TextStyle(color: Colors.white, fontSize: 18),
             ),
-            onTap: () {
-              setState(() {
-                smallFotoItemNew.photographedPeople.remove(e);
-                _photographedPeopleKey.currentState
-                    .updateSuggestions(_getPeopleSuggestions());
-              });
-            },
-          ),
-        )
-      ],
-    ),
-  );
+            Container(
+              width: 5,
+            ),
+            Text(
+              e?.lastName ?? "",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            ),
+            Container(
+              width: 8,
+            ),
+            Material(
+              color: Colors.transparent,
+              child: InkWell(
+                child: Icon(
+                  Icons.close,
+                  color: Colors.white,
+                ),
+                onTap: () {
+                  setState(() {
+                    smallFotoItemNew.photographedPeople.remove(e);
+                    _photographedPeopleKey.currentState
+                        .updateSuggestions(_getPeopleSuggestions());
+                  });
+                },
+              ),
+            )
+          ],
+        ),
+      );
 
   _deleteLocation({Location location}) async {
     widget.ks.editLocation(EditingTypEnum.DELETE, location);

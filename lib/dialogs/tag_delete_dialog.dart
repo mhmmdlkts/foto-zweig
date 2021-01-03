@@ -8,7 +8,6 @@ import 'package:foto_zweig/services/init_fotos.dart';
 import 'package:foto_zweig/widgets/rounded_button.dart';
 import 'package:http/http.dart' as http;
 
-
 class TagDeleteDialog extends StatefulWidget {
   final String tagVal;
   final String tagKey;
@@ -31,22 +30,23 @@ class _TagDeleteDialogState extends State<TagDeleteDialog> {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
-      ),      
+        borderRadius: BorderRadius.circular(5),
+      ),
       elevation: 0.0,
       backgroundColor: Colors.white,
       child: dialogContent(context),
     );
   }
+
   dialogContent(BuildContext context) {
     return Container(
       child: Column(
-        mainAxisSize:  MainAxisSize.min,
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _countOfTags == null? CircularProgressIndicator():_warnText(),
+          _countOfTags == null ? CircularProgressIndicator() : _warnText(),
           Row(
-            mainAxisSize:  MainAxisSize.min,
+            mainAxisSize: MainAxisSize.min,
             children: [
               RoundedButtonWidget(
                 color: Colors.red,
@@ -56,7 +56,9 @@ class _TagDeleteDialogState extends State<TagDeleteDialog> {
                   Navigator.pop(context, true);
                 },
               ),
-              Container(width: 10,),
+              Container(
+                width: 10,
+              ),
               RoundedButtonWidget(
                 color: Colors.grey,
                 text: "Schließen",
@@ -78,11 +80,8 @@ class _TagDeleteDialogState extends State<TagDeleteDialog> {
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
-          text: '${widget.tagVal} wird ',
-          style: TextStyle(
-            fontSize: fontSize,
-            color: darkColor
-          ),
+          text: 'Das Schlüsselwort "${widget.tagVal}" wird ',
+          style: TextStyle(fontSize: fontSize, color: darkColor),
           children: [
             TextSpan(
               text: '$_countOfTags mal',
@@ -93,19 +92,17 @@ class _TagDeleteDialogState extends State<TagDeleteDialog> {
               ),
             ),
             TextSpan(
-              text: ' hergenommen.\nSind Sie sicher dass Sie es trotzdem löschen wollen.',
-              style: TextStyle(
-                  fontSize: fontSize,
-                  color: darkColor
-              ),
+              text:
+                  ' verwendet.\nSind Sie sicher dass Sie es trotzdem löschen wollen?',
+              style: TextStyle(fontSize: fontSize, color: darkColor),
             ),
-          ]
-      ),
+          ]),
     );
   }
 
   _countTags() async {
-    final http.Response response = await http.get(API_URL + 'countKeyword?key=${widget.tagKey}');
+    final http.Response response =
+        await http.get(API_URL + 'countKeyword?key=${widget.tagKey}');
     final Map<String, dynamic> data = json.decode(response.body);
     setState(() {
       _countOfTags = data['count'];
