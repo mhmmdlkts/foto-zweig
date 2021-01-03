@@ -243,7 +243,10 @@ class _MyHomePageState extends State<MyHomePage> {
                           _isFilterMenuOpen = !_isFilterMenuOpen;
                           if (!_isFilterMenuOpen) {
                             _filterLocationValue = null;
-                            _sortFilterContent();
+                            _filterBisDate = null;
+                            _filterVonDate = null;
+                            _shownItems = _sortingService.sortList(_keywordService);
+                            //_sortFilterContent();
                           }
                         }),
                       ),
@@ -280,12 +283,10 @@ class _MyHomePageState extends State<MyHomePage> {
     if (i == 0)
       return;
     else if (i == 1) {
-      print("a");
       Navigator.push(context, MaterialPageRoute(builder: (context) =>
           KeywordEditScreen(ks: _keywordService)));
     }
     else if (i == 2) {
-      print("b");
       setState(() {
         _fotoUser = FotoUser(name: "Ali", email: "mh", authMode: AuthModeEnum.ADMIN, uid: "id");
       });
