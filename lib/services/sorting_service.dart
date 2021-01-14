@@ -1,3 +1,4 @@
+import 'package:foto_zweig/enums/auth_mode_enum.dart';
 import 'package:foto_zweig/enums/sorting_typs_enum.dart';
 import 'package:foto_zweig/models/item_infos/date.dart';
 import 'package:foto_zweig/models/item_infos/location.dart';
@@ -11,6 +12,7 @@ class SortingService {
 
   List<SmallFotoItem> sortList(KeywordService ks,
       {SortingTypsEnum sortingTyp,
+      AuthModeEnum authMode,
       String searchText,
       String placeFiler,
       String von,
@@ -60,27 +62,27 @@ class SortingService {
     if(locationFilter != null && vonFilter != null && bisFilter != null){
       if(bisFilter.isBefore(vonFilter)){
         _tmpList.clear();
-      return _tmpList;
+      return _tmpList.where((element) => element.isPublic || authMode == AuthModeEnum.ADMIN).toList();
     }
       _tmpList = list.where((element) => ((element.date.startDate!=null&&element.date.endDate!=null)&&locationFilter.key == element.locationKey)&&bisFilter.isAfter(element?.date?.endDate??bisFilter.subtract(Duration(days: 364)))
       &&vonFilter.isBefore(element?.date?.startDate??vonFilter.add(Duration(days: 364)))).toList();
 
-      return _tmpList;
+      return _tmpList.where((element) => element.isPublic || authMode == AuthModeEnum.ADMIN).toList();
     }else if(locationFilter != null && vonFilter != null){
       _tmpList = list.where((element) => ((element.date.startDate!=null&&element.date.endDate!=null)&&locationFilter.key == element.locationKey&&vonFilter.isBefore(element?.date?.startDate??vonFilter.add(Duration(days: 364))))).toList();
-      return _tmpList;
+      return _tmpList.where((element) => element.isPublic || authMode == AuthModeEnum.ADMIN).toList();
     }else if(locationFilter != null&&bisFilter != null){
       _tmpList = list.where((element) => ((element.date.startDate!=null&&element.date.endDate!=null)&&locationFilter.key == element.locationKey&&bisFilter.isBefore(element?.date?.startDate??bisFilter.add(Duration(days: 364))))).toList();
-      return _tmpList;
+      return _tmpList.where((element) => element.isPublic || authMode == AuthModeEnum.ADMIN).toList();
     } else if(vonFilter != null && bisFilter != null){
       if(bisFilter.isBefore(vonFilter)){
         _tmpList.clear();
-      return _tmpList;
+        return _tmpList.where((element) => element.isPublic || authMode == AuthModeEnum.ADMIN).toList();
     }
       _tmpList = list.where((element) => ((element.date.startDate!=null&&element.date.endDate!=null)&&vonFilter.isBefore(element?.date?.startDate??vonFilter.add(Duration(days: 364)))&&bisFilter.isAfter(element?.date?.endDate??bisFilter.subtract(Duration(days: 364))))).toList();
       _tmpList.forEach((SmallFotoItem s) { 
       });
-      return _tmpList;
+      return _tmpList.where((element) => element.isPublic || authMode == AuthModeEnum.ADMIN).toList();
     }
     
     if (locationFilter != null)
@@ -90,7 +92,7 @@ class SortingService {
     }
     if (bisFilter != null)
       _tmpList = list.where((element) => (element.date.startDate!=null&&element.date.endDate!=null)&&bisFilter.isAfter(element?.date?.endDate??bisFilter.subtract(Duration(days: 364)))).toList();
-    return _tmpList;
+    return _tmpList.where((element) => element.isPublic || authMode == AuthModeEnum.ADMIN).toList();
   }
 
   String getTyp() {

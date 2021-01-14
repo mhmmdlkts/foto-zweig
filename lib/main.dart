@@ -83,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
         _getAuthMode() == AuthModeEnum.ADMIN ? "admin":null, _keywordService
     ).then((value) => setState(() {
       _sortingService.list = value;
-      _shownItems = _sortingService.sortList(_keywordService);
+      _shownItems = _sortingService.sortList(_keywordService, authMode: _getAuthMode());
       _openAutoEditingScreen(0);
       _initLocationList();
     }));
@@ -327,7 +327,7 @@ class _MyHomePageState extends State<MyHomePage> {
             _filterLocationValue = null;
             _filterBisDate = null;
             _filterVonDate = null;
-            _shownItems = _sortingService.sortList(_keywordService);
+            _shownItems = _sortingService.sortList(_keywordService, authMode: _getAuthMode());
             //_sortFilterContent();
           }
         });
@@ -431,7 +431,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _sortFilterContent() {
     setState(() {
-      _shownItems = _sortingService.sortList(_keywordService, searchText: _searchField, vonFilter: _filterVonDate, bisFilter: _filterBisDate, locationFilter: _filterLocationValue);
+      _shownItems = _sortingService.sortList(_keywordService, authMode: _getAuthMode(), searchText: _searchField, vonFilter: _filterVonDate, bisFilter: _filterBisDate, locationFilter: _filterLocationValue);
     });
   }
 }
