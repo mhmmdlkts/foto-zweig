@@ -342,6 +342,7 @@ class _MyHomePageState extends State<MyHomePage> {
         if (newValue == 'Ort') sortingTypEnum = SortingTypsEnum.ORT;
         if (newValue == 'Datum') sortingTypEnum = SortingTypsEnum.DATE;
         if (newValue == 'Kurzbezeichnung') sortingTypEnum = SortingTypsEnum.DESCRIPTION;
+        _sortingService.setTyp(sortingTypEnum);
         _sortingService.sortingTyp = sortingTypEnum;
         _sortFilterContent();
       },

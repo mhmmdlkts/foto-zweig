@@ -26,6 +26,7 @@ class SortingService {
             ((a?.date?.startDate?.millisecondsSinceEpoch ?? 0) -
                 (b?.date?.startDate?.millisecondsSinceEpoch ?? 0)) *
             (this.isDesc ? 1 : -1));
+            print(this.sortingTyp);
         break;
       case SortingTypsEnum.ORT:
         if (isDesc) {
@@ -35,6 +36,7 @@ class SortingService {
                   ?.country
                   ?.compareTo(b?.getLocation(ks)?.country ?? "") ??
               0 * (this.isDesc ? 1 : -1));
+              print(this.sortingTyp);
         } else {
           list.sort((a, b) =>
               b
@@ -49,6 +51,7 @@ class SortingService {
           list.sort((a, b) =>
               a?.shortDescription?.compareTo(b?.shortDescription ?? "") ??
               0 * (this.isDesc ? 1 : -1));
+              print(this.sortingTyp);
         } else {
           list.sort((a, b) =>
               b?.shortDescription?.compareTo(a?.shortDescription ?? "") ??
@@ -103,5 +106,9 @@ class SortingService {
         return "Kurzbezeichnung";
     }
     return "Datum";
+  }
+  
+  void setTyp(SortingTypsEnum sortTyp){
+    this.sortingTyp = sortTyp;
   }
 }
