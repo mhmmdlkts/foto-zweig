@@ -26,7 +26,6 @@ class SortingService {
             ((a?.date?.startDate?.millisecondsSinceEpoch ?? 0) -
                 (b?.date?.startDate?.millisecondsSinceEpoch ?? 0)) *
             (this.isDesc ? 1 : -1));
-            print(this.sortingTyp);
         break;
       case SortingTypsEnum.ORT:
         if (isDesc) {
@@ -36,7 +35,6 @@ class SortingService {
                   ?.country
                   ?.compareTo(b?.getLocation(ks)?.country ?? "") ??
               0 * (this.isDesc ? 1 : -1));
-              print(this.sortingTyp);
         } else {
           list.sort((a, b) =>
               b
@@ -51,7 +49,6 @@ class SortingService {
           list.sort((a, b) =>
               a?.shortDescription?.compareTo(b?.shortDescription ?? "") ??
               0 * (this.isDesc ? 1 : -1));
-              print(this.sortingTyp);
         } else {
           list.sort((a, b) =>
               b?.shortDescription?.compareTo(a?.shortDescription ?? "") ??
@@ -59,7 +56,7 @@ class SortingService {
         }
         break;
     }
-    List<SmallFotoItem> _tmpList = list.where((element) => element.contains(ks.tagJson, searchText)).toList();
+    List<SmallFotoItem> _tmpList = list.where((element) => element.contains(ks.tagJson, searchText) || ((searchText == null || searchText == "") && element.tagKeys.isEmpty)).toList();
     if(locationFilter != null && vonFilter != null && bisFilter != null){
       if(bisFilter.isBefore(vonFilter)){
         _tmpList.clear();
