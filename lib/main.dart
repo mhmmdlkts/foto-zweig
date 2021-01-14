@@ -239,16 +239,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       opacity: _isFilterMenuOpen ? 1 : 0.6,
                       child: IconButton(
                         icon: Icon(Icons.sort),
-                        onPressed: () => setState(() {
-                          _isFilterMenuOpen = !_isFilterMenuOpen;
-                          if (!_isFilterMenuOpen) {
-                            _filterLocationValue = null;
-                            _filterBisDate = null;
-                            _filterVonDate = null;
-                            _shownItems = _sortingService.sortList(_keywordService);
-                            //_sortFilterContent();
-                          }
-                        }),
+                        onPressed: onFilterButtonPressed,
                       ),
                     ),
                     _sortingDropDown(),
@@ -321,16 +312,25 @@ class _MyHomePageState extends State<MyHomePage> {
           child: _filterBis(),
         ),
         RaisedButton(
-          child: Text('No Filter'),
-          onPressed: () => setState(() {
-            _shownItems = _sortingService.sortList(_keywordService);
-          
-            //print('You tapped on FlatButton');
-          }),
+          child: Text('Filter zurücksetzen'),
+          onPressed: onFilterButtonPressed,
         ),
         
       ],
     );
+  }
+
+  void onFilterButtonPressed(){
+     setState(() {
+          _isFilterMenuOpen = !_isFilterMenuOpen;
+          if (!_isFilterMenuOpen) {
+            _filterLocationValue = null;
+            _filterBisDate = null;
+            _filterVonDate = null;
+            _shownItems = _sortingService.sortList(_keywordService);
+            //_sortFilterContent();
+          }
+        });
   }
 
   Widget _sortingDropDown() {
