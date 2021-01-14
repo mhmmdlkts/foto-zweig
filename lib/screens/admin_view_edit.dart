@@ -795,7 +795,7 @@ class _AdminViewEditState extends State<AdminViewEdit> {
             padding: EdgeInsets.all(8.0),
             child: ListTile(
               title: Text(
-                  creator?.firstName ?? "" + " " + creator?.lastName ?? ""),
+                  (creator?.firstName ?? "") + " " + (creator?.lastName ?? "")),
             ),
           );
         },
